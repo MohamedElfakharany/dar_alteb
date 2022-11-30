@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
+  <g id="Group_56288" data-name="Group 56288" transform="translate(-159 -678)">
+    <g id="vuesax_bold_clipboard-tick" data-name="vuesax/bold/clipboard-tick" transform="translate(159 678)" opacity="0">
+      <g id="clipboard-tick">
+        <path id="Vector" d="M7.139,0H2.047A2.044,2.044,0,0,0,0,2.037V3.055A2.034,2.034,0,0,0,2.037,5.092h5.1A2.034,2.034,0,0,0,9.176,3.055V2.037A2.027,2.027,0,0,0,7.139,0Z" transform="translate(8.407 2.167)" fill="#2685c7"/>
+        <path id="Vector-2" data-name="Vector" d="M15.113.8A3.139,3.139,0,0,1,11.982,3.93H6.89A3.139,3.139,0,0,1,3.759.8a.809.809,0,0,0-1.192-.7A4.844,4.844,0,0,0,0,4.374V14.568a4.855,4.855,0,0,0,4.843,4.842h9.187a4.855,4.855,0,0,0,4.842-4.842V4.374A4.844,4.844,0,0,0,16.3.095.809.809,0,0,0,15.113.8ZM13.054,9.368,8.721,13.7a.811.811,0,0,1-1.148,0L5.947,12.076A.812.812,0,0,1,7.1,10.928l1.051,1.051L11.906,8.22a.812.812,0,0,1,1.148,1.148Z" transform="translate(3.564 4.423)" fill="#2685c7"/>
+        <path id="Vector-3" data-name="Vector" d="M0,0H26V26H0Z" transform="translate(26 26) rotate(180)" fill="none" opacity="0"/>
+      </g>
+    </g>
+    <g id="vuesax_linear_clipboard-tick" data-name="vuesax/linear/clipboard-tick" transform="translate(159 678)">
+      <g id="clipboard-tick-2" data-name="clipboard-tick">
+        <path id="Vector-4" data-name="Vector" d="M0,2.708,1.625,4.333,5.958,0" transform="translate(10.086 13.217)" fill="none" stroke="#6a6e83" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Vector-5" data-name="Vector" d="M2.167,4.333H6.5c2.167,0,2.167-1.083,2.167-2.167C8.667,0,7.583,0,6.5,0H2.167C1.083,0,0,0,0,2.167S1.083,4.333,2.167,4.333Z" transform="translate(8.667 2.167)" fill="none" stroke="#6a6e83" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Vector-6" data-name="Vector" d="M14.083,0C17.691.2,19.5,1.527,19.5,6.478v6.5c0,4.333-1.083,6.5-6.5,6.5H6.5c-5.417,0-6.5-2.167-6.5-6.5v-6.5C0,1.538,1.809.2,5.417,0" transform="translate(3.25 4.355)" fill="none" stroke="#6a6e83" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Vector-7" data-name="Vector" d="M0,0H26V26H0Z" fill="none" opacity="0"/>
+      </g>
+    </g>
+  </g>
+</svg>

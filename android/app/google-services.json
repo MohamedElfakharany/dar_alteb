@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "450437050994",
+    "firebase_url": "https://dar-eltep-default-rtdb.firebaseio.com",
+    "project_id": "dar-eltep",
+    "storage_bucket": "dar-eltep.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450437050994:android:fcb1ba6eee76f9c68e48eb",
+        "android_client_info": {
+          "package_name": "com.example.darAltep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450437050994-k87lp5cq656vqvjo54joppm9ncgh8fgt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.darAltep",
+            "certificate_hash": "0afd5fe963c793c29e39b3b29695c94387696756"
+          }
+        },
+        {
+          "client_id": "450437050994-mgg7ges7mrjs8cvb1ut5671rtr2bggpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi5MwspZupU4N0X7T8fBA-7g60IZZdN0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450437050994-mgg7ges7mrjs8cvb1ut5671rtr2bggpp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "450437050994-npihrbrk8v7bivjij7n22869o977rb9i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.darAltep"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450437050994:android:820d2d889dd618958e48eb",
+        "android_client_info": {
+          "package_name": "com.example.dar_altep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450437050994-uefodri6avq3tfbgts2elsp9o01es52u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dar_altep",
+            "certificate_hash": "0afd5fe963c793c29e39b3b29695c94387696756"
+          }
+        },
+        {
+          "client_id": "450437050994-mgg7ges7mrjs8cvb1ut5671rtr2bggpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi5MwspZupU4N0X7T8fBA-7g60IZZdN0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450437050994-mgg7ges7mrjs8cvb1ut5671rtr2bggpp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "450437050994-npihrbrk8v7bivjij7n22869o977rb9i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.darAltep"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
