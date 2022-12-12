@@ -41,25 +41,28 @@ class LabReservationsDateModel {
   CreatedAt? createdAt;
   List<Tests>? tests;
   List<Offers>? offers;
+  List<String>? titles;
 
-  LabReservationsDateModel(
-      {this.id,
-      this.date,
-      this.time,
-      this.family,
-      this.branch,
-      this.coupon,
-      this.price,
-      this.tax,
-      this.discount,
-      this.total,
-      this.status,
-      this.statusEn,
-      this.rate,
-      this.rateMessage,
-      this.createdAt,
-      this.tests,
-      this.offers});
+  LabReservationsDateModel({
+    this.id,
+    this.date,
+    this.time,
+    this.family,
+    this.branch,
+    this.coupon,
+    this.price,
+    this.tax,
+    this.discount,
+    this.total,
+    this.status,
+    this.statusEn,
+    this.rate,
+    this.rateMessage,
+    this.createdAt,
+    this.tests,
+    this.offers,
+    this.titles,
+  });
 
   LabReservationsDateModel.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
@@ -71,6 +74,7 @@ class LabReservationsDateModel {
     //     family!.add(new Null.fromJson(v));
     //   });
     // }
+    titles = json['titles'].cast<String>();
     branch =
         json['branch'] != null ? new Branch.fromJson(json['branch']) : null;
     if (json['coupon'] != null) {

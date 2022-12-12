@@ -37,6 +37,7 @@ class AddressDataModel {
     this.specialMark,
     this.floorNumber,
     this.buildingNumber,
+    this.title,
     this.isSelected,
   });
 
@@ -45,6 +46,7 @@ class AddressDataModel {
   dynamic specialMark;
   dynamic floorNumber;
   dynamic buildingNumber;
+  dynamic title;
   dynamic isSelected;
 
   factory AddressDataModel.fromJson(Map<dynamic, dynamic> json) => AddressDataModel(
@@ -52,6 +54,7 @@ class AddressDataModel {
     address: json["address"],
     specialMark: json["specialMark"],
     floorNumber: json["floorNumber"],
+    title: json["title"],
     buildingNumber: json["buildingNumber"],
     isSelected: json["isSelected"],
   );

@@ -2,7 +2,6 @@
 
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -156,8 +155,8 @@ class GeneralUnfilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: () {
+    return InkWell(
+      onTap: () {
         onPress();
       },
       child: Container(
@@ -275,41 +274,28 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
-        if (state is AppGetCartSuccessState) {
-          if (state.cartModel.status == true) {
-            if (state.cartModel.data!.isEmpty) {
-              showToast(msg: LocaleKeys.noDataToShow.tr(), state: ToastState.error);
-            } else {
-              Navigator.push(
-                context,
-                FadeRoute(
-                  page: CartScreen(),
-                ),
-              );
-            }
-          } else {
-            showToast(msg: state.cartModel.message, state: ToastState.error);
-          }
-        } else if (state is AppGetCartErrorState) {
-          showToast(msg: state.error, state: ToastState.error);
-        }
+        // if (state is AppGetCartSuccessState) {
+        //   if (state.cartModel.status == true) {
+        //     if (state.cartModel.data!.isEmpty) {
+        //       showToast(msg: LocaleKeys.noDataToShow.tr(), state: ToastState.error);
+        //     } else {
+        //       Navigator.push(
+        //         context,
+        //         FadeRoute(
+        //           page: CartScreen(),
+        //         ),
+        //       );
+        //     }
+        //   } else {
+        //     showToast(msg: state.cartModel.message, state: ToastState.error);
+        //   }
+        // } else if (state is AppGetCartErrorState) {
+        //   showToast(msg: state.error, state: ToastState.error);
+        // }
       },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
-        String notifications;
-        if (AppCubit.get(context).notificationsModel != null) {
-          if (AppCubit.get(context).notificationsModel!.data!.length > 9) {
-            notifications = '+9';
-          } else {
-            notifications = AppCubit.get(context)
-                .notificationsModel!
-                .data!
-                .length
-                .toString();
-          }
-        } else {
-          notifications = '';
-        }
+
         String cart;
         if (AppCubit.get(context).cartModel != null) {
           if (AppCubit.get(context).cartModel!.data!.length > 9) {
@@ -408,30 +394,25 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
             ),
             if (AppCubit.get(context).isVisitor == false)
-              ConditionalBuilder(
-                condition: state is! AppGetCartLoadingState,
-                builder: (context) => InkWell(
-                  onTap: () {
-                    AppCubit.get(context).getCart();
-                  },
-                  child: Badge(
-                    position: BadgePosition.topEnd(top: 0),
-                    alignment: AlignmentDirectional.centerEnd,
-                    animationType: BadgeAnimationType.slide,
-                    badgeContent: Text(
-                      cart,
-                      style: titleSmallStyle2.copyWith(color: whiteColor),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, FadeRoute(page: const CartScreen()));
+                },
+                child: Badge(
+                  position: BadgePosition.topEnd(top: 0),
+                  alignment: AlignmentDirectional.centerEnd,
+                  animationType: BadgeAnimationType.slide,
+                  badgeContent: Text(
+                    cart,
+                    style: titleSmallStyle2.copyWith(color: whiteColor),
+                  ),
+                  child: const ImageIcon(
+                    AssetImage(
+                      'assets/images/lab.png',
                     ),
-                    child: const ImageIcon(
-                      AssetImage(
-                        'assets/images/lab.png',
-                      ),
-                      color: mainColor,
-                    ),
+                    color: mainColor,
                   ),
                 ),
-                fallback: (context) =>
-                    const Center(child: CircularProgressIndicator.adaptive()),
               ),
             horizontalSmallSpace,
             if (AppCubit.get(context).isVisitor == false)
@@ -444,22 +425,33 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                     ),
                   );
                 },
-                child: Badge(
-                  position: BadgePosition.topEnd(top: 0),
+                child: Stack(
                   alignment: AlignmentDirectional.centerEnd,
-                  animationType: BadgeAnimationType.slide,
-                  badgeContent: Text(
-                    notifications,
-                    style: titleSmallStyle2.copyWith(
-                      color: whiteColor,
+                  children: [
+                    const Center(
+                      child: ImageIcon(
+                        AssetImage(
+                          'assets/images/notification.png',
+                        ),
+                        color: mainLightColor,
+                      ),
                     ),
-                  ),
-                  child: const ImageIcon(
-                    AssetImage(
-                      'assets/images/notification.png',
-                    ),
-                    color: mainColor,
-                  ),
+                    if (AppCubit.get(context)
+                            .notificationsModel
+                            ?.data
+                            ?.isEmpty ==
+                        false)
+                      if (AppCubit.get(context)
+                              .notificationsModel
+                              ?.data
+                              ?.first
+                              .isRead ==
+                          0)
+                        const CircleAvatar(
+                          backgroundColor: redColor,
+                          radius: 4,
+                        ),
+                  ],
                 ),
               ),
             if (AppCubit.get(context).isVisitor == false) horizontalSmallSpace,
@@ -609,11 +601,11 @@ class DefaultFormField extends StatelessWidget {
             }
           }
 
-          if (validatedText == LocaleKeys.txtFieldCoupon.tr()) {
-            if (value.length != 10) {
-              return LocaleKeys.txtCouponValidation.tr();
-            }
-          }
+          // if (validatedText == LocaleKeys.txtFieldCoupon.tr()) {
+          //   if (value.length != 10) {
+          //     return LocaleKeys.txtCouponValidation.tr();
+          //   }
+          // }
         },
         autofocus: autoFocus,
         controller: controller,
@@ -657,21 +649,21 @@ class DefaultFormField extends StatelessWidget {
             icon: Icon(suffixIcon),
             color: mainColor,
           ),
-          hintStyle: const TextStyle(color: greyDarkColor, fontSize: 14),
-          labelStyle: const TextStyle(
+          hintStyle: TextStyle(color: greyDarkColor, fontSize: 14),
+          labelStyle: TextStyle(
             // color: isClickable ? Colors.grey[400] : blueColor,
             color: greyDarkColor,
             fontSize: 14,
           ),
           fillColor: Colors.white,
           filled: true,
-          errorStyle: const TextStyle(color: redColor),
+          errorStyle: TextStyle(color: redColor),
           // floatingLabelBehavior: FloatingLabelBehavior.never,
           contentPadding: contentPadding ??
               const EdgeInsetsDirectional.only(
                   start: 15.0, end: 15.0, bottom: 15.0, top: 15.0),
         ),
-        style: const TextStyle(
+        style: TextStyle(
             color: mainLightColor, fontSize: 18, fontFamily: fontFamily),
       ),
     );
@@ -684,7 +676,7 @@ class GeneralNationalityCode extends StatefulWidget {
     Key? key,
     required this.controller,
   }) : super(key: key);
-  final TextEditingController controller;
+  TextEditingController controller;
   bool? canSelect = true;
 
   @override
@@ -708,8 +700,10 @@ class _GeneralNationalityCodeState extends State<GeneralNationalityCode> {
           showCountryPicker(
             context: context,
             onSelect: (Country country) {
-              setState((){
-                  widget.controller.text = country.phoneCode;});
+              setState(() {
+                widget.controller.text = country.phoneCode;
+                print('widget.controller.text : ${widget.controller.text}');
+              });
             },
           );
         } else {}
@@ -723,20 +717,20 @@ class _GeneralNationalityCodeState extends State<GeneralNationalityCode> {
             color: greyExtraLightColor.withOpacity(0.4),
           ),
         ),
-        hintStyle: const TextStyle(color: greyDarkColor, fontSize: 14),
-        labelStyle: const TextStyle(
+        hintStyle: TextStyle(color: greyDarkColor, fontSize: 14),
+        labelStyle: TextStyle(
           // color: isClickable ? Colors.grey[400] : blueColor,
           color: greyDarkColor,
           fontSize: 14,
         ),
         fillColor: Colors.white,
         filled: true,
-        errorStyle: const TextStyle(color: redColor),
+        errorStyle: TextStyle(color: redColor),
         // floatingLabelBehavior: FloatingLabelBehavior.never,
         contentPadding: const EdgeInsetsDirectional.only(
             start: 5.0, end: 0.0, bottom: 0.0, top: 0.0),
       ),
-      style: const TextStyle(
+      style: TextStyle(
           color: mainLightColor, fontSize: 18, fontFamily: fontFamily),
     );
   }
@@ -943,10 +937,7 @@ class ScreenHolder extends StatelessWidget {
       child: Text(
         '${LocaleKeys.txtThereIsNo.tr()} $msg ${LocaleKeys.txtYet.tr()}',
         textAlign: TextAlign.center,
-        style: Theme.of(context)
-            .textTheme
-            .headlineSmall
-            ?.copyWith(color: mainColor),
+        style: titleStyle.copyWith(color: mainColor),
       ),
     );
   }
@@ -982,7 +973,8 @@ class MySeparator extends StatelessWidget {
   final double height;
   final Color color;
 
-  const MySeparator({Key? key,
+  const MySeparator({
+    Key? key,
     this.height = 1,
     this.color = greyLightColor,
   }) : super(key: key);
@@ -1017,7 +1009,7 @@ class MySeparator extends StatelessWidget {
 }
 
 Widget doneKeyboard() {
-  return const Text(
+  return Text(
     'done',
     style: titleSmallStyle,
   );

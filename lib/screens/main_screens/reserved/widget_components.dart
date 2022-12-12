@@ -19,61 +19,66 @@ class ReservedCard extends StatelessWidget {
       : super(key: key);
   LabReservationsDateModel? labReservationsDataModel;
   HomeReservationsDataModel? homeReservationsDataModel;
+
   @override
   Widget build(BuildContext context) {
-    String title;
+    List<String> title;
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
         Color stateColor;
-        if (labReservationsDataModel?.statusEn == 'Pending' || homeReservationsDataModel?.statusEn == 'Pending') {
+        if (labReservationsDataModel?.statusEn == 'Pending' ||
+            homeReservationsDataModel?.statusEn == 'Pending') {
           stateColor = pendingColor;
-        } else if (labReservationsDataModel?.statusEn == 'Accepted' || homeReservationsDataModel?.statusEn == 'Accepted') {
+        } else if (labReservationsDataModel?.statusEn == 'Accepted' ||
+            homeReservationsDataModel?.statusEn == 'Accepted') {
           stateColor = acceptedColor;
-        } else if (labReservationsDataModel?.statusEn == 'Sampling' || homeReservationsDataModel?.statusEn == 'Sampling') {
+        } else if (labReservationsDataModel?.statusEn == 'Sampling' ||
+            homeReservationsDataModel?.statusEn == 'Sampling') {
           stateColor = samplingColor;
-        } else if (labReservationsDataModel?.statusEn == 'Finished' || homeReservationsDataModel?.statusEn == 'Finished') {
+        } else if (labReservationsDataModel?.statusEn == 'Finished' ||
+            homeReservationsDataModel?.statusEn == 'Finished') {
           stateColor = finishedColor;
         } else {
           stateColor = canceledColor;
         }
         if (labReservationsDataModel?.tests?.isEmpty ??
             homeReservationsDataModel!.tests!.isEmpty) {
-          title = labReservationsDataModel?.offers?.first.title ??
-              homeReservationsDataModel!.offers?.first.title;
+          title = labReservationsDataModel?.titles ??
+              homeReservationsDataModel!.titles ?? [];
         } else if (labReservationsDataModel?.offers?.isEmpty ??
             homeReservationsDataModel!.offers!.isEmpty) {
-          title = labReservationsDataModel?.tests?.first.title ??
-              homeReservationsDataModel!.tests?.first.title;
+          title = labReservationsDataModel?.titles ??
+              homeReservationsDataModel!.titles ?? [];
         } else {
-          title = '';
+          title = [];
         }
         if (homeReservationsDataModel != null) {
           if (homeReservationsDataModel!.tests!.isEmpty) {
-            title = homeReservationsDataModel?.offers?.first.title;
+            title = homeReservationsDataModel?.titles ?? [];
           } else if (homeReservationsDataModel!.offers!.isEmpty) {
-            title = homeReservationsDataModel?.tests?.first.title;
+            title = homeReservationsDataModel?.titles ?? [];
           } else {
-            title = '';
+            title = [];
           }
         } else if (labReservationsDataModel != null) {
           if (labReservationsDataModel!.tests!.isEmpty) {
-            title = labReservationsDataModel?.offers?.first.title;
+            title = labReservationsDataModel?.titles ?? [];
           } else if (labReservationsDataModel!.offers!.isEmpty) {
-            title = labReservationsDataModel?.tests?.first.title;
+            title = labReservationsDataModel?.titles ?? [];
           } else {
-            title = '';
+            title = [];
           }
         } else {
-          title = '';
+          title = [];
         }
         return ConditionalBuilder(
           condition: state is! AppGetHomeReservationsLoadingState ||
               state is! AppGetLabReservationsLoadingState,
           builder: (context) => SizedBox(
-            height: 150,
+            // height: 150,
             child: Container(
-              height: 110.0,
+              // height: 110.0,
               width: 110.0,
               decoration: BoxDecoration(
                 color: whiteColor,
@@ -108,11 +113,18 @@ class ReservedCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text(
-                      title,
-                      style: titleSmallStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    SizedBox(
+                      height: 30.0 * (labReservationsDataModel?.titles?.length ?? homeReservationsDataModel?.titles?.length ?? 0),
+                      child: ListView.separated(
+                        itemBuilder: (context,index) => Text(
+                          title[index],
+                          style: titleSmallStyle.copyWith(color: mainColor),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        separatorBuilder:  (context, index) =>verticalMicroSpace,
+                        itemCount: labReservationsDataModel?.titles?.length ?? homeReservationsDataModel?.titles?.length ?? 0,
+                      ),
                     ),
                     Text(
                       '${labReservationsDataModel?.date ?? homeReservationsDataModel?.date} - ${labReservationsDataModel?.time ?? homeReservationsDataModel?.time}',
@@ -130,8 +142,7 @@ class ReservedCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Center(
                           child: Text(
-                        labReservationsDataModel?.status ??
-                            homeReservationsDataModel?.status,
+                        labReservationsDataModel?.status ?? homeReservationsDataModel?.status,
                         style: titleStyle.copyWith(
                             fontSize: 15.0,
                             color: stateColor,

@@ -32,6 +32,7 @@ target 'Runner' do
   use_modular_headers!
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
+
   pod 'GoogleMaps'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))

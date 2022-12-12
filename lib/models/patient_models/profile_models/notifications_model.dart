@@ -32,15 +32,18 @@ class NotificationsDataModel {
     this.id,
     this.body,
     this.date,
+    this.isRead,
   });
 
   dynamic id;
   dynamic body;
+  dynamic isRead;
   NotificationsDateModel? date;
 
   factory NotificationsDataModel.fromJson(Map<dynamic, dynamic> json) => NotificationsDataModel(
     id: json["id"],
     body: json["body"],
+    isRead: json["isRead"],
     date: NotificationsDateModel.fromJson(json["date"]),
   );
 }

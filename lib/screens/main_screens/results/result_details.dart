@@ -47,7 +47,9 @@ class _ResultDetailsScreenState extends State<ResultDetailsScreen> {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var result = widget.homeResultsDataModel;
+        var homeResult = widget.homeResultsDataModel;
+        var labResult = widget.labResultsDataModel;
+
         return Scaffold(
           backgroundColor: greyExtraLightColor,
           appBar: GeneralAppBar(
@@ -83,7 +85,7 @@ class _ResultDetailsScreenState extends State<ResultDetailsScreen> {
                           child: Row(
                             children: [
                               Text(
-                                '# ${result?.id ?? ''}',
+                                '# ${homeResult?.id ?? labResult?.id ?? ''}',
                                 style: titleSmallStyle,
                                 textAlign: TextAlign.start,
                               ),
@@ -93,7 +95,7 @@ class _ResultDetailsScreenState extends State<ResultDetailsScreen> {
                         ),
                         Expanded(
                           child: Text(
-                            result?.date?.date ?? '',
+                            homeResult?.date?.date ?? labResult?.date?.date ?? '',
                           ),
                         ),
                       ],
@@ -177,7 +179,7 @@ class _ResultDetailsScreenState extends State<ResultDetailsScreen> {
                             ),
                     ),
                     separatorBuilder: (context, index) => verticalMiniSpace,
-                    itemCount: result?.results?.length ?? 0,
+                    itemCount: homeResult?.results?.length ?? labResult?.results?.length ?? 0,
                   ),
                 ),
               ],

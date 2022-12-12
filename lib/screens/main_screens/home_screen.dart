@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_elteb/shared/components/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,8 @@ import 'package:dar_elteb/shared/constants/general_constants.dart';
 import 'package:dar_elteb/shared/network/local/cache_helper.dart';
 import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    permission();
     if (AppCubit.get(context).isVisitor == false) {
       AppCubit.get(context).getCarouselData();
       AppCubit.get(context).getTerms();
@@ -52,6 +56,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<bool> permission() async {
+    PermissionStatus result;
+    // In Android we need to request the storage permission,
+    // while in iOS is the photos permission
+    if (Platform.isAndroid) {
+      result = await Permission.location.request();
+    } else {
+      result = await Permission.locationAlways.request();
+    }
+
+    if (result.isGranted) {
+      return true;
+    } else if (Platform.isIOS || result.isPermanentlyDenied) {
+      return false;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var cubit = AppCubit.get(context);
@@ -60,16 +83,72 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (BuildContext context) => AppCubit()
         ..getCountry()
         ..getTerms()
+        ..getGeneral()
         ..getCity(countryId: extraCountryId!)
         ..getBranch(cityID: extraCityId!)
         ..getCategories()
         ..getOffers()
-        ..getNotifications(),
+        ..getNotifications()
+        ..getBanner(),
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is AppGetBannerSuccessState) {
+            if (state.bannerModel.status == true) {
+              if (Management.dialogAppeared == false) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: InkWell(
+                        onTap: () async {
+                          print('tapped');
+                          var url = '${AppCubit.get(context).bannerModel?.data?.link}';
+                          if (await canLaunchUrl(Uri(path: url))) {
+                            await launchUrl(Uri(path: url));
+                          } else {
+                            print('tapped');
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.cancel_outlined,
+                                    color: greyDarkColor,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                const Spacer(),
+                              ],
+                            ),
+                            Text(
+                              AppCubit.get(context).bannerModel?.data?.title ?? '',
+                              style: titleSmallStyle,
+                            ),
+                            Expanded(
+                              child: CachedNetworkImageNormal(
+                                height: 300,
+                                width: 300,
+                                imageUrl:
+                                '${AppCubit.get(context).bannerModel?.data?.image}',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ).then((value) => Management.dialogAppeared = true);
+              }
+            }
+          }
+        },
         builder: (context, state) {
-          // AppCubit.get(context).getProfile();
-          // AppCubit.get(context).userResourceModel?.data?.branch?.title;
           return Scaffold(
             backgroundColor: greyExtraLightColor,
             body: ConditionalBuilder(
@@ -84,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   state is! AppGetProfileLoadingState &&
                   cubit.branchNames != null,
               builder: (context) {
+                print('fontFamily : $fontFamily');
                 locationValue =
                     AppCubit.get(context).branchName[extraBranchIndex ?? 0];
                 return Container(
@@ -248,115 +328,125 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       verticalMiniSpace,
-                      SizedBox(
-                        height: 110.0,
-                        width: double.infinity,
-                        child: ListView.separated(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                FadeRoute(
-                                  page: TestItemsScreen(
-                                    categoryId: AppCubit.get(context)
-                                        .categoriesModel!
-                                        .data![index]
-                                        .id,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: CategoriesCard(
-                              categoriesDataModel: AppCubit.get(context)
-                                  .categoriesModel!
-                                  .data![index],
-                            ),
-                          ),
-                          separatorBuilder: (context, index) =>
-                          horizontalMiniSpace,
-                          itemCount: AppCubit.get(context)
-                              .categoriesModel
-                              ?.data
-                              ?.length ??
-                              0,
-                        ),
-                      ),
-                      verticalMiniSpace,
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(radius),
-                          color: whiteColor,
-                          border: Border.all(color: greyLightColor),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  verticalMicroSpace,
-                                  Text(
-                                    LocaleKeys.txtHomeReservation.tr(),
-                                    style: titleSmallStyle.copyWith(
-                                        color: mainColor, fontSize: 20),
-                                  ),
-                                  verticalMicroSpace,
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Text(
-                                      LocaleKeys.onboardingBody.tr(),
-                                      textAlign: TextAlign.start,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: titleSmallStyle2,
+                      ConditionalBuilder(
+                        condition: cubit.testsModel?.data == null,
+                        builder: (context) => SizedBox(
+                          height: 110.0,
+                          width: double.infinity,
+                          child: ListView.separated(
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  FadeRoute(
+                                    page: TestItemsScreen(
+                                      categoryId: AppCubit.get(context)
+                                          .categoriesModel!
+                                          .data![index]
+                                          .id,
                                     ),
                                   ),
-                                  verticalMicroSpace,
-                                  GeneralButton(
-                                    title:
-                                        '${LocaleKeys.TxtReservationScreenTitle.tr()} ${LocaleKeys.txtNow.tr()}',
-                                    fontSize: 15,
-                                    onPress: () {
-                                      if (AppCubit.get(context).isVisitor ==
-                                          true) {
-                                        showPopUp(
-                                          context,
-                                          const VisitorHoldingPopUp(),
-                                        );
-                                      } else {
-                                        Navigator.push(
-                                          context,
-                                          FadeRoute(
-                                            page:
-                                                const CreateTechSupportScreen(),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    height: 40,
-                                  ),
-                                  verticalMicroSpace,
-                                  verticalMicroSpace,
-                                ],
+                                );
+                              },
+                              child: CategoriesCard(
+                                categoriesDataModel: AppCubit.get(context)
+                                    .categoriesModel!
+                                    .data![index],
                               ),
                             ),
-                            Expanded(
-                                child: Padding(
-                              padding: const EdgeInsetsDirectional.only(
-                                top: 10.0,
-                                start: 10.0,
-                                bottom: 10.0,
-                              ),
-                              child: Image.asset(
-                                  'assets/images/homeImageReserv.png'),
-                            )),
-                          ],
+                            separatorBuilder: (context, index) =>
+                                horizontalMiniSpace,
+                            itemCount: AppCubit.get(context)
+                                    .categoriesModel
+                                    ?.data
+                                    ?.length ??
+                                0,
+                          ),
                         ),
+                        fallback: (context) =>
+                            ScreenHolder(msg: LocaleKeys.homeTxtOffers.tr()),
                       ),
+                      verticalMiniSpace,
+                      if (AppCubit.get(context)
+                              .generalModel
+                              ?.data
+                              ?.technicalReservations ==
+                          1)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(radius),
+                            color: whiteColor,
+                            border: Border.all(color: greyLightColor),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    verticalMicroSpace,
+                                    Text(
+                                      LocaleKeys.txtHomeReservation.tr(),
+                                      style: titleSmallStyle.copyWith(
+                                          color: mainColor, fontSize: 20),
+                                    ),
+                                    verticalMicroSpace,
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Text(
+                                        LocaleKeys.onboardingBody.tr(),
+                                        textAlign: TextAlign.start,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: titleSmallStyle2,
+                                      ),
+                                    ),
+                                    verticalMicroSpace,
+                                    GeneralButton(
+                                      title:
+                                          '${LocaleKeys.TxtReservationScreenTitle.tr()} ${LocaleKeys.txtNow.tr()}',
+                                      fontSize: 15,
+                                      onPress: () {
+                                        if (AppCubit.get(context).isVisitor ==
+                                            true) {
+                                          showPopUp(
+                                            context,
+                                            const VisitorHoldingPopUp(),
+                                          );
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            FadeRoute(
+                                              page:
+                                                  const CreateTechSupportScreen(),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      height: 40,
+                                    ),
+                                    verticalMicroSpace,
+                                    verticalMicroSpace,
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  child: Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                  top: 10.0,
+                                  start: 10.0,
+                                  bottom: 10.0,
+                                ),
+                                child: Image.asset(
+                                    'assets/images/homeImageReserv.png'),
+                              )),
+                            ],
+                          ),
+                        ),
                       Row(
                         children: [
                           Text(LocaleKeys.homeTxtOffers.tr(),
@@ -402,11 +492,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             separatorBuilder: (context, index) =>
-                            horizontalMiniSpace,
+                                horizontalMiniSpace,
                             itemCount: AppCubit.get(context)
-                                .offersModel
-                                ?.data
-                                ?.length ??
+                                    .offersModel
+                                    ?.data
+                                    ?.length ??
                                 0,
                           ),
                         ),
@@ -429,6 +519,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   DropdownMenuItem<String> buildLocationItem(String item) => DropdownMenuItem(
         value: item,
-        child: Text(item),
+        child: Text(
+          item,
+          style: titleSmallStyle,
+        ),
       );
+}
+
+class Management {
+  static bool dialogAppeared = false;
 }

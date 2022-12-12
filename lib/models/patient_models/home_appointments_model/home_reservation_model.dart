@@ -1,32 +1,71 @@
+// To parse this JSON data, do
+//
+//     final homeReservationsModel = homeReservationsModelFromJson(jsondynamic);
+
+import 'dart:convert';
+
+HomeReservationsModel homeReservationsModelFromJson(dynamic str) =>
+    HomeReservationsModel.fromJson(json.decode(str));
+
 class HomeReservationsModel {
+  HomeReservationsModel({
+    this.status,
+    this.message,
+    this.data,
+    this.extra,
+    this.errors,
+  });
+
   dynamic status;
   dynamic message;
   List<HomeReservationsDataModel>? data;
   Extra? extra;
   Errors? errors;
 
-  HomeReservationsModel({this.status, this.message, this.data, this.extra, this.errors});
-
-  HomeReservationsModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <HomeReservationsDataModel>[];
-      json['data'].forEach((v) { data!.add(HomeReservationsDataModel.fromJson(v)); });
-    }
-    extra = json['extra'] != null ? Extra.fromJson(json['extra']) : null;
-    errors = json['errors'] != null ? Errors.fromJson(json['errors']) : null;
-  }
+  factory HomeReservationsModel.fromJson(Map<dynamic, dynamic> json) =>
+      HomeReservationsModel(
+        status: json["status"] == null ? null : json["status"],
+        message: json["message"] == null ? null : json["message"],
+        data: json["data"] == null
+            ? null
+            : List<HomeReservationsDataModel>.from(
+                json["data"].map((x) => HomeReservationsDataModel.fromJson(x))),
+        extra: json["extra"] == null ? null : Extra.fromJson(json["extra"]),
+        errors: json["errors"] == null ? null : Errors.fromJson(json["errors"]),
+      );
 }
 
 class HomeReservationsDataModel {
+  HomeReservationsDataModel({
+    this.id,
+    this.date,
+    this.time,
+    this.family,
+    this.address,
+    this.branch,
+    this.coupon,
+    this.price,
+    this.tax,
+    this.discount,
+    this.total,
+    this.status,
+    this.statusEn,
+    this.rate,
+    this.rateMessage,
+    this.createdAt,
+    this.tests,
+    this.offers,
+    this.titles,
+    this.technical,
+  });
+
   dynamic id;
   dynamic date;
   dynamic time;
-  List<void>? family;
-  Address? address;
-  List<void>? branch;
-  List<void>? coupon;
+  Family? family;
+  AddressClass? address;
+  Branch? branch;
+  Coupon? coupon;
   dynamic price;
   dynamic tax;
   dynamic discount;
@@ -36,50 +75,57 @@ class HomeReservationsDataModel {
   dynamic rate;
   dynamic rateMessage;
   CreatedAt? createdAt;
-  List<Tests>? tests;
-  List<Tests>? offers;
-  List<void>? technical;
+  List<Offer>? tests;
+  List<Offer>? offers;
+  Technical? technical;
+  List<String>? titles;
 
-  HomeReservationsDataModel({this.id, this.date, this.time, this.family, this.address, this.branch, this.coupon, this.price, this.tax, this.discount, this.total, this.status, this.statusEn, this.rate, this.rateMessage, this.createdAt, this.tests, this.offers, this.technical});
-
-  HomeReservationsDataModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    date = json['date'];
-    time = json['time'];
-    if (json['family'] != null) {
-      family = <Null>[];
-    }
-    address = json['address'] != null ? Address.fromJson(json['address']) : null;
-    if (json['branch'] != null) {
-      branch = <Null>[];
-    }
-    if (json['coupon'] != null) {
-      coupon = <Null>[];
-    }
-    price = json['price'];
-    tax = json['tax'];
-    discount = json['discount'];
-    total = json['total'];
-    status = json['status'];
-    statusEn = json['statusEn'];
-    rate = json['rate'];
-    rateMessage = json['rateMessage'];
-    createdAt = json['created_at'] != null ? CreatedAt.fromJson(json['created_at']) : null;
-    if (json['tests'] != null) {
-      tests = <Tests>[];
-      json['tests'].forEach((v) { tests!.add(Tests.fromJson(v)); });
-    }
-    if (json['offers'] != null) {
-      offers = <Tests>[];
-      json['tests'].forEach((v) { tests!.add(Tests.fromJson(v)); });
-    }
-    if (json['technical'] != null) {
-      technical = <Null>[];
-    }
-  }
+  factory HomeReservationsDataModel.fromJson(Map<dynamic, dynamic> json) =>
+      HomeReservationsDataModel(
+        id: json["id"] == null ? null : json["id"],
+        date: json["date"] == null ? null : json["date"],
+        time: json["time"] == null ? null : json["time"],
+        titles: json['titles']  == null ? null : json['titles'].cast<String>(),
+        family: json["family"] == null ? null : Family.fromJson(json["family"]),
+        address: json["address"] == null
+            ? null
+            : AddressClass.fromJson(json["address"]),
+        branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
+        coupon: json["coupon"] == null ? null : Coupon.fromJson(json["coupon"]),
+        price: json["price"] == null ? null : json["price"],
+        tax: json["tax"] == null ? null : json["tax"],
+        discount: json["discount"] == null ? null : json["discount"],
+        total: json["total"] == null ? null : json["total"],
+        status: json["status"] == null ? null : json["status"],
+        statusEn: json["statusEn"] == null ? null : json["statusEn"],
+        rate: json["rate"] == null ? null : json["rate"],
+        rateMessage: json["rateMessage"] == null ? null : json["rateMessage"],
+        createdAt: json["created_at"] == null
+            ? null
+            : CreatedAt.fromJson(json["created_at"]),
+        tests: json["tests"] == null
+            ? null
+            : List<Offer>.from(json["tests"].map((x) => Offer.fromJson(x))),
+        offers: json["offers"] == null
+            ? null
+            : List<Offer>.from(json["offers"].map((x) => Offer.fromJson(x))),
+        technical: json["technical"] == null
+            ? null
+            : Technical.fromJson(json["technical"]),
+      );
 }
 
-class Address {
+class AddressClass {
+  AddressClass({
+    this.id,
+    this.latitude,
+    this.longitude,
+    this.address,
+    this.specialMark,
+    this.floorNumber,
+    this.buildingNumber,
+  });
+
   dynamic id;
   dynamic latitude;
   dynamic longitude;
@@ -88,80 +134,190 @@ class Address {
   dynamic floorNumber;
   dynamic buildingNumber;
 
-  Address({this.id, this.latitude, this.longitude, this.address, this.specialMark, this.floorNumber, this.buildingNumber});
+  factory AddressClass.fromJson(Map<dynamic, dynamic> json) => AddressClass(
+        id: json["id"] == null ? null : json["id"],
+        latitude: json["latitude"] == null ? null : json["latitude"],
+        longitude: json["longitude"] == null ? null : json["longitude"],
+        address: json["address"] == null ? null : json["address"],
+        specialMark: json["special_mark"] == null ? null : json["special_mark"],
+        floorNumber: json["floor_number"] == null ? null : json["floor_number"],
+        buildingNumber:
+            json["building_number"] == null ? null : json["building_number"],
+      );
+}
 
-  Address.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    address = json['address'];
-    specialMark = json['special_mark'];
-    floorNumber = json['floor_number'];
-    buildingNumber = json['building_number'];
-  }
+class Branch {
+  Branch({
+    this.id,
+    this.title,
+  });
+
+  dynamic id;
+  dynamic title;
+
+  factory Branch.fromJson(Map<dynamic, dynamic> json) => Branch(
+        id: json["id"] == null ? null : json["id"],
+        title: json["title"] == null ? null : json["title"],
+      );
+}
+
+class Coupon {
+  Coupon({
+    this.id,
+    this.code,
+  });
+
+  dynamic id;
+  dynamic code;
+
+  factory Coupon.fromJson(Map<dynamic, dynamic> json) => Coupon(
+        id: json["id"] == null ? null : json["id"],
+        code: json["code"] == null ? null : json["code"],
+      );
 }
 
 class CreatedAt {
+  CreatedAt({
+    this.date,
+    this.time,
+  });
+
   dynamic date;
   dynamic time;
 
-  CreatedAt({this.date, this.time});
-
-  CreatedAt.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
-    time = json['time'];
-  }
+  factory CreatedAt.fromJson(Map<dynamic, dynamic> json) => CreatedAt(
+        date: json["date"] == null ? null : json["date"],
+        time: json["time"] == null ? null : json["time"],
+      );
 }
 
-class Tests {
+class Family {
+  Family({
+    this.id,
+    this.relation,
+    this.name,
+    this.phoneCode,
+    this.phone,
+    this.birthday,
+    this.gender,
+    this.profile,
+  });
+
+  dynamic id;
+  Branch? relation;
+  dynamic name;
+  dynamic phoneCode;
+  dynamic phone;
+  dynamic birthday;
+  dynamic gender;
+  dynamic profile;
+
+  factory Family.fromJson(Map<dynamic, dynamic> json) => Family(
+        id: json["id"] == null ? null : json["id"],
+        relation:
+            json["relation"] == null ? null : Branch.fromJson(json["relation"]),
+        name: json["name"] == null ? null : json["name"],
+        phoneCode: json["phoneCode"] == null ? null : json["phoneCode"],
+        phone: json["phone"] == null ? null : json["phone"],
+        birthday: json["birthday"] == null ? null : json["birthday"],
+        gender: json["gender"] == null ? null : json["gender"],
+        profile: json["profile"] == null ? null : json["profile"],
+      );
+}
+
+class Offer {
+  Offer({
+    this.id,
+    this.title,
+    this.price,
+    this.image,
+    this.category,
+  });
+
   dynamic id;
   dynamic title;
-  dynamic category;
   dynamic price;
   dynamic image;
+  dynamic category;
 
-  Tests({this.id, this.title, this.category, this.price, this.image});
+  factory Offer.fromJson(Map<dynamic, dynamic> json) => Offer(
+        id: json["id"] == null ? null : json["id"],
+        title: json["title"] == null ? null : json["title"],
+        price: json["price"] == null ? null : json["price"],
+        image: json["image"] == null ? null : json["image"],
+        category: json["category"] == null ? null : json["category"],
+      );
+}
 
-  Tests.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    category = json['category'];
-    price = json['price'];
-    image = json['image'];
-  }
+class Technical {
+  Technical({
+    this.id,
+    this.name,
+    this.profile,
+    this.phoneCode,
+    this.phone,
+  });
+
+  dynamic id;
+  dynamic name;
+  dynamic profile;
+  dynamic phoneCode;
+  dynamic phone;
+
+  factory Technical.fromJson(Map<dynamic, dynamic> json) => Technical(
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        profile: json["profile"] == null ? null : json["profile"],
+        phoneCode: json["phoneCode"] == null ? null : json["phoneCode"],
+        phone: json["phone"] == null ? null : json["phone"],
+      );
+}
+
+class Errors {
+  Errors();
+
+  factory Errors.fromJson(Map<dynamic, dynamic> json) => Errors();
+
+  Map<dynamic, dynamic> toJson() => {};
 }
 
 class Extra {
+  Extra({
+    this.phone,
+    this.pagination,
+  });
+
   dynamic phone;
   Pagination? pagination;
 
-  Extra({this.phone, this.pagination});
-
-  Extra.fromJson(Map<String, dynamic> json) {
-    phone = json['phone'];
-    pagination = json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null;
-  }
+  factory Extra.fromJson(Map<dynamic, dynamic> json) => Extra(
+        phone: json["phone"] == null ? null : json["phone"],
+        pagination: json["pagination"] == null
+            ? null
+            : Pagination.fromJson(json["pagination"]),
+      );
 }
 
 class Pagination {
+  Pagination({
+    this.total,
+    this.count,
+    this.perPage,
+    this.currentPage,
+    this.lastPage,
+  });
+
   dynamic total;
   dynamic count;
   dynamic perPage;
   dynamic currentPage;
   dynamic lastPage;
 
-  Pagination({this.total, this.count, this.perPage, this.currentPage, this.lastPage});
-
-  Pagination.fromJson(Map<String, dynamic> json) {
-    total = json['total'];
-    count = json['count'];
-    perPage = json['perPage'];
-    currentPage = json['currentPage'];
-    lastPage = json['lastPage'];
-  }
-}
-
-class Errors {
-  Errors();
-Errors.fromJson(Map<String, dynamic> json);
+  factory Pagination.fromJson(Map<dynamic, dynamic> json) => Pagination(
+        total: json["total"] == null ? null : json["total"],
+        count: json["count"] == null ? null : json["count"],
+        perPage: json["perPage"] == null ? null : json["perPage"],
+        currentPage: json["currentPage"] == null ? null : json["currentPage"],
+        lastPage: json["lastPage"] == null ? null : json["lastPage"],
+      );
 }

@@ -1,3 +1,4 @@
+import 'package:dar_elteb/models/onboarding_model.dart';
 import 'package:dar_elteb/models/patient_models/auth_models/create_token_model.dart';
 import 'package:dar_elteb/models/patient_models/auth_models/reset_password_model.dart';
 import 'package:dar_elteb/models/patient_models/cart_model.dart';
@@ -187,6 +188,31 @@ class AppGetNotificationsErrorState extends AppStates{
   AppGetNotificationsErrorState(this.error);
 }
 
+class AppSeenNotificationsLoadingState extends AppStates{}
+
+class AppSeenNotificationsSuccessState extends AppStates{
+  final SuccessModel successModel;
+  AppSeenNotificationsSuccessState(this.successModel);
+}
+
+class AppSeenNotificationsErrorState extends AppStates{
+  final String error;
+  AppSeenNotificationsErrorState(this.error);
+}
+
+class AppDeleteNotificationsLoadingState extends AppStates{}
+
+class AppDeleteNotificationsSuccessState extends AppStates{
+  final SuccessModel successModel;
+  AppDeleteNotificationsSuccessState(this.successModel);
+}
+
+class AppDeleteNotificationsErrorState extends AppStates{
+  final String error;
+  AppDeleteNotificationsErrorState(this.error);
+}
+
+
 class AppGetFamiliesLoadingState extends AppStates{}
 
 class AppGetFamiliesSuccessState extends AppStates{
@@ -258,6 +284,19 @@ class AppGetCountriesSuccessState extends AppStates{
 class AppGetCountriesErrorState extends AppStates{
   final String error;
   AppGetCountriesErrorState(this.error);
+}
+
+
+class AppGetOnBoardingLoadingState extends AppStates{}
+
+class AppGetOnBoardingSuccessState extends AppStates{
+  final OnBoardingModel onBoardingModel;
+  AppGetOnBoardingSuccessState(this.onBoardingModel);
+}
+
+class AppGetOnBoardingErrorState extends AppStates{
+  final String error;
+  AppGetOnBoardingErrorState(this.error);
 }
 
 class AppGetRelationsLoadingState extends AppStates{}
@@ -462,6 +501,30 @@ class AppGetHomeResultsSuccessState extends AppStates{
 class AppGetHomeResultsErrorState extends AppStates{
   final String error;
   AppGetHomeResultsErrorState(this.error);
+}
+
+class AppGetBannerLoadingState extends AppStates{}
+
+class AppGetBannerSuccessState extends AppStates{
+  final BannerModel bannerModel;
+  AppGetBannerSuccessState(this.bannerModel);
+}
+
+class AppGetBannerErrorState extends AppStates{
+  final String error;
+  AppGetBannerErrorState(this.error);
+}
+
+class AppGetGeneralLoadingState extends AppStates{}
+
+class AppGetGeneralSuccessState extends AppStates{
+  final GeneralModel generalModel;
+  AppGetGeneralSuccessState(this.generalModel);
+}
+
+class AppGetGeneralErrorState extends AppStates{
+  final String error;
+  AppGetGeneralErrorState(this.error);
 }
 
 class AppGetAddressLoadingState extends AppStates{}

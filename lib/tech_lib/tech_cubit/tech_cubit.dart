@@ -271,6 +271,7 @@ class AppTechCubit extends Cubit<AppTechStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
+      print(responseJson);
       techUserRequestModel = TechUserRequestModel.fromJson(responseJson);
       emit(AppGetTechUserRequestSuccessState(techUserRequestModel!));
     } catch (error) {
@@ -324,6 +325,7 @@ class AppTechCubit extends Cubit<AppTechStates> {
           techReservationsCanceledModel?.add(techReservationsModel!.data![i]);
         }
       }
+      print('AppGetTechReservationsSuccessState : $responseJson');
       emit(AppGetTechReservationsSuccessState(techReservationsModel!));
     } catch (error) {
       emit(AppGetTechReservationsErrorState(error.toString()));

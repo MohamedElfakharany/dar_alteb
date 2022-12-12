@@ -82,7 +82,7 @@ class _TechnicalSupportScreenState extends State<TechnicalSupportScreen> {
                 verticalMediumSpace,
                 if (AppCubit.get(context).patientTechnicalSupportModel?.data != null)
                   ConditionalBuilder(
-                    condition: AppCubit.get(context).patientTechnicalSupportModel?.data == null,
+                    condition: AppCubit.get(context).patientTechnicalSupportModel?.data?.date?.date?.isEmpty == false,
                     builder: (context) => ConditionalBuilder(
                       condition: state is! AppGetTechRequestLoadingState,
                       builder: (context) => const UserRequestsCart(),

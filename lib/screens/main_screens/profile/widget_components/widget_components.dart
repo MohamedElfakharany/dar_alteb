@@ -222,7 +222,7 @@ class MedicalInquiriesCard extends StatelessWidget {
                         radius,
                       ),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         'New',
                         style: titleSmallStyleGreen,
@@ -251,8 +251,7 @@ class AddressCard extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         Widget isSelectedAddress;
-        if (AppCubit.get(context).addressModel?.data?[index].isSelected ==
-            '1') {
+        if (AppCubit.get(context).addressModel?.data?[index].isSelected == '1') {
           isSelectedAddress = SvgPicture.asset(
             'assets/images/checkTrue.svg',
             width: 20,
@@ -283,8 +282,17 @@ class AddressCard extends StatelessWidget {
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start ,
                     children: [
+                      Text(
+                        '${addressDataModel.title}',
+                        style: titleSmallStyle.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: mainColor
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       Text(
                         '${addressDataModel.address}',
                         style: titleSmallStyle.copyWith(

@@ -1,3 +1,5 @@
+import 'package:dar_elteb/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
@@ -36,12 +38,25 @@ class VisitorHolderScreenState extends State<VisitorHolderScreen> {
                   height: 150,
                 ),
                 verticalLargeSpace,
-                const Text('Please Sign in First 😅 ',style: titleStyle,),
+                Text(
+                  LocaleKeys.txtPleaseSignInFirst.tr(),
+                  style: titleStyle,
+                ),
                 verticalLargeSpace,
-                GeneralButton(title: 'Sign In', onPress: (){
-                  AppCubit.get(context).currentIndex = 0;
-                  Navigator.pushAndRemoveUntil(context, FadeRoute(page: OnBoardingScreen(),), (route) => false);
-                }),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: GeneralButton(
+                      title: LocaleKeys.BtnSignIn.tr(),
+                      onPress: () {
+                        AppCubit.get(context).currentIndex = 0;
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            FadeRoute(
+                              page: OnBoardingScreen(),
+                            ),
+                            (route) => false);
+                      }),
+                ),
                 verticalLargeSpace,
               ],
             ),

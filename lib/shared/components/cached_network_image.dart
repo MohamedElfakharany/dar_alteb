@@ -96,9 +96,6 @@ class CachedNetworkImageNormal extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         decoration: const BoxDecoration(
             shape: BoxShape.circle, color: Color(0xffDEDEDE)),
-        child: Image.asset(
-          'assets/images/placeholder.png',
-        ),
       ),
     );
   }

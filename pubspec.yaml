@@ -46,6 +46,8 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   flutter_datetime_picker: ^1.5.1
   permission_handler: ^9.2.0
+  flutter_local_notifications: ^12.0.4
+  url_launcher: ^6.1.7
 
   #firebase
   firebase_auth: ^3.11.1
@@ -76,7 +78,7 @@ flutter_app_name:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/darEltepAppLogog.jpg"
+  image_path: "assets/images/darEltepLogo.png"
 
 flutter:
   uses-material-design: true
@@ -115,3 +117,13 @@ flutter:
         - asset: assets/fonts/Poppins-Thin.ttf
         - asset: assets/fonts/Poppins-ThinItalic.ttf
           style: italic
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Black.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+        - asset: assets/fonts/Cairo-ExtraBold.ttf
+        - asset: assets/fonts/Cairo-ExtraLight.ttf
+        - asset: assets/fonts/Cairo-Light.ttf
+        - asset: assets/fonts/Cairo-Medium.ttf
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-SemiBold.ttf

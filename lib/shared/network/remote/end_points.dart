@@ -1,4 +1,4 @@
-///Main darelteb
+///Main HQ
       const mainURL = 'https://darelteb.orcav.com/api';
 
       const authURL = '$mainURL/auth';
@@ -45,6 +45,8 @@
 
       const countryURL = '$coreURL/countries';
 
+      const onboardingURL = '$coreURL/onboarding';
+
       const cityURL = '$coreURL/cities';
 
       const branchURL = '$coreURL/branches';
@@ -52,6 +54,10 @@
       const relationsURL = '$coreURL/relations';
 
       const slidersURL = '$coreURL/sliders';
+
+      const generalURL = '$coreURL/general';
+
+      const bannerURL = '$coreURL/banners';
 
 ///Tests
 
@@ -66,6 +72,8 @@
       const getProfileURL = '$profileURL/get-profile';
 
       const getNotificationsURL = '$profileURL/notifications';
+
+      const notificationSeenURL = '$getNotificationsURL/read';
 
       const editProfileURL = '$profileURL/edit-profile';
 

@@ -1,14 +1,15 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
 import 'package:dar_elteb/cubit/states.dart';
 import 'package:dar_elteb/screens/intro_screens/auth/login_screen.dart';
 import 'package:dar_elteb/screens/intro_screens/auth/register/select_country_screen.dart';
 import 'package:dar_elteb/screens/intro_screens/auth/register/sign_up_screen.dart';
+import 'package:dar_elteb/shared/components/cached_network_image.dart';
 import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
@@ -31,6 +32,7 @@ class BoardingModel {
 class OnBoardingScreen extends StatefulWidget {
   OnBoardingScreen({Key? key, this.isSignOut}) : super(key: key);
   bool? isSignOut = false;
+
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
@@ -38,68 +40,82 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   bool isLast = false;
   var boardController = PageController();
-  List<BoardingModel> boarding = [
-    BoardingModel(
-      image: 'assets/images/onboarding1.svg',
-      body: LocaleKeys.onboardingBody.tr(),
-      title: LocaleKeys.onboardingTitle.tr(),
-    ),
-    BoardingModel(
-      image: 'assets/images/onboarding1.svg',
-      body: LocaleKeys.onboardingBody.tr(),
-      title: LocaleKeys.onboardingTitle.tr(),
-    ),
-    BoardingModel(
-      image: 'assets/images/onboarding1.svg',
-      body: LocaleKeys.onboardingBody.tr(),
-      title: LocaleKeys.onboardingTitle.tr(),
-    ),
-  ];
+
+  @override
+  void initState() {
+    AppCubit.get(context).getOnboarding();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
-        if (state is AppGetCountriesSuccessState){
-          if (state.countriesModel.status){
-          Navigator.push(context, FadeRoute(page: const SelectCountryScreen(),),);
-          }else {
-            showDialog(context: context, builder: (context) => AlertDialog(content: Text(state.countriesModel.message,)),);
+        if (state is AppGetCountriesSuccessState) {
+          if (state.countriesModel.status) {
+            Navigator.push(
+              context,
+              FadeRoute(
+                page: const SelectCountryScreen(),
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                  content: Text(
+                state.countriesModel.message,
+              )),
+            );
           }
-        }else if (state is AppGetCountriesErrorState){
-          showDialog(context: context, builder: (context) => AlertDialog(content: Text(state.error,)),);
+        } else if (state is AppGetCountriesErrorState) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                content: Text(
+              state.error,
+            )),
+          );
         }
       },
       builder: (context, state) {
+        var cubit = AppCubit.get(context).onBoardingModel;
+        var item1 = cubit?.data?.onboarding1;
+        var item2 = cubit?.data?.onboarding2;
+        var item3 = cubit?.data?.onboarding3;
         return Scaffold(
           backgroundColor: whiteColor,
           body: Padding(
             padding:
-                const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 30.0),
+                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
             child: Column(
               children: [
                 Expanded(
-                  child: PageView.builder(
-                    onPageChanged: (int index) {
-                      if (index == boarding.length - 1) {
-                        setState(() {
-                          isLast = true;
-                        });
-                      } else {
-                        isLast = false;
-                      }
-                    },
+                  child: PageView(
                     physics: const BouncingScrollPhysics(),
                     controller: boardController,
-                    itemBuilder: (context, index) =>
-                        buildBoardingItem(boarding[index]),
-                    itemCount: boarding.length,
+                    children: [
+                      buildBoardingItem(
+                        title: '${item1?.title}',
+                        image: '${item1?.image}',
+                        description: '${item1?.description}',
+                      ),
+                      buildBoardingItem(
+                        title: '${item2?.title}',
+                        image: '${item2?.image}',
+                        description: '${item2?.description}',
+                      ),
+                      buildBoardingItem(
+                        title: '${item3?.title}',
+                        image: '${item3?.image}',
+                        description: '${item3?.description}',
+                      ),
+                    ],
                   ),
                 ),
                 Center(
                   child: SmoothPageIndicator(
                     controller: boardController,
-                    count: boarding.length,
+                    count: 3,
                     effect: const ExpandingDotsEffect(
                       dotColor: Colors.grey,
                       dotHeight: 10,
@@ -219,22 +235,32 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  Widget buildBoardingItem(BoardingModel model) => ListView(
+  Widget buildBoardingItem({
+    required String image,
+    required String title,
+    required String description,
+  }) =>
+      ListView(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(
-            model.image,
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
+          verticalMiniSpace,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: CachedNetworkImageNormal(
+              imageUrl: image,
+              height: MediaQuery.of(context).size.height * 0.5,
+              width: MediaQuery.of(context).size.width,
+            ),
           ),
+          verticalMiniSpace,
           Text(
-            model.title,
+            title,
             textAlign: TextAlign.center,
             style: titleStyle,
           ),
           verticalMiniSpace,
           Text(
-            model.body,
+            description,
             textAlign: TextAlign.center,
             style: subTitleSmallStyle,
             maxLines: 2,

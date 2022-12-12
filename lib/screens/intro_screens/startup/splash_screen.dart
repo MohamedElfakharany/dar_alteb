@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     type = CacheHelper.getData(key: 'type');
     isFirst = CacheHelper.getData(key: 'isFirst');
     sharedLanguage = CacheHelper.getData(key: 'local');
-    // verified = CacheHelper.getData(key: 'verified');
+    verified = CacheHelper.getData(key: 'verified');
     extraCountryId = CacheHelper.getData(key: 'extraCountryId');
     extraCityId = CacheHelper.getData(key: 'extraCityId');
     extraBranchId = CacheHelper.getData(key: 'extraBranchId');
@@ -38,7 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
     isEnglishShared ??= true;
 
-    verified ??= 0;
+    if (sharedLanguage == 'en'){
+      fontFamily = 'Poppins';
+    }else {
+      fontFamily = 'Cairo';
+    }
 
     if (kDebugMode) {
       printWrapped('from main the token is $token');
@@ -55,21 +59,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (token != null) {
       if (verified != null){
-        if (verified == 1) {
-          if (type == 'Technical'){
-            widget = const TechHomeLayoutScreen();
-          }else{
-            AppCubit.get(context).isVisitor = false;
-            widget = const HomeLayoutScreen();}
-        } else {
-          widget = const LoginScreen();
-        }
-      }else {
-        if (isFirst != null){
-          widget = OnBoardingScreen(isSignOut: false,);
+      if (verified == 1) {
+        if (type == 'Technical'){
+          widget = const TechHomeLayoutScreen();
         }else{
-          widget = const SelectLangScreen();
-        }
+        AppCubit.get(context).isVisitor = false;
+        widget = const HomeLayoutScreen();}
+      } else {
+        widget = const LoginScreen();
+      }
+      }else {
+      if (isFirst != null){
+        widget = OnBoardingScreen(isSignOut: false,);
+      }else{
+        widget = const SelectLangScreen();
+      }
       }
     } else {
       widget = const SelectLangScreen();

@@ -96,7 +96,7 @@ class _MedicalInquiriesScreenState extends State<MedicalInquiriesScreen> {
                                             color: Colors.white,
                                           ),
                                           Text(LocaleKeys.BtnDelete.tr(),
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20)),
                                         ],

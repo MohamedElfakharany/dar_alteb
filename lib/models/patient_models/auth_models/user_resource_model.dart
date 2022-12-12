@@ -43,6 +43,7 @@ class UserResourceDataModel {
     this.deviceToken,
     this.active,
     this.isCompleted,
+    this.completedPercentage,
     this.nationalId,
     this.phoneCode,
   });
@@ -64,6 +65,7 @@ class UserResourceDataModel {
   dynamic deviceToken;
   dynamic active;
   dynamic isCompleted;
+  dynamic completedPercentage;
   dynamic nationalId;
 
   factory UserResourceDataModel.fromJson(Map<dynamic, dynamic> json) =>
@@ -85,6 +87,7 @@ class UserResourceDataModel {
         deviceToken: json["deviceToken"],
         active: json["active"],
         isCompleted: json["isCompleted"],
+        completedPercentage: json["completedPercentage"],
         nationalId: json["nationalId"],
       );
 }

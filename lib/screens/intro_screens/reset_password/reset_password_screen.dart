@@ -152,7 +152,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 10),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         boxShadow: [
                           BoxShadow(
                             color: whiteColor,
@@ -179,15 +179,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             color: mainColor,
                           ),
                           label: Text(LocaleKeys.txtFieldPassword.tr()),
-                          hintStyle: const TextStyle(
+                          hintStyle: TextStyle(
                               color: greyDarkColor, fontSize: 14),
-                          labelStyle: const TextStyle(
+                          labelStyle: TextStyle(
                               // color: isClickable ? Colors.grey[400] : blueColor,
                               color: greyDarkColor,
                               fontSize: 14),
                           fillColor: Colors.white,
                           filled: true,
-                          errorStyle: const TextStyle(color: redColor),
+                          errorStyle: TextStyle(color: redColor),
                           // floatingLabelBehavior: FloatingLabelBehavior.never,
                           contentPadding: const EdgeInsetsDirectional.only(
                               start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -198,7 +198,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             ),
                           ),
                         ),
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: mainLightColor,
                             fontSize: 18,
                             fontFamily: fontFamily),
@@ -209,43 +209,46 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return LocaleKeys.txtFieldPassword.tr();
-                          } else {
-                            //call function to check password
-                            bool result = validatePassword(value);
-                            if (result) {
-                              // create account event
-                              return null;
-                            } else {
-                              return LocaleKeys.passwordConditions.tr();
-                            }
+                            return '${LocaleKeys.txtFill.tr()} ${LocaleKeys.TxtFieldNewPassword.tr()}';
+                          }else if (value.length < 8){
+                            return LocaleKeys.txtPasswordValidate.tr();
                           }
+                          // else {
+                          //   //call function to check password
+                          //   bool result = validatePassword(value);
+                          //   if (result) {
+                          //     // create account event
+                          //     return null;
+                          //   } else {
+                          //     return LocaleKeys.passwordConditions.tr();
+                          //   }
+                          // }
                         },
                       ),
                     ),
                   ),
-                  verticalMiniSpace,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: LinearProgressIndicator(
-                      value: passwordStrength,
-                      backgroundColor: Colors.grey[300],
-                      minHeight: 5,
-                      color: passwordStrength <= 1 / 4
-                          ? Colors.red
-                          : passwordStrength == 2 / 4
-                              ? Colors.yellow
-                              : passwordStrength == 3 / 4
-                                  ? Colors.blue
-                                  : Colors.green,
-                    ),
-                  ),
+                  // verticalMiniSpace,
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  //   child: LinearProgressIndicator(
+                  //     value: passwordStrength,
+                  //     backgroundColor: Colors.grey[300],
+                  //     minHeight: 5,
+                  //     color: passwordStrength <= 1 / 4
+                  //         ? Colors.red
+                  //         : passwordStrength == 2 / 4
+                  //             ? Colors.yellow
+                  //             : passwordStrength == 3 / 4
+                  //                 ? Colors.blue
+                  //                 : Colors.green,
+                  //   ),
+                  // ),
                   verticalMiniSpace,
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 10),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         boxShadow: [
                           BoxShadow(
                             color: whiteColor,
@@ -273,15 +276,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             color: mainColor,
                           ),
                           label: Text(LocaleKeys.TxtFieldConfirmPassword.tr()),
-                          hintStyle: const TextStyle(
+                          hintStyle: TextStyle(
                               color: greyDarkColor, fontSize: 14),
-                          labelStyle: const TextStyle(
+                          labelStyle: TextStyle(
                               // color: isClickable ? Colors.grey[400] : blueColor,
                               color: greyDarkColor,
                               fontSize: 14),
                           fillColor: Colors.white,
                           filled: true,
-                          errorStyle: const TextStyle(color: redColor),
+                          errorStyle: TextStyle(color: redColor),
                           // floatingLabelBehavior: FloatingLabelBehavior.never,
                           contentPadding: const EdgeInsetsDirectional.only(
                               start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -292,7 +295,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             ),
                           ),
                         ),
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: mainLightColor,
                             fontSize: 18,
                             fontFamily: fontFamily),

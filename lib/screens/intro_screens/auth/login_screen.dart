@@ -8,7 +8,7 @@ import 'package:dar_elteb/cubit/states.dart';
 import 'package:dar_elteb/screens/intro_screens/auth/register/select_country_screen.dart';
 import 'package:dar_elteb/screens/intro_screens/auth/register/sign_up_screen.dart';
 import 'package:dar_elteb/screens/intro_screens/reset_password/forget_password_screen.dart';
-import 'package:dar_elteb/screens/intro_screens/reset_password/verification_screen.dart';
+import 'package:dar_elteb/screens/intro_screens/auth/verification_screen.dart';
 import 'package:dar_elteb/screens/main_screens/home_layout_screen.dart';
 import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:dar_elteb/shared/constants/colors.dart';
@@ -72,9 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 FadeRoute(
                   page: VerificationScreen(
                     phoneCode: nationalCodeController.text,
-                    isChangeMobile: false,
                     mobileNumber: mobileController.text.toString(),
-                    isRegister: true,
                   ),
                 ),
               );
@@ -148,6 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       builder: (context, state) {
+        nationalCodeController.text = '966';
         return Scaffold(
           backgroundColor: whiteColor,
           appBar: GeneralAppBar(

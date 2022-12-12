@@ -422,18 +422,18 @@ class _VerificationScreenState extends State<VerificationScreen> {
         }
       }
     } on FirebaseAuthException catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return
-            // const Center(child: CircularProgressIndicator.adaptive());
-            AlertDialog(
-            content: Text(
-              e.code,
-            ),
-          );
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return
+      //       // const Center(child: CircularProgressIndicator.adaptive());
+      //       AlertDialog(
+      //       content: Text(
+      //         e.code,
+      //       ),
+      //     );
+      //   },
+      // );
       if (kDebugMode) {
         print("catch");
       }

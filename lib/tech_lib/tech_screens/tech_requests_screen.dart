@@ -10,12 +10,28 @@ import 'package:dar_elteb/tech_lib/tech_cubit/tech_cubit.dart';
 import 'package:dar_elteb/tech_lib/tech_cubit/tech_states.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 
-class TechRequestsScreen extends StatelessWidget {
+class TechRequestsScreen extends StatefulWidget {
   const TechRequestsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<TechRequestsScreen> createState() => _TechRequestsScreenState();
+}
+
+class _TechRequestsScreenState extends State<TechRequestsScreen> {
+  Color bgColorTest = whiteColor;
+  Color bgColorOffer = mainColor;
+  Color fontColorTest = mainColor;
+  Color fontColorOffer = whiteColor;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
     var cubit = AppTechCubit.get(context);
+    bgColorTest = index == 0 ? mainLightColor : whiteColor;
+    bgColorOffer = index == 1 ? mainLightColor : whiteColor;
+    fontColorTest = index == 1 ? mainLightColor : whiteColor;
+    fontColorOffer = index == 0 ? mainLightColor : whiteColor;
+
     return BlocConsumer<AppTechCubit, AppTechStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -36,108 +52,92 @@ class TechRequestsScreen extends StatelessWidget {
                       child: AppBar(
                         backgroundColor: greyExtraLightColor,
                         elevation: 0.0,
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.circular(20),
-                        // ),
                         bottom: TabBar(
-                          indicatorColor: mainColor,
+                          indicator: const BoxDecoration(),
+                          onTap: (i) {
+                            setState(() {
+                              index = i;
+                            });
+                          },
                           tabs: [
                             Tab(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      height: 60,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                            color: mainLightColor, width: 2),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.grey.withOpacity(0.15),
-                                            spreadRadius: 2,
-                                            blurRadius: 2,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
-                                        color: whiteColor,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/atHomeIcon.png',
-                                            width: 25,
-                                            height: 25,
-                                            color: mainColor,
-                                          ),
-                                          horizontalSmallSpace,
-                                          Text(
-                                            LocaleKeys.BtnAtHome.tr(),
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: darkColor,
-                                            ),
-                                          ),
-                                        ],
+                              child: Container(
+                                height: 60,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: mainLightColor, width: 2),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.15),
+                                      spreadRadius: 2,
+                                      blurRadius: 2,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                  color: bgColorTest,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/atLabIcon.png',
+                                      width: 25,
+                                      height: 25,
+                                      color: fontColorTest,
+                                    ),
+                                    horizontalMiniSpace,
+                                    Text(
+                                      LocaleKeys.BtnAtLab.tr(),
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: fontColorTest,
                                       ),
                                     ),
-                                  ),
-                                  verticalMicroSpace,
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             Tab(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      height: 60,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                            color: mainLightColor, width: 2),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.grey.withOpacity(0.15),
-                                            spreadRadius: 2,
-                                            blurRadius: 2,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
-                                        color: whiteColor,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/homeUnselected.png',
-                                            width: 25,
-                                            height: 25,
-                                            color: mainColor,
-                                          ),
-                                          horizontalSmallSpace,
-                                          Text(
-                                            '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.txtRequests.tr()}',
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: darkColor,
-                                            ),
-                                          ),
-                                        ],
+                              child: Container(
+                                height: 60,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: mainLightColor, width: 2),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.15),
+                                      spreadRadius: 2,
+                                      blurRadius: 2,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                  color: bgColorOffer,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/atHomeIcon.png',
+                                      width: 25,
+                                      height: 25,
+                                      color: fontColorOffer,
+                                    ),
+                                    horizontalMiniSpace,
+                                    Text(
+                                      LocaleKeys.BtnAtHome.tr(),
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: fontColorOffer,
                                       ),
                                     ),
-                                  ),
-                                  verticalMicroSpace,
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -148,28 +148,35 @@ class TechRequestsScreen extends StatelessWidget {
                     verticalMiniSpace,
                     Expanded(
                       child: TabBarView(
-                        physics: const BouncingScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         children: [
                           // first tab bar view widget
                           ConditionalBuilder(
                             condition:
                                 cubit.techRequestsModel?.data?.isNotEmpty ==
                                     true,
-                            builder: (context) => Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: ListView.separated(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (context, index) =>
-                                    TechHomeRequestsCart(index: index),
-                                separatorBuilder: (context, index) =>
-                                    verticalMiniSpace,
-                                itemCount: AppTechCubit.get(context)
-                                        .techRequestsModel
-                                        ?.data
-                                        ?.length ??
-                                    0,
+                            builder: (context) => ConditionalBuilder(
+                              condition:
+                                  state is! AppAcceptTechRequestsLoadingState,
+                              builder: (context) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: ListView.separated(
+                                  physics: const BouncingScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) =>
+                                      TechHomeRequestsCart(index: index),
+                                  separatorBuilder: (context, index) =>
+                                      verticalMiniSpace,
+                                  itemCount: AppTechCubit.get(context)
+                                          .techRequestsModel
+                                          ?.data
+                                          ?.length ??
+                                      0,
+                                ),
+                              ),
+                              fallback: (context) => const Center(
+                                child: CircularProgressIndicator.adaptive(),
                               ),
                             ),
                             fallback: (context) => Center(

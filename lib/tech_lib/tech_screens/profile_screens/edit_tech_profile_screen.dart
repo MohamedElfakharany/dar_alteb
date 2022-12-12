@@ -242,15 +242,15 @@ class _EditTechProfileScreenState extends State<EditTechProfileScreen> {
                           ),
                         ),
                         hintStyle:
-                        const TextStyle(color: greyDarkColor, fontSize: 14),
-                        labelStyle: const TextStyle(
+                        TextStyle(color: greyDarkColor, fontSize: 14),
+                        labelStyle: TextStyle(
                           // color: isClickable ? Colors.grey[400] : blueColor,
                           color: greyDarkColor,
                           fontSize: 14,
                         ),
                         fillColor: Colors.white,
                         filled: true,
-                        errorStyle: const TextStyle(color: redColor),
+                        errorStyle: TextStyle(color: redColor),
                         // floatingLabelBehavior: FloatingLabelBehavior.never,
                         contentPadding: const EdgeInsetsDirectional.only(
                             start: 15.0, end: 15.0, bottom: 15.0, top: 15.0),

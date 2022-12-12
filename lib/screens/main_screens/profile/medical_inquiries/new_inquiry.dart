@@ -102,7 +102,7 @@ class _NewInquiryScreenState extends State<NewInquiryScreen> {
                               children: [
                                 Text(
                                   LocaleKeys.BtnAddFile.tr(),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: fontFamily,
                                     fontWeight: FontWeight.bold,

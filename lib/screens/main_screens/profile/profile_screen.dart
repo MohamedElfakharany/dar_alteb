@@ -23,7 +23,6 @@ import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
 import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -45,6 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           AppCubit.get(context).getTerms();
           AppCubit.get(context).getMedicalInquiries();
           AppCubit.get(context).getProfile();
+          AppCubit.get(context).getGeneral();
         }
       },
     );
@@ -188,7 +188,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           physics: const BouncingScrollPhysics(),
                           child: Column(
                             children: [
-                              if (AppCubit.get(context).isVisitor == true &&
+                              if (AppCubit.get(context)
+                                          .userResourceModel
+                                          ?.data
+                                          ?.completedPercentage !=
+                                      '100' &&
                                   later == true)
                                 Container(
                                   height: 160,
@@ -227,15 +231,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               child: LinearProgressIndicator(
                                                 minHeight: 5,
                                                 color: greenColor,
-                                                value: 0.5,
+                                                value: (AppCubit.get(context)
+                                                        .userResourceModel
+                                                        ?.data
+                                                        ?.completedPercentage ?? 50) *
+                                                    .01,
                                                 backgroundColor: greyLightColor
                                                     .withOpacity(0.4),
                                               ),
                                             ),
                                           ),
                                           horizontalSmallSpace,
-                                          const Text(
-                                            '50 %',
+                                          Text(
+                                            '${AppCubit.get(context).userResourceModel?.data?.completedPercentage} %',
                                           ),
                                         ],
                                       ),
@@ -243,10 +251,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         children: [
                                           MaterialButton(
                                             onPressed: () {
-                                              showPopUp(
-                                                context,
-                                                const VisitorHoldingPopUp(),
-                                              );
+                                              if (AppCubit.get(context)
+                                                      .isVisitor ==
+                                                  true) {
+                                                showPopUp(
+                                                  context,
+                                                  const VisitorHoldingPopUp(),
+                                                );
+                                              } else {
+                                                Navigator.push(
+                                                    context,
+                                                    FadeRoute(
+                                                        page:
+                                                            const EditProfileScreen()));
+                                              }
                                             },
                                             child: Container(
                                               height: 50,
@@ -314,65 +332,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     );
                                   }
                                 },
-                                child: Badge(
-                                  position: BadgePosition.topEnd(end: 40.0),
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  animationType: BadgeAnimationType.fade,
-                                  badgeContent: Text(
-                                    '${AppCubit.get(context).medicalInquiriesModel?.data?.length ?? ''}',
-                                    style: titleSmallStyle2.copyWith(
-                                        color: whiteColor),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        profileMessageImage,
-                                        width: 25,
-                                        height: 25,
-                                      ),
-                                      horizontalSmallSpace,
-                                      Text(
-                                        LocaleKeys.txtMedicalInquiries.tr(),
-                                        style: titleSmallStyle.copyWith(
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                      const Spacer(),
-                                      horizontalSmallSpace,
-                                      const Icon(
-                                        Icons.arrow_forward_ios_sharp,
-                                        color: greyLightColor,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              verticalMediumSpace,
-                              InkWell(
-                                onTap: () {
-                                  if (AppCubit.get(context).isVisitor == true) {
-                                    showPopUp(
-                                      context,
-                                      const VisitorHoldingPopUp(),
-                                    );
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                        page: const TechnicalSupportScreen(),
-                                      ),
-                                    );
-                                  }
-                                },
                                 child: Row(
                                   children: [
-                                    const ImageIcon(
-                                        AssetImage(
-                                            'assets/images/reservedSelected.png'),
-                                        color: mainColor),
-
+                                    Image.asset(
+                                      profileMessageImage,
+                                      width: 25,
+                                      height: 25,
+                                    ),
                                     horizontalSmallSpace,
                                     Text(
-                                      LocaleKeys.TxtReservationScreenTitle.tr(),
+                                      LocaleKeys.txtMedicalInquiries.tr(),
                                       style: titleSmallStyle.copyWith(
                                           fontWeight: FontWeight.normal),
                                     ),
@@ -385,6 +354,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                               ),
+                              if (AppCubit.get(context)
+                                      .generalModel
+                                      ?.data
+                                      ?.technicalReservations ==
+                                  1)
+                                verticalMediumSpace,
+                              if (AppCubit.get(context)
+                                      .generalModel
+                                      ?.data
+                                      ?.technicalReservations ==
+                                  1)
+                                InkWell(
+                                  onTap: () {
+                                    if (AppCubit.get(context).isVisitor ==
+                                        true) {
+                                      showPopUp(
+                                        context,
+                                        const VisitorHoldingPopUp(),
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        FadeRoute(
+                                          page: const TechnicalSupportScreen(),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      const ImageIcon(
+                                          AssetImage(
+                                              'assets/images/reservedSelected.png'),
+                                          color: mainColor),
+                                      horizontalSmallSpace,
+                                      Text(
+                                        LocaleKeys.txtAskForTech.tr(),
+                                        style: titleSmallStyle.copyWith(
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      const Spacer(),
+                                      horizontalSmallSpace,
+                                      const Icon(
+                                        Icons.arrow_forward_ios_sharp,
+                                        color: greyLightColor,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               verticalMediumSpace,
                               InkWell(
                                 onTap: () {
@@ -461,44 +479,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                               ),
-                              verticalMediumSpace,
-                              InkWell(
-                                onTap: () {
-                                  if (AppCubit.get(context).isVisitor == true) {
-                                    showPopUp(
-                                      context,
-                                      const VisitorHoldingPopUp(),
-                                    );
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                        page: const AddressScreen(),
+                              if (AppCubit.get(context)
+                                      .generalModel
+                                      ?.data
+                                      ?.homeReservations ==
+                                  1)
+                                verticalMediumSpace,
+                              if (AppCubit.get(context)
+                                      .generalModel
+                                      ?.data
+                                      ?.homeReservations ==
+                                  1)
+                                InkWell(
+                                  onTap: () {
+                                    if (AppCubit.get(context).isVisitor ==
+                                        true) {
+                                      showPopUp(
+                                        context,
+                                        const VisitorHoldingPopUp(),
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        FadeRoute(
+                                          page: const AddressScreen(),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        profileLocationImage,
+                                        width: 25,
+                                        height: 25,
                                       ),
-                                    );
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      profileLocationImage,
-                                      width: 25,
-                                      height: 25,
-                                    ),
-                                    horizontalSmallSpace,
-                                    Text(
-                                      LocaleKeys.txtAddress.tr(),
-                                      style: titleSmallStyle.copyWith(
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    const Spacer(),
-                                    const Icon(
-                                      Icons.arrow_forward_ios_sharp,
-                                      color: greyLightColor,
-                                    ),
-                                  ],
+                                      horizontalSmallSpace,
+                                      Text(
+                                        LocaleKeys.txtAddress.tr(),
+                                        style: titleSmallStyle.copyWith(
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      const Spacer(),
+                                      const Icon(
+                                        Icons.arrow_forward_ios_sharp,
+                                        color: greyLightColor,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
                               verticalMediumSpace,
                               InkWell(
                                 onTap: () {
@@ -578,15 +607,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 },
                                 child: Row(
                                   children: [
-                                    // Image.asset(
-                                    //   'assets/images/terms.jpg',
-                                    //   width: 25,
-                                    //   height: 25,
-                                    // ),
-
-                                    SvgPicture.asset(
+                                    Image.asset(
                                       profileEyeShieldImage,
-                                      height: 0.05.sw,
+                                      width: 25,
+                                      height: 25,
                                     ),
                                     horizontalSmallSpace,
                                     Text(

@@ -55,6 +55,18 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
     });
   }
 
+  Color bgColorAll = whiteColor;
+  Color bgColorUpcoming = mainColor;
+  Color bgColorSampling = mainColor;
+  Color bgColorCanceled = mainColor;
+  Color bgColorFinished = mainColor;
+  Color fontColorAll = mainColor;
+  Color fontColorUpcoming = whiteColor;
+  Color fontColorSampling = whiteColor;
+  Color fontColorCanceled = whiteColor;
+  Color fontColorFinished = whiteColor;
+  int index = 0;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppTechCubit, AppTechStates>(
@@ -70,6 +82,26 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
         }
       },
       builder: (context, state) {
+        bgColorAll =
+        index == 0 ? mainLightColor : whiteColor;
+        bgColorUpcoming =
+        index == 1 ? mainLightColor : whiteColor;
+        bgColorSampling =
+        index == 2 ? mainLightColor : whiteColor;
+        bgColorCanceled =
+        index == 3 ? mainLightColor : whiteColor;
+        bgColorFinished =
+        index == 4 ? mainLightColor : whiteColor;
+        fontColorAll =
+        index == 0 ? whiteColor : mainLightColor;
+        fontColorUpcoming =
+        index == 1 ? whiteColor : mainLightColor;
+        fontColorSampling =
+        index == 2 ? whiteColor : mainLightColor;
+        fontColorCanceled =
+        index == 3 ? whiteColor : mainLightColor;
+        fontColorFinished =
+        index == 4 ? whiteColor : mainLightColor;
         return Scaffold(
           backgroundColor: greyExtraLightColor,
           appBar: const TechGeneralHomeLayoutAppBar(),
@@ -91,15 +123,18 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                         isScrollable: true,
                         physics: const BouncingScrollPhysics(),
                         indicator: const BoxDecoration(),
-                        unselectedLabelColor: darkColor,
-                        labelColor: mainColor,
+                        onTap: (i) {
+                          setState(() {
+                          index = i;
+                          });
+                        },
                         tabs: [
                           Tab(
                             child: Container(
                               height: 55,
                               width: 100,
                               decoration: BoxDecoration(
-                                color: whiteColor,
+                                color: bgColorAll,
                                 borderRadius: BorderRadius.circular(radius),
                                 border:
                                     Border.all(width: 1, color: greyLightColor),
@@ -107,8 +142,8 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               child: Center(
                                 child: Text(
                                   LocaleKeys.txtAll.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                                  style: titleSmallStyle.copyWith(
+                                    color: fontColorAll,
                                   ),
                                 ),
                               ),
@@ -119,7 +154,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               height: 55,
                               width: 100,
                               decoration: BoxDecoration(
-                                color: whiteColor,
+                                color: bgColorUpcoming,
                                 borderRadius: BorderRadius.circular(radius),
                                 border:
                                     Border.all(width: 1, color: greyLightColor),
@@ -127,8 +162,8 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               child: Center(
                                 child: Text(
                                   LocaleKeys.txtUpcoming.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                                  style: titleSmallStyle.copyWith(
+                                    color: fontColorUpcoming,
                                   ),
                                 ),
                               ),
@@ -139,7 +174,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               height: 55,
                               width: 100,
                               decoration: BoxDecoration(
-                                color: whiteColor,
+                                color: bgColorSampling,
                                 borderRadius: BorderRadius.circular(radius),
                                 border:
                                     Border.all(width: 1, color: greyLightColor),
@@ -147,9 +182,8 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               child: Center(
                                 child: Text(
                                   LocaleKeys.txtSampling.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
+                                  style: titleSmallStyle.copyWith(
+                                      color: fontColorSampling),
                                 ),
                               ),
                             ),
@@ -159,7 +193,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               height: 55,
                               width: 100,
                               decoration: BoxDecoration(
-                                color: whiteColor,
+                                color: bgColorCanceled,
                                 borderRadius: BorderRadius.circular(radius),
                                 border:
                                     Border.all(width: 1, color: greyLightColor),
@@ -167,9 +201,8 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               child: Center(
                                 child: Text(
                                   LocaleKeys.txtCanceled.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
+                                  style: titleSmallStyle.copyWith(
+                                      color: fontColorCanceled),
                                 ),
                               ),
                             ),
@@ -179,7 +212,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               height: 55,
                               width: 100,
                               decoration: BoxDecoration(
-                                color: whiteColor,
+                                color: bgColorFinished,
                                 borderRadius: BorderRadius.circular(radius),
                                 border:
                                     Border.all(width: 1, color: greyLightColor),
@@ -187,9 +220,8 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               child: Center(
                                 child: Text(
                                   LocaleKeys.completeTxtMain.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
+                                  style: titleSmallStyle.copyWith(
+                                      color: fontColorFinished),
                                 ),
                               ),
                             ),
@@ -203,7 +235,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: TabBarView(
-                        physics: const BouncingScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         children: [
                           // first tab bar view widget
                           Column(
@@ -213,20 +245,20 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                                     start: 10.0),
                                 child: Row(
                                   children: [
-                                    const Text(
-                                      'Tests List',
+                                    Text(
+                                      LocaleKeys.txtTestList.tr(),
                                       style: titleSmallStyle,
                                     ),
                                     const Spacer(),
                                     GeneralUnfilledButton(
                                       width: 100,
                                       height: 40.0,
-                                      title: 'Filter date',
+                                      title: LocaleKeys.txtTestDate.tr(),
                                       onPress: () {
                                         showCustomBottomSheet(
                                           context,
                                           bottomSheetContent:
-                                              const SyncfusionFlutterDatePicker(),
+                                          const SyncfusionFlutterDatePicker(),
                                           bottomSheetHeight: 0.65,
                                         );
                                       },
@@ -237,13 +269,13 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               verticalMiniSpace,
                               ConditionalBuilder(
                                 condition: AppTechCubit.get(context)
-                                        .techReservationsModel
-                                        ?.data
-                                        ?.isEmpty ==
+                                    .techReservationsModel
+                                    ?.data
+                                    ?.isEmpty ==
                                     false,
                                 builder: (context) => ConditionalBuilder(
                                   condition: state
-                                      is! AppGetTechReservationsLoadingState,
+                                  is! AppGetTechReservationsLoadingState,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -254,17 +286,17 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                                         child: TechHomeReservationsCart(
                                           index: index,
                                           techReservationsDataModel:
-                                              AppTechCubit.get(context)
-                                                  .techReservationsModel!
-                                                  .data!,
+                                          AppTechCubit.get(context)
+                                              .techReservationsModel!
+                                              .data!,
                                         ),
                                       ),
                                       separatorBuilder: (context, index) =>
-                                          verticalMiniSpace,
+                                      verticalMiniSpace,
                                       itemCount: AppTechCubit.get(context)
-                                              .techReservationsModel
-                                              ?.data
-                                              ?.length ??
+                                          .techReservationsModel
+                                          ?.data
+                                          ?.length ??
                                           0,
                                     ),
                                   ),
@@ -272,10 +304,12 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                                     child: CircularProgressIndicator.adaptive(),
                                   ),
                                 ),
-                                fallback: (context) => Center(
-                                    child: ScreenHolder(
-                                  msg: LocaleKeys.txtReservations.tr(),
-                                )),
+                                fallback: (context) => Expanded(
+                                  child: Center(
+                                      child: ScreenHolder(
+                                        msg: LocaleKeys.txtReservations.tr(),
+                                      )),
+                                ),
                               ),
                             ],
                           ),

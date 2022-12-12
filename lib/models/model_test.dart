@@ -78,9 +78,9 @@ class SyncfusionFlutterDatePickerState
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        'Date Range',
+                        LocaleKeys.txtDateRange.tr(),
                         style: titleSmallStyle,
                       ),
                     ],

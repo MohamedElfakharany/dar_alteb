@@ -12,7 +12,6 @@ import 'package:dar_elteb/models/patient_models/home_appointments_model/home_res
 import 'package:dar_elteb/models/patient_models/lab_appointments_model/lab_reservation_model.dart';
 import 'package:dar_elteb/screens/main_screens/home_layout_screen.dart';
 import 'package:dar_elteb/screens/main_screens/reservations/widget_components.dart';
-import 'package:dar_elteb/shared/components/cached_network_image.dart';
 import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
@@ -172,7 +171,6 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                             title = homeReservationsDataModel.tests![index].title;
                             price = homeReservationsDataModel.tests![index].price;
                             image = homeReservationsDataModel.tests![index].image;
-                            print('index : $index');
                             return ReservationInCartCard(
                               title: title,
                               image: image,
@@ -193,10 +191,9 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
-                            title = homeReservationsDataModel.offers![index].title;
-                            price = homeReservationsDataModel.offers![index].price;
-                            image = homeReservationsDataModel.offers![index].image;
-                            print('index : $index');
+                            title = homeReservationsDataModel.offers?[index].title ?? '';
+                            price = homeReservationsDataModel.offers?[index].price ?? '';
+                            image = homeReservationsDataModel.offers?[index].image ?? '';
                             return ReservationInCartCard(
                               title: title,
                               image: image,
@@ -220,7 +217,6 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                           title = labReservationsDataModel.tests![index].title;
                           price = labReservationsDataModel.tests![index].price;
                           image = labReservationsDataModel.tests![index].image;
-                          print('index : $index');
                           return ReservationInCartCard(
                             title: title,
                             image: image,
@@ -244,7 +240,6 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                           title = labReservationsDataModel.offers![index].title;
                           price = labReservationsDataModel.offers![index].price;
                           image = labReservationsDataModel.offers![index].image;
-                          print('index : $index');
                           return ReservationInCartCard(
                             title: title,
                             image: image,
@@ -331,7 +326,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.7,
                                     child: Text(
-                                      '${homeReservationsModel?.data?[topIndex].address?.address ?? labReservationsDataModel?.branch?.title}  ${homeReservationsModel?.data?[topIndex].address?.specialMark ?? ''}',
+                                      '${homeReservationsModel?.data?[topIndex].address?.address ?? labReservationsDataModel?.branch?.title ?? ''}  ${homeReservationsModel?.data?[topIndex].address?.specialMark ?? ''}',
                                       textAlign: TextAlign.start,
                                       style: subTitleSmallStyle,
                                       maxLines: 1,

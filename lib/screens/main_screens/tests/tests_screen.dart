@@ -25,14 +25,20 @@ class _TestsScreenState extends State<TestsScreen> {
   @override
   void initState() {
     super.initState();
+    print('cubit.tapIndex : ${AppCubit.get(context).tapIndex}');
     Timer(
       const Duration(milliseconds: 0),
-          () {
+      () {
         AppCubit.get(context).getCategories();
         AppCubit.get(context).getOffers();
       },
     );
   }
+    Color bgColorTest = whiteColor;
+    Color bgColorOffer = mainColor;
+    Color fontColorTest = mainColor;
+    Color fontColorOffer = whiteColor;
+
   @override
   Widget build(BuildContext context) {
     var cubit = AppCubit.get(context);
@@ -53,61 +59,60 @@ class _TestsScreenState extends State<TestsScreen> {
                       backgroundColor: greyExtraLightColor,
                       elevation: 0.0,
                       bottom: TabBar(
-                        indicatorColor: mainColor,
-                        labelColor: mainColor,
-                        unselectedLabelColor: mainLightColor,
-                        labelStyle: titleStyle,
-                        enableFeedback: true,
+                        indicator: const BoxDecoration(),
+                        onTap: (i){
+                          setState((){
+                            bgColorTest = i == 0 ? mainLightColor : whiteColor;
+                            bgColorOffer = i == 1 ? mainLightColor : whiteColor;
+                            fontColorTest = i == 1 ? mainLightColor : whiteColor;
+                            fontColorOffer = i == 0 ? mainLightColor : whiteColor;
+                          });
+                        },
                         tabs: [
                           Tab(
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    height: 60,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: mainLightColor, width: 2),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color:
-                                              Colors.grey.withOpacity(0.15),
-                                          spreadRadius: 2,
-                                          blurRadius: 2,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                      color: whiteColor,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        horizontalMiniSpace,
-                                        Image.asset(
-                                          appLogo,
-                                          fit: BoxFit.cover,
-                                          height: 30,
-                                          width: 30,
-                                        ),
-                                        horizontalSmallSpace,
-                                        Expanded(
-                                          child: Text(
-                                            LocaleKeys.homeTxtTestLibrary
-                                                .tr(),
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: darkColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                            child: Container(
+                              height: 60,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: bgColorTest,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: mainLightColor,
+                                  width: 2,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.15),
+                                    spreadRadius: 2,
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                                // color: whiteColor,
+                              ),
+                              child: Row(
+                                children: [
+                                  horizontalMiniSpace,
+                                  Image.asset(
+                                    'assets/images/tests.png',
+                                    fit: BoxFit.cover,
+                                    color: fontColorTest,
+                                    height: 25,
+                                    width: 25,
+                                  ),
+                                  horizontalSmallSpace,
+                                  Expanded(
+                                    child: Text(
+                                      LocaleKeys.homeTxtTestLibrary.tr(),
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: fontColorTest,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                verticalMicroSpace,
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           Tab(
@@ -123,32 +128,32 @@ class _TestsScreenState extends State<TestsScreen> {
                                           color: mainLightColor, width: 2),
                                       boxShadow: [
                                         BoxShadow(
-                                          color:
-                                              Colors.grey.withOpacity(0.15),
+                                          color: Colors.grey.withOpacity(0.15),
                                           spreadRadius: 2,
                                           blurRadius: 2,
                                           offset: const Offset(0, 2),
                                         ),
                                       ],
-                                      color: whiteColor,
+                                      color: bgColorOffer,
                                     ),
                                     child: Row(
                                       children: [
                                         horizontalMiniSpace,
                                         Image.asset(
-                                          appLogo,
+                                          'assets/images/tests.png',
                                           fit: BoxFit.cover,
-                                          height: 30,
-                                          width: 30,
+                                          color: fontColorOffer,
+                                          height: 25,
+                                          width: 25,
                                         ),
                                         horizontalSmallSpace,
                                         Expanded(
                                           child: Text(
                                             LocaleKeys.homeTxtOffers.tr(),
                                             textAlign: TextAlign.start,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 14,
-                                              color: darkColor,
+                                              color: fontColorOffer,
                                             ),
                                           ),
                                         ),
@@ -167,6 +172,7 @@ class _TestsScreenState extends State<TestsScreen> {
                   // create widgets for each tab bar here
                   Expanded(
                     child: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
                       children: [
                         // first tab bar view widget
                         Column(
@@ -228,8 +234,7 @@ class _TestsScreenState extends State<TestsScreen> {
                           children: [
                             verticalSmallSpace,
                             ConditionalBuilder(
-                              condition:
-                                  state is! AppGetOffersLoadingState,
+                              condition: state is! AppGetOffersLoadingState,
                               builder: (context) => Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -242,22 +247,32 @@ class _TestsScreenState extends State<TestsScreen> {
                                         Navigator.push(
                                           context,
                                           FadeRoute(
-                                            page: TestDetailsScreen(offersDataModel: AppCubit.get(context).offersModel!.data![index],
+                                            page: TestDetailsScreen(
+                                              offersDataModel:
+                                                  AppCubit.get(context)
+                                                      .offersModel!
+                                                      .data![index],
                                             ),
                                           ),
                                         );
                                       },
                                       child: OffersCard(
-                                        offersDataModel: AppCubit.get(context).offersModel!.data![index],
+                                        offersDataModel: AppCubit.get(context)
+                                            .offersModel!
+                                            .data![index],
                                       ),
                                     ),
                                     separatorBuilder: (context, index) =>
-                                    horizontalMiniSpace,
-                                    itemCount: AppCubit.get(context).offersModel!.data!.length,
+                                        horizontalMiniSpace,
+                                    itemCount: AppCubit.get(context)
+                                        .offersModel!
+                                        .data!
+                                        .length,
                                   ),
                                 ),
                               ),
-                              fallback: (context) => const Center(child: CircularProgressIndicator.adaptive()),
+                              fallback: (context) => const Center(
+                                  child: CircularProgressIndicator.adaptive()),
                             ),
                           ],
                         ),
@@ -266,7 +281,6 @@ class _TestsScreenState extends State<TestsScreen> {
                   ),
                 ],
               ),
-
             ),
           );
         });

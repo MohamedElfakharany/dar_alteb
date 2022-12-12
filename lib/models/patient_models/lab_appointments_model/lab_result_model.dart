@@ -22,11 +22,11 @@ class LabResultsModel {
   Errors? errors;
 
   factory LabResultsModel.fromJson(Map<dynamic, dynamic> json) => LabResultsModel(
-    status: json["status"],
-    message: json["message"],
-    data: List<LabResultsDataModel>.from(json["data"].map((x) => LabResultsDataModel.fromJson(x))),
-    extra: Extra.fromJson(json["extra"]),
-    errors: Errors.fromJson(json["errors"]),
+    status: json["status"] == null ? null : json["status"],
+    message: json["message"] == null ? null : json["message"],
+    data: json["data"] == null ? null : List<LabResultsDataModel>.from(json["data"].map((x) => LabResultsDataModel.fromJson(x))),
+    extra: json["extra"] == null ? null : Extra.fromJson(json["extra"]),
+    errors: json["errors"] == null ? null : Errors.fromJson(json["errors"]),
   );
 }
 
@@ -40,19 +40,19 @@ class LabResultsDataModel {
 
   dynamic id;
   dynamic countResult;
-  LabResultsDateModel? date;
+  Date? date;
   List<LabResultsDataFileModel>? results;
 
   factory LabResultsDataModel.fromJson(Map<dynamic, dynamic> json) => LabResultsDataModel(
-    id: json["id"],
-    countResult: json["countResult"],
-    date: LabResultsDateModel.fromJson(json["date"]),
-    results: List<LabResultsDataFileModel>.from(json["results"].map((x) => LabResultsDataFileModel.fromJson(x))),
+    id: json["id"] == null ? null : json["id"],
+    countResult: json["countResult"] == null ? null : json["countResult"],
+    date: json["date"] == null ? null : Date.fromJson(json["date"]),
+    results: json["results"] == null ? null : List<LabResultsDataFileModel>.from(json["results"].map((x) => LabResultsDataFileModel.fromJson(x))),
   );
 }
 
-class LabResultsDateModel {
-  LabResultsDateModel({
+class Date {
+  Date({
     this.date,
     this.time,
   });
@@ -60,9 +60,9 @@ class LabResultsDateModel {
   dynamic date;
   dynamic time;
 
-  factory LabResultsDateModel.fromJson(Map<dynamic, dynamic> json) => LabResultsDateModel(
-    date: json["date"],
-    time: json["time"],
+  factory Date.fromJson(Map<dynamic, dynamic> json) => Date(
+    date: json["date"] == null ? null : json["date"],
+    time: json["time"] == null ? null : json["time"],
   );
 }
 
@@ -78,15 +78,15 @@ class LabResultsDataFileModel {
   dynamic id;
   dynamic file;
   dynamic title;
-  LabResultsDateModel? date;
+  Date? date;
   dynamic notes;
 
   factory LabResultsDataFileModel.fromJson(Map<dynamic, dynamic> json) => LabResultsDataFileModel(
-    id: json["id"],
-    file: json["file"],
-    title: json["title"],
-    date: LabResultsDateModel.fromJson(json["date"]),
-    notes: json["notes"],
+    id: json["id"] == null ? null : json["id"],
+    file: json["file"] == null ? null : json["file"],
+    title: json["title"] == null ? null : json["title"],
+    date: json["date"] == null ? null : Date.fromJson(json["date"]),
+    notes: json["notes"] == null ? null : json["notes"],
   );
 }
 
@@ -95,6 +95,9 @@ class Errors {
 
   factory Errors.fromJson(Map<dynamic, dynamic> json) => Errors(
   );
+
+  Map<dynamic, dynamic> toJson() => {
+  };
 }
 
 class Extra {
@@ -105,7 +108,7 @@ class Extra {
   Pagination? pagination;
 
   factory Extra.fromJson(Map<dynamic, dynamic> json) => Extra(
-    pagination: Pagination.fromJson(json["pagination"]),
+    pagination: json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]),
   );
 }
 
@@ -125,10 +128,10 @@ class Pagination {
   dynamic lastPage;
 
   factory Pagination.fromJson(Map<dynamic, dynamic> json) => Pagination(
-    total: json["total"],
-    count: json["count"],
-    perPage: json["perPage"],
-    currentPage: json["currentPage"],
-    lastPage: json["lastPage"],
+    total: json["total"] == null ? null : json["total"],
+    count: json["count"] == null ? null : json["count"],
+    perPage: json["perPage"] == null ? null : json["perPage"],
+    currentPage: json["currentPage"] == null ? null : json["currentPage"],
+    lastPage: json["lastPage"] == null ? null : json["lastPage"],
   );
 }

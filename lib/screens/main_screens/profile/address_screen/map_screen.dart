@@ -31,6 +31,7 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => _MapScreenState();
 }
 
+
 class _MapScreenState extends State<MapScreen> {
   var formKey = GlobalKey<FormState>();
   final focusNodes = Iterable<int>.generate(4).map((_) => FocusNode()).toList();
@@ -41,181 +42,6 @@ class _MapScreenState extends State<MapScreen> {
 
   geolocator.Position? position;
 
-  Future<void> getLocation() async {
-    position = await geolocator.Geolocator.getCurrentPosition(
-        desiredAccuracy: geolocator.LocationAccuracy.high);
-  }
-
-  @override
-  void initState() {
-    if (Platform.isIOS) {
-      getLocation().then((v) {
-        setState(() {
-          getAddressBasedOnLocation(
-              lat: position?.latitude, long: position?.longitude);
-          mLatitude = position!.latitude;
-          mLongitude = position!.longitude;
-        });
-      });
-    } else {
-      mLatitude = widget.position!.latitude;
-      mLongitude = widget.position!.longitude;
-      getAddressBasedOnLocation(lat: mLatitude, long: mLongitude);
-    }
-
-    super.initState();
-  }
-
-  Location currentLocation = Location();
-  final Set<Marker> markers = {};
-  geo.Placemark? userAddress;
-  String? addressLocation;
-  Location location = Location();
-
-  final addressController = TextEditingController();
-  final markOfPlaceController = TextEditingController();
-  final floorController = TextEditingController();
-  final buildingController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {
-        if (state is AppCreateAddressSuccessState) {
-          if (state.successModel.status) {
-            Navigator.pop(context);
-            showToast(
-                msg: state.successModel.message, state: ToastState.success);
-          }
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Icon(
-              Icons.gps_fixed_outlined,
-              color: mainColor,
-            ),
-            elevation: 0.0,
-            backgroundColor: whiteColor,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: greyDarkColor,
-              ),
-              onPressed: () {
-                currentLocation.serviceEnabled().ignore();
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          // appBar: GeneralAppBar(title: '',),
-          body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                GoogleMap(
-                  zoomControlsEnabled: true,
-                  myLocationEnabled: true,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(mLatitude, mLongitude),
-                    zoom: 17.0,
-                  ),
-                  onTap: (value){
-                    getAddressBasedOnLocation(lat: value.latitude,long: value.longitude);
-                  },
-                  markers: markers,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .5,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: KeyboardActions(
-                      tapOutsideBehavior: TapOutsideBehavior.translucentDismiss,
-                      config: KeyboardActionsConfig(
-                        // Define ``defaultDoneWidget`` only once in the config
-                        defaultDoneWidget: doneKeyboard(),
-                        actions: focusNodes
-                            .map((focusNode) =>
-                                KeyboardActionsItem(focusNode: focusNode))
-                            .toList(),
-                      ),
-                      child: ListView(
-                        physics: const BouncingScrollPhysics(),
-                        children: [
-                          Form(
-                            key: formKey,
-                            child: DefaultFormField(
-                              controller: addressController,
-                              focusNode: focusNodes[0],
-                              suffixIcon: Icons.location_searching,
-                              type: TextInputType.text,
-                              validatedText: LocaleKeys.txtFieldAddress.tr(),
-                              label: LocaleKeys.txtFieldAddress.tr(),
-                              onTap: () {},
-                              suffixPressed: () {
-                                addressController.text = addressLocation ?? '';
-                              },
-                            ),
-                          ),
-                          verticalSmallSpace,
-                          DefaultFormField(
-                            controller: markOfPlaceController,
-                            focusNode: focusNodes[1],
-                            type: TextInputType.text,
-                            label: LocaleKeys.txtMarkOfThePlace.tr(),
-                            onTap: () {},
-                          ),
-                          verticalSmallSpace,
-                          DefaultFormField(
-                            controller: floorController,
-                            focusNode: focusNodes[2],
-                            type: TextInputType.number,
-                            label: LocaleKeys.txtFloorNumber.tr(),
-                            onTap: () {},
-                          ),
-                          verticalSmallSpace,
-                          DefaultFormField(
-                            controller: buildingController,
-                            focusNode: focusNodes[3],
-                            type: TextInputType.number,
-                            label: LocaleKeys.txtBuildingNumber.tr(),
-                            onTap: () {},
-                          ),
-                          verticalSmallSpace,
-                          ConditionalBuilder(
-                            condition: state is! AppCreateAddressLoadingState,
-                            builder: (context) => GeneralButton(
-                              title: LocaleKeys.txtFieldAddress.tr(),
-                              onPress: () {
-                                if (formKey.currentState!.validate()) {
-                                  AppCubit.get(context).createAddress(
-                                    latitude: mLongitude,
-                                    longitude: mLongitude,
-                                    address: addressController.text,
-                                  );
-                                }
-                              },
-                            ),
-                            fallback: (context) => const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            ),
-                          ),
-                          verticalLargeSpace
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   Future _getLocation({double? lat, double? long}) async {
     LocationData pos = await location.getLocation();
@@ -276,7 +102,7 @@ class _MapScreenState extends State<MapScreen> {
       );
 
       addressLocation =
-          '${userAddress?.administrativeArea} ${userAddress?.locality} ${userAddress?.street} ${userAddress?.subThoroughfare}';
+      '${userAddress?.administrativeArea} ${userAddress?.locality} ${userAddress?.street} ${userAddress?.subThoroughfare}';
     });
     setState(() {
       addressController.text = addressLocation ?? '';
@@ -284,4 +110,187 @@ class _MapScreenState extends State<MapScreen> {
       buildingController.text = userAddress?.subThoroughfare ?? '';
     });
   }
+
+  Future<void> getLocation() async {
+    position = await geolocator.Geolocator.getCurrentPosition(
+        desiredAccuracy: geolocator.LocationAccuracy.high);
+  }
+
+  @override
+  void initState() {
+    if (Platform.isIOS) {
+      getLocation().then((v) {
+        setState(() {
+          getAddressBasedOnLocation(
+              lat: position?.latitude, long: position?.longitude);
+          mLatitude = position!.latitude;
+          mLongitude = position!.longitude;
+        });
+      });
+    } else {
+      mLatitude = widget.position!.latitude;
+      mLongitude = widget.position!.longitude;
+      getAddressBasedOnLocation(lat: mLatitude, long: mLongitude);
+    }
+
+    super.initState();
+  }
+
+  Location currentLocation = Location();
+  final Set<Marker> markers = {};
+  geo.Placemark? userAddress;
+  String? addressLocation;
+  Location location = Location();
+
+  final addressController = TextEditingController();
+  final titleController = TextEditingController();
+  final markOfPlaceController = TextEditingController();
+  final floorController = TextEditingController();
+  final buildingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {
+        if (state is AppCreateAddressSuccessState) {
+          if (state.successModel.status) {
+            Navigator.pop(context);
+            showToast(
+              msg: state.successModel.message,
+              state: ToastState.success,
+            );
+          }
+        }
+      },
+      builder: (context, state) {
+        print('lat: $mLatitude, long: $mLongitude');
+        return Scaffold(
+          appBar: AppBar(
+            title: const Icon(
+              Icons.gps_fixed_outlined,
+              color: mainColor,
+            ),
+            elevation: 0.0,
+            backgroundColor: whiteColor,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: greyDarkColor,
+              ),
+              onPressed: () {
+                currentLocation.serviceEnabled().ignore();
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          // appBar: GeneralAppBar(title: '',),
+          body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                GoogleMap(
+                  zoomControlsEnabled: true,
+                  myLocationEnabled: true,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(mLatitude, mLongitude),
+                    zoom: 17.0,
+                  ),
+                  onTap: (value) {
+                    getAddressBasedOnLocation(
+                        lat: value.latitude, long: value.longitude);
+                  },
+                  markers: markers,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .5,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: KeyboardActions(
+                      tapOutsideBehavior: TapOutsideBehavior.translucentDismiss,
+                      config: KeyboardActionsConfig(
+                        // Define ``defaultDoneWidget`` only once in the config
+                        defaultDoneWidget: doneKeyboard(),
+                        actions: focusNodes
+                            .map((focusNode) =>
+                                KeyboardActionsItem(focusNode: focusNode))
+                            .toList(),
+                      ),
+                      child: ListView(
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          Form(
+                            key: formKey,
+                            child: Column(
+                              children: [
+                                DefaultFormField(
+                                  controller: titleController,
+                                  focusNode: focusNodes[0],
+                                  type: TextInputType.text,
+                                  validatedText: LocaleKeys.txtFieldAddress.tr(),
+                                  label: LocaleKeys.txtFieldAddress.tr(),
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
+                          ),
+                          verticalSmallSpace,
+                          DefaultFormField(
+                            controller: markOfPlaceController,
+                            focusNode: focusNodes[1],
+                            type: TextInputType.text,
+                            label: LocaleKeys.txtMarkOfThePlace.tr(),
+                            onTap: () {},
+                          ),
+                          verticalSmallSpace,
+                          DefaultFormField(
+                            controller: floorController,
+                            focusNode: focusNodes[2],
+                            type: TextInputType.number,
+                            label: LocaleKeys.txtFloorNumber.tr(),
+                            onTap: () {},
+                          ),
+                          verticalSmallSpace,
+                          DefaultFormField(
+                            controller: buildingController,
+                            focusNode: focusNodes[3],
+                            type: TextInputType.number,
+                            label: LocaleKeys.txtBuildingNumber.tr(),
+                            onTap: () {},
+                          ),
+                          verticalSmallSpace,
+                          ConditionalBuilder(
+                            condition: state is! AppCreateAddressLoadingState,
+                            builder: (context) => GeneralButton(
+                              title: LocaleKeys.txtFieldAddress.tr(),
+                              onPress: () {
+                                if (formKey.currentState!.validate()) {
+                                  AppCubit.get(context).createAddress(
+                                    latitude: mLongitude,
+                                    longitude: mLongitude,
+                                    address: addressController.text,
+                                    title: titleController.text,
+                                  );
+                                }
+                              },
+                            ),
+                            fallback: (context) => const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                          ),
+                          verticalLargeSpace
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }

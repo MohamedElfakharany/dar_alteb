@@ -28,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
     Timer(
       const Duration(milliseconds: 0),
           () {
-        AppCubit.get(context).getTests(categoriesId: 0);
+        AppCubit.get(context).getTests();
         // AppCubit.get(context).getTerms();
       },
     );
@@ -38,6 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        var cubit = AppCubit.get(context);
         return Scaffold(
           backgroundColor: greyExtraLightColor,
           appBar: GeneralAppBar(
@@ -57,14 +58,15 @@ class _SearchScreenState extends State<SearchScreen> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
                       label: Text(LocaleKeys.TxtFieldSearch.tr()),
-                      hintStyle: const TextStyle(color: greyDarkColor, fontSize: 14),
-                      labelStyle: const TextStyle(
-                          // color: isClickable ? Colors.grey[400] : blueColor,
+                      hintStyle:
+                      TextStyle(color: greyDarkColor, fontSize: 14),
+                      labelStyle: TextStyle(
+                        // color: isClickable ? Colors.grey[400] : blueColor,
                           color: greyDarkColor,
                           fontSize: 14),
                       fillColor: Colors.white,
                       filled: true,
-                      errorStyle: const TextStyle(color: redColor),
+                      errorStyle: TextStyle(color: redColor),
                       contentPadding: const EdgeInsetsDirectional.only(
                           start: 20.0, end: 10.0, bottom: 0.0, top: 0.0),
                       border: const OutlineInputBorder(
@@ -74,7 +76,11 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       ),
                     ),
-                    style: const TextStyle(
+                    onChanged: (String v){
+                      print(v);
+                      AppCubit.get(context).getTests(search: v);
+                    },
+                    style: TextStyle(
                       color: mainLightColor,
                       fontSize: 18,
                       fontFamily: fontFamily,
@@ -83,7 +89,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 verticalSmallSpace,
-
                 Expanded(
                   child: ConditionalBuilder(
                     condition: state is! AppGetTestsLoadingState,
@@ -91,9 +96,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) => TestItemCard(index: index),
                       separatorBuilder: (context, index) => verticalMiniSpace,
-                      itemCount: AppCubit.get(context).testsModel?.data?.length ?? 0,
+                      itemCount: cubit.testsModel?.data?.length ?? 0,
                     ),
-                    fallback: (context) => const Center(child: CircularProgressIndicator.adaptive(),),
+                    fallback: (context) => const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
                   ),
                 ),
               ],

@@ -131,7 +131,7 @@ class TechGeneralHomeLayoutAppBar extends StatelessWidget
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(85);
+  Size get preferredSize => const Size.fromHeight(86);
 }
 
 class TechHomeRequestsCart extends StatelessWidget {
@@ -146,14 +146,6 @@ class TechHomeRequestsCart extends StatelessWidget {
       builder: (context, state) {
         var techRequests =
             AppTechCubit.get(context).techRequestsModel?.data?[index];
-        String image;
-        if (techRequests?.tests != null) {
-          image = techRequests?.tests?.first.image;
-        } else if (techRequests?.offers != null) {
-          image = techRequests?.offers?.first.image;
-        } else {
-          image = imageTest;
-        }
         return Container(
           height: 260.0,
           width: MediaQuery.of(context).size.width * 0.7,
@@ -186,9 +178,10 @@ class TechHomeRequestsCart extends StatelessWidget {
               Row(
                 children: [
                   CachedNetworkImageCircular(
-                    imageUrl: image,
+                    imageUrl: '${techRequests?.patient?.profile}',
                     height: 65,
                   ),
+
                   horizontalMiniSpace,
                   Text(
                     '${techRequests?.patient?.name}',
@@ -254,8 +247,9 @@ class TechHomeRequestsCart extends StatelessWidget {
                         .acceptRequest(requestId: techRequests!.id);
                   },
                 ),
-                fallback: (context) =>
-                    const Center(child: CircularProgressIndicator.adaptive()),
+                fallback: (context) => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
               ),
             ],
           ),
@@ -438,7 +432,10 @@ class ReservedAcceptedSubScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: true,
+          condition: AppTechCubit.get(context)
+              .techReservationsAcceptedModel
+              ?.isEmpty ==
+              false,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -456,7 +453,7 @@ class ReservedAcceptedSubScreen extends StatelessWidget {
                     ?.length ??
                 0,
           ),
-          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtUpcoming.tr()),
+          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtReservations.tr()),
         );
       },
     );
@@ -473,7 +470,10 @@ class ReservedSamplingSubScreen extends StatelessWidget {
       builder: (context, state) {
         return ConditionalBuilder(
           condition:
-              AppTechCubit.get(context).techReservationsSamplingModel != null,
+          AppTechCubit.get(context)
+              .techReservationsSamplingModel
+              ?.isEmpty ==
+              false,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -491,7 +491,7 @@ class ReservedSamplingSubScreen extends StatelessWidget {
                     ?.length ??
                 0,
           ),
-          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtSampling.tr()),
+          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtReservations.tr()),
         );
       },
     );
@@ -508,7 +508,10 @@ class ReservedCanceledSubScreen extends StatelessWidget {
       builder: (context, state) {
         return ConditionalBuilder(
           condition:
-              AppTechCubit.get(context).techReservationsCanceledModel != null,
+          AppTechCubit.get(context)
+              .techReservationsCanceledModel
+              ?.isEmpty ==
+              false,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -526,7 +529,7 @@ class ReservedCanceledSubScreen extends StatelessWidget {
                     ?.length ??
                 0,
           ),
-          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtCanceled.tr()),
+          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtReservations.tr()),
         );
       },
     );
@@ -543,7 +546,10 @@ class ReservedFinishingSubScreen extends StatelessWidget {
       builder: (context, state) {
         return ConditionalBuilder(
           condition:
-              AppTechCubit.get(context).techReservationsFinishedModel != null,
+          AppTechCubit.get(context)
+              .techReservationsFinishedModel
+              ?.isEmpty ==
+              false,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -561,7 +567,7 @@ class ReservedFinishingSubScreen extends StatelessWidget {
                     ?.length ??
                 0,
           ),
-          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtFinished.tr()),
+          fallback: (context) => ScreenHolder(msg: LocaleKeys.txtReservations.tr()),
         );
       },
     );

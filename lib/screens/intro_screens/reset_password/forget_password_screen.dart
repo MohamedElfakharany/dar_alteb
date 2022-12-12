@@ -6,15 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
 import 'package:dar_elteb/cubit/states.dart';
-import 'package:dar_elteb/screens/intro_screens/reset_password/verification_screen.dart';
+import 'package:dar_elteb/screens/intro_screens/reset_password/verification_reset_password.dart';
 import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
-  ForgetPasswordScreen({Key? key, this.isChangeMobile}) : super(key: key);
-  bool? isChangeMobile = false;
+  ForgetPasswordScreen({Key? key}) : super(key: key);
   final mobileController = TextEditingController();
   final nationalCodeController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -24,16 +23,14 @@ class ForgetPasswordScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) async {
         if (state is AppCreateTokenSuccessState) {
-          if (state.createTokenModel.status) {
+          if (state.createTokenModel.status == true) {
             Navigator.push(
               context,
               FadeRoute(
-                page: VerificationScreen(
+                page: VerificationResetScreen(
                   phoneCode: nationalCodeController.text,
                   resetToken: state.createTokenModel.data!.resetToken,
-                  isRegister: false,
                   mobileNumber: mobileController.text.toString(),
-                  isChangeMobile: false,
                 ),
               ),
             );
@@ -47,9 +44,11 @@ class ForgetPasswordScreen extends StatelessWidget {
               ),
             );
           }
-        } else {}
+        }
       },
-      builder: (context, state) => Scaffold(
+      builder: (context, state) {
+        nationalCodeController.text = '966';
+        return Scaffold(
         backgroundColor: whiteColor,
         appBar: GeneralAppBar(
           title: '',
@@ -58,7 +57,6 @@ class ForgetPasswordScreen extends StatelessWidget {
           key: formKey,
           child: ListView(
             children: [
-              if (isChangeMobile != true)
                 Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Padding(
@@ -118,21 +116,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     title: LocaleKeys.BtnContinue.tr(),
                     onPress: () {
                       if (formKey.currentState!.validate()) {
-                        if (isChangeMobile == false) {
-                          AppCubit.get(context)
-                              .createToken(mobile: mobileController.text, phoneCode: nationalCodeController.text);
-                        } else {
-                          Navigator.push(
-                            context,
-                            FadeRoute(
-                              page: VerificationScreen(
-                                  mobileNumber: mobileController.text,
-                                  phoneCode: nationalCodeController.text,
-                                  isRegister: false,
-                                  isChangeMobile: true),
-                            ),
-                          );
-                        }
+                        AppCubit.get(context).createToken(phoneCode: nationalCodeController.text,mobile: mobileController.text);
                       }
                     },
                   ),
@@ -144,7 +128,8 @@ class ForgetPasswordScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      );
+      },
     );
   }
 }

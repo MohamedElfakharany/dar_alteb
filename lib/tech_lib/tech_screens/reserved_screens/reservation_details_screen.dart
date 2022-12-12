@@ -178,7 +178,7 @@ class _TechReservationsDetailsScreenState
                                               color: Colors.white,
                                             ),
                                             Text(LocaleKeys.BtnDelete.tr(),
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20)),
                                           ],

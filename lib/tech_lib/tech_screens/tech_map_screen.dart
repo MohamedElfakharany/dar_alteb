@@ -17,6 +17,7 @@ class TechMapScreen extends StatefulWidget {
 }
 
 class _TechMapScreenState extends State<TechMapScreen> {
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppTechCubit, AppTechStates>(

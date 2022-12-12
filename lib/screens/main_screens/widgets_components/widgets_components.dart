@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
 import 'package:dar_elteb/cubit/states.dart';
 import 'package:dar_elteb/models/patient_models/profile_models/notifications_model.dart';
@@ -11,6 +12,8 @@ import 'package:dar_elteb/models/patient_models/test_models/categories_model.dar
 import 'package:dar_elteb/models/patient_models/test_models/offers_model.dart';
 import 'package:dar_elteb/models/patient_models/test_models/tests_model.dart';
 import 'package:dar_elteb/screens/intro_screens/startup/onboarding_screen.dart';
+import 'package:dar_elteb/screens/main_screens/card_screen.dart';
+import 'package:dar_elteb/screens/main_screens/home_layout_screen.dart';
 import 'package:dar_elteb/screens/main_screens/test_items_screen/test_details_screen.dart';
 import 'package:dar_elteb/shared/components/cached_network_image.dart';
 import 'package:dar_elteb/shared/components/general_components.dart';
@@ -130,7 +133,7 @@ class _LabCalenderViewState extends State<LabCalenderView> {
 
                         AppCubit.get(context).getLabAppointments(
                             date:
-                            '${selectedDay.year.toString()}-${month.toString()}-${day.toString()}');
+                                '${selectedDay.year.toString()}-${month.toString()}-${day.toString()}');
                       },
                       availableCalendarFormats: const {
                         CalendarFormat.month: 'Month',
@@ -140,7 +143,7 @@ class _LabCalenderViewState extends State<LabCalenderView> {
                       ),
                       calendarStyle: const CalendarStyle(
                         selectedTextStyle:
-                        TextStyle(color: whiteColor, fontSize: 20),
+                            TextStyle(color: whiteColor, fontSize: 20),
                         todayDecoration: BoxDecoration(),
                         todayTextStyle: TextStyle(
                             color: greenColor,
@@ -150,17 +153,17 @@ class _LabCalenderViewState extends State<LabCalenderView> {
                             color: greenColor, shape: BoxShape.circle),
                         defaultDecoration: BoxDecoration(),
                         holidayDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
+                            BoxDecoration(shape: BoxShape.circle),
                         weekendDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
+                            BoxDecoration(shape: BoxShape.circle),
                         rangeEndDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
+                            BoxDecoration(shape: BoxShape.circle),
                         outsideDecoration: BoxDecoration(
                           shape: BoxShape.circle,
                         ),
                         disabledDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
-                        // weekendTextStyle: const TextStyle(
+                            BoxDecoration(shape: BoxShape.circle),
+                        // weekendTextStyle: TextStyle(
                         //   color: blueColor,
                         // ),
                         markerSize: 40.0,
@@ -294,7 +297,7 @@ class _HomeCalenderViewState extends State<HomeCalenderView> {
 
                         AppCubit.get(context).getHomeAppointments(
                             date:
-                            '${selectedDay.year.toString()}-${month.toString()}-${day.toString()}');
+                                '${selectedDay.year.toString()}-${month.toString()}-${day.toString()}');
                       },
                       availableCalendarFormats: const {
                         CalendarFormat.month: 'Month',
@@ -324,7 +327,7 @@ class _HomeCalenderViewState extends State<HomeCalenderView> {
                       ),
                       calendarStyle: const CalendarStyle(
                         selectedTextStyle:
-                        TextStyle(color: whiteColor, fontSize: 20),
+                            TextStyle(color: whiteColor, fontSize: 20),
                         todayDecoration: BoxDecoration(),
                         todayTextStyle: TextStyle(
                             color: greenColor,
@@ -334,17 +337,17 @@ class _HomeCalenderViewState extends State<HomeCalenderView> {
                             color: greenColor, shape: BoxShape.circle),
                         defaultDecoration: BoxDecoration(),
                         holidayDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
+                            BoxDecoration(shape: BoxShape.circle),
                         weekendDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
+                            BoxDecoration(shape: BoxShape.circle),
                         rangeEndDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
+                            BoxDecoration(shape: BoxShape.circle),
                         outsideDecoration: BoxDecoration(
                           shape: BoxShape.circle,
                         ),
                         disabledDecoration:
-                        BoxDecoration(shape: BoxShape.circle),
-                        // weekendTextStyle: const TextStyle(
+                            BoxDecoration(shape: BoxShape.circle),
+                        // weekendTextStyle: TextStyle(
                         //   color: blueColor,
                         // ),
                         markerSize: 40.0,
@@ -420,14 +423,14 @@ class OffersCard extends StatelessWidget {
                         children: [
                           Container(
                             height: 30,
-                            width: 80,
+                            width: 30,
                             decoration: BoxDecoration(
                               color: redColor,
                               borderRadius: BorderRadius.circular(radius),
                             ),
                             child: const Center(
                               child: Text(
-                                'Off',
+                                '%',
                                 style: TextStyle(color: whiteColor),
                               ),
                             ),
@@ -446,8 +449,8 @@ class OffersCard extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      offersDataModel.gender,
-                                      style: const TextStyle(color: whiteColor),
+                                      LocaleKeys.Male.tr(),
+                                      style: TextStyle(color: whiteColor),
                                     ),
                                     horizontalMicroSpace,
                                     const Icon(
@@ -471,8 +474,8 @@ class OffersCard extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      offersDataModel.gender,
-                                      style: const TextStyle(color: whiteColor),
+                                      LocaleKeys.Female.tr(),
+                                      style: TextStyle(color: whiteColor),
                                     ),
                                     const Icon(
                                       Icons.female,
@@ -490,7 +493,7 @@ class OffersCard extends StatelessWidget {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 child: Text(
                   offersDataModel.title,
                   style: titleSmallStyle2,
@@ -577,9 +580,9 @@ class CategoriesCard extends StatelessWidget {
 class TestItemCard extends StatelessWidget {
   TestItemCard(
       {Key? key,
-        required this.index,
-        this.offersDataModel,
-        this.testsDataModel})
+      required this.index,
+      this.offersDataModel,
+      this.testsDataModel})
       : super(key: key);
   TestsDataModel? testsDataModel;
   OffersDataModel? offersDataModel;
@@ -611,8 +614,8 @@ class TestItemCard extends StatelessWidget {
                   horizontalMicroSpace,
                   CachedNetworkImageNormal(
                     imageUrl:
-                    AppCubit.get(context).testsModel?.data?[index].image ??
-                        '',
+                        AppCubit.get(context).testsModel?.data?[index].image ??
+                            '',
                     width: 80,
                     height: 80,
                   ),
@@ -624,9 +627,9 @@ class TestItemCard extends StatelessWidget {
                       children: [
                         Text(
                           AppCubit.get(context)
-                              .testsModel
-                              ?.data?[index]
-                              .title ??
+                                  .testsModel
+                                  ?.data?[index]
+                                  .title ??
                               '',
                           style: titleStyle,
                           maxLines: 1,
@@ -634,9 +637,9 @@ class TestItemCard extends StatelessWidget {
                         ),
                         Text(
                           AppCubit.get(context)
-                              .testsModel
-                              ?.data?[index]
-                              .description ??
+                                  .testsModel
+                                  ?.data?[index]
+                                  .description ??
                               '',
                           style: subTitleSmallStyle2,
                           maxLines: 1,
@@ -700,9 +703,9 @@ class TestItemCard extends StatelessWidget {
                         children: [
                           horizontalMicroSpace,
                           if (AppCubit.get(context)
-                              .testsModel
-                              ?.data?[index]
-                              .gender ==
+                                  .testsModel
+                                  ?.data?[index]
+                                  .gender ==
                               'Male')
                             const Center(
                               child: CircleAvatar(
@@ -716,9 +719,9 @@ class TestItemCard extends StatelessWidget {
                               ),
                             ),
                           if (AppCubit.get(context)
-                              .testsModel
-                              ?.data?[index]
-                              .gender ==
+                                  .testsModel
+                                  ?.data?[index]
+                                  .gender ==
                               'Female')
                             const Center(
                               child: CircleAvatar(
@@ -735,6 +738,262 @@ class TestItemCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (AppCubit.get(context).isVisitor == false)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          if (AppCubit.get(context).isVisitor == false) {
+                            showPopUp(
+                              context,
+                              const VisitorHoldingPopUp(),
+                            );
+                          } else {
+                            showCustomBottomSheet(
+                              context,
+                              bottomSheetContent: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.55,
+                                decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(radius),
+                                    topRight: Radius.circular(radius),
+                                  ),
+                                ),
+                                padding: const EdgeInsetsDirectional.only(
+                                    start: 20.0, end: 20.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    verticalMicroSpace,
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/images/checkTrue.svg',
+                                        ),
+                                        horizontalMiniSpace,
+                                        Text(
+                                          LocaleKeys.txtReservationSucceeded
+                                              .tr(),
+                                          style:
+                                              titleStyle.copyWith(fontSize: 15),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      LocaleKeys.TxtPopUpReservationTypeSecond
+                                          .tr(),
+                                      style: subTitleSmallStyle.copyWith(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 110.0,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: whiteColor,
+                                        borderRadius:
+                                            BorderRadius.circular(radius),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: greyDarkColor,
+                                        ),
+                                      ),
+                                      alignment: AlignmentDirectional.center,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 0, horizontal: 4),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .only(start: 10.0, top: 10.0),
+                                            child: Image.asset(
+                                              appLogo,
+                                              width: 80,
+                                              height: 80,
+                                            ),
+                                          ),
+                                          horizontalMiniSpace,
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                verticalMiniSpace,
+                                                Text(
+                                                  AppCubit.get(context)
+                                                          .testsModel
+                                                          ?.data?[index]
+                                                          .title ??
+                                                      offersDataModel?.title,
+                                                  style: titleStyle.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                // const Padding(
+                                                //   padding: EdgeInsets.symmetric(
+                                                //       vertical: 5.0),
+                                                //   child: Text(
+                                                //     'Sugar Checks',
+                                                //     style: TextStyle(),
+                                                //     maxLines: 2,
+                                                //     overflow: TextOverflow.ellipsis,
+                                                //   ),
+                                                // ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      '${AppCubit.get(context).testsModel?.data?[index].price ?? AppCubit.get(context).offersModel?.data?[index].discount} ${LocaleKeys.salary.tr()}',
+                                                      style:
+                                                          titleStyle.copyWith(
+                                                              fontSize: 15),
+                                                    ),
+                                                    horizontalMiniSpace,
+                                                    if (AppCubit.get(context)
+                                                            .offersModel
+                                                            ?.data?[index]
+                                                            .price !=
+                                                        null)
+                                                      Text(
+                                                        '${AppCubit.get(context).offersModel?.data?[index].price} ${LocaleKeys.salary.tr()}',
+                                                        style:
+                                                            subTitleSmallStyle
+                                                                .copyWith(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .lineThrough,
+                                                        ),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    verticalMicroSpace,
+                                    Container(
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(radius),
+                                        color: greyExtraLightColor,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          horizontalSmallSpace,
+                                          Text(
+                                            LocaleKeys.txtTotal.tr(),
+                                            style: titleStyle.copyWith(
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                          const Spacer(),
+                                          Text(
+                                            '${AppCubit.get(context).testsModel?.data?[index].price ?? AppCubit.get(context).offersModel?.data?[index].discount} ${LocaleKeys.salary.tr()}',
+                                            style: titleStyle.copyWith(
+                                                fontSize: 18),
+                                          ),
+                                          horizontalSmallSpace,
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 80.0,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Center(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: MaterialButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    FadeRoute(
+                                                      page: CartScreen(
+                                                          // testsDataModel:
+                                                          //     testsDataModel,
+                                                          // offersDataModel:
+                                                          //     offersDataModel,
+                                                          ),
+                                                    ),
+                                                  );
+                                                },
+                                                height: 80.0,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: mainColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            radius),
+                                                  ),
+                                                  height: 50.0,
+                                                  width: double.infinity,
+                                                  child: Center(
+                                                    child: Text(
+                                                      LocaleKeys.BtnCheckout
+                                                          .tr(),
+                                                      style: titleSmallStyle
+                                                          .copyWith(
+                                                        color: whiteColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: GeneralUnfilledButton(
+                                                width: double.infinity,
+                                                title:
+                                                    LocaleKeys.BtnBrowse.tr(),
+                                                onPress: () {
+                                                  AppCubit.get(context)
+                                                      .changeBottomScreen(0);
+                                                  navigateAndFinish(
+                                                    context,
+                                                    const HomeLayoutScreen(),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              bottomSheetHeight: 0.55,
+                            );
+                          }
+                        },
+                        child: const CircleAvatar(
+                          radius: 15,
+                          backgroundColor: greyLightColor,
+                          child: Icon(
+                            Icons.add,
+                            color: whiteColor,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               )
             ],
@@ -778,7 +1037,7 @@ class VisitorHoldingPopUp extends StatelessWidget {
                       FadeRoute(
                         page: OnBoardingScreen(),
                       ),
-                          (route) => false);
+                      (route) => false);
                 }),
           ),
           verticalLargeSpace,
@@ -788,13 +1047,28 @@ class VisitorHoldingPopUp extends StatelessWidget {
   }
 }
 
-class NotificationsCard extends StatelessWidget {
+class NotificationsCard extends StatefulWidget {
   const NotificationsCard({Key? key, required this.notificationsDataModel})
       : super(key: key);
   final NotificationsDataModel notificationsDataModel;
 
   @override
+  State<NotificationsCard> createState() => _NotificationsCardState();
+}
+
+class _NotificationsCardState extends State<NotificationsCard> {
+  @override
   Widget build(BuildContext context) {
+    Color containerColor = whiteColor;
+
+    setState(() {
+      if (widget.notificationsDataModel.isRead == 0) {
+        containerColor = mainLightColor.withOpacity(0.1);
+      } else {
+        containerColor = whiteColor;
+      }
+    });
+
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -802,7 +1076,7 @@ class NotificationsCard extends StatelessWidget {
           width: double.infinity,
           height: 100.0,
           decoration: BoxDecoration(
-            color: whiteColor,
+            color: containerColor,
             borderRadius: BorderRadius.circular(
               radius,
             ),
@@ -837,36 +1111,33 @@ class NotificationsCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        notificationsDataModel.body,
+                        widget.notificationsDataModel.body,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Text(
-                        '${notificationsDataModel.date?.date} - ${notificationsDataModel.date?.time}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: subTitleSmallStyle,
+                      Row(
+                        children: [
+                          Text(
+                            '${widget.notificationsDataModel.date?.date} - ${widget.notificationsDataModel.date?.time}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: subTitleSmallStyle,
+                          ),
+                          TextButton(
+                            child: Text(
+                              LocaleKeys.BtnDelete.tr(),
+                              style: titleSmallStyleRed,
+                            ),
+                            onPressed: () {
+                              AppCubit.get(context).deleteNotifications(
+                                  notificationId: '${widget.notificationsDataModel.id}');
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                // horizontalSmallSpace,
-                //   Container(
-                //     width: 60.0,
-                //     height: 30.0,
-                //     decoration: BoxDecoration(
-                //       color: greenColor.withOpacity(0.2),
-                //       borderRadius: BorderRadius.circular(
-                //         radius,
-                //       ),
-                //     ),
-                //     child: const Center(
-                //       child: Text(
-                //         'New',
-                //         style: titleSmallStyleGreen,
-                //       ),
-                //     ),
-                //   ),
               ],
             ),
           ),

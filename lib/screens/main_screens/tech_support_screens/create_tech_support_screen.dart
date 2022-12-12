@@ -174,8 +174,7 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                             type: TextInputType.none,
                             label: LocaleKeys.TxtFieldDateOfVisit.tr(),
                             suffixPressed: () {},
-                            validatedText:
-                                LocaleKeys.TxtFieldDateOfVisit.tr(),
+                            validatedText: LocaleKeys.TxtFieldDateOfVisit.tr(),
                             onTap: () {
                               DatePicker.showDatePicker(context,
                                   showTitleActions: true,
@@ -205,13 +204,11 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                             type: TextInputType.none,
                             label: LocaleKeys.TxtFieldTimeOfVisit.tr(),
                             suffixPressed: () {},
-                            validatedText:
-                                LocaleKeys.TxtFieldTimeOfVisit.tr(),
+                            validatedText: LocaleKeys.TxtFieldTimeOfVisit.tr(),
                             onTap: () {
                               DatePicker.showTimePicker(context,
                                   showTitleActions: true,
-                                  showSecondsColumn: false,
-                                  onChanged: (date) {
+                                  showSecondsColumn: false, onChanged: (date) {
                                 setState(() {
                                   timeController.text =
                                       '${date.hour.toString()}:${date.minute.toString()}';
@@ -245,15 +242,15 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                                   color: greyLightColor,
                                   size: 30,
                                 ),
-                                contentPadding: const EdgeInsetsDirectional.only(
-                                    start: 20.0,
-                                    end: 0.0,
-                                    bottom: 0.0,
-                                    top: 10.0),
+                                contentPadding:
+                                    const EdgeInsetsDirectional.only(
+                                        start: 20.0,
+                                        end: 0.0,
+                                        bottom: 0.0,
+                                        top: 10.0),
                                 fillColor: Colors.white,
                                 filled: true,
-                                errorStyle:
-                                    const TextStyle(color: Color(0xFF4F4F4F)),
+                                errorStyle: TextStyle(color: Color(0xFF4F4F4F)),
                                 border: InputBorder.none,
                                 suffixIcon: IconButton(
                                   onPressed: () {
@@ -345,13 +342,16 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
         value: item,
         child: Row(
           children: [
-            Text(item),
+            Text(item,style: titleSmallStyle,),
           ],
         ),
       );
 
   DropdownMenuItem<String> buildLocationItem(String item) => DropdownMenuItem(
         value: item,
-        child: Text(item),
+        child: Text(
+          item,
+          style: titleSmallStyle,
+        ),
       );
 }

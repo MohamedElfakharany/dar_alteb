@@ -78,6 +78,7 @@ class _NewMemberScreenState extends State<NewMemberScreen> {
         }
       },
       builder: (context, state) {
+        nationalCodeController.text = '966';
         var memberImage = AppCubit.get(context).memberImage;
         return Scaffold(
           backgroundColor: greyExtraLightColor,
@@ -260,7 +261,7 @@ class _NewMemberScreenState extends State<NewMemberScreen> {
                             fillColor: Colors.white,
                             filled: true,
                             errorStyle:
-                                const TextStyle(color: Color(0xFF4F4F4F)),
+                                TextStyle(color: Color(0xFF4F4F4F)),
                             label: Text(
                               LocaleKeys.txtRelationship.tr(),
                             ),
@@ -393,6 +394,6 @@ class _NewMemberScreenState extends State<NewMemberScreen> {
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
         value: item,
-        child: Text(item),
+        child: Text(item,style: titleSmallStyle,),
       );
 }

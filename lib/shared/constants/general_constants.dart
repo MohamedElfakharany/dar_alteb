@@ -13,21 +13,21 @@ var month;
 final kFirstDay = DateTime(kToday.year, kToday.month, kToday.day);
 final kLastDay = DateTime(kToday.year, kToday.month + 5, kToday.day);
 
-const titleStyle = TextStyle(color: darkColor,fontFamily: fontFamily,fontSize: 20,fontWeight: FontWeight.bold);
+var titleStyle = TextStyle(color: darkColor,fontFamily: fontFamily,fontSize: 20,fontWeight: FontWeight.bold);
 
-const titleSmallStyle = TextStyle(color: darkColor,fontFamily: fontFamily,fontSize: 16,fontWeight: FontWeight.w600);
+var titleSmallStyle = TextStyle(color: darkColor,fontFamily: fontFamily,fontSize: 16,fontWeight: FontWeight.w600);
 
-const titleSmallStyle2 = TextStyle(color: darkColor,fontFamily: fontFamily,fontSize: 12,fontWeight: FontWeight.w600);
+var titleSmallStyle2 = TextStyle(color: darkColor,fontFamily: fontFamily,fontSize: 12,fontWeight: FontWeight.w600);
 
-const titleSmallStyleGreen = TextStyle(color: greenColor,fontFamily: fontFamily,fontSize: 14,fontWeight: FontWeight.w600);
+var titleSmallStyleGreen = TextStyle(color: greenColor,fontFamily: fontFamily,fontSize: 14,fontWeight: FontWeight.w600);
 
-const titleSmallStyleRed = TextStyle(color: redColor,fontFamily: fontFamily,fontSize: 14,fontWeight: FontWeight.w600);
+var titleSmallStyleRed = TextStyle(color: redColor,fontFamily: fontFamily,fontSize: 14,fontWeight: FontWeight.w600);
 
-const subTitleSmallStyle = TextStyle(color: greyDarkColor,fontFamily: fontFamily,fontSize: 14,fontWeight: FontWeight.normal);
+var subTitleSmallStyle = TextStyle(color: greyDarkColor,fontFamily: fontFamily,fontSize: 14,fontWeight: FontWeight.normal);
 
-const subTitleSmallStyle2 = TextStyle(color: greyDarkColor,fontFamily: fontFamily,fontSize: 12,fontWeight: FontWeight.w600);
+var subTitleSmallStyle2 = TextStyle(color: greyDarkColor,fontFamily: fontFamily,fontSize: 12,fontWeight: FontWeight.w600);
 
-const subTitleSmallStyle3 = TextStyle(color: greyDarkColor,fontFamily: fontFamily,fontSize: 10,fontWeight: FontWeight.w600);
+var subTitleSmallStyle3 = TextStyle(color: greyDarkColor,fontFamily: fontFamily,fontSize: 10,fontWeight: FontWeight.w600);
 
 const verticalMicroSpace = SizedBox(height: 5,);
 

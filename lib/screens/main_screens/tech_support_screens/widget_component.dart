@@ -12,7 +12,9 @@ import 'package:dar_elteb/tech_lib/tech_screens/tech_map_screen.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 
 class UserRequestsCart extends StatelessWidget {
-  const UserRequestsCart({Key? key,}) : super(key: key);
+  const UserRequestsCart({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,41 +92,41 @@ class UserRequestsCart extends StatelessWidget {
                   ],
                 ),
               ),
+              if (techRequests?.statusEn == 'Pending') myHorizontalDivider(),
               if (techRequests?.statusEn == 'Pending')
-              myHorizontalDivider(),
-              if (techRequests?.statusEn == 'Pending')
-              MaterialButton(
-                onPressed: () {
-                  showPopUp(
-                    context,
-                    Container(
-                      height: 400,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 10.0),
-                      child: Column(
-                        children: [
-                          verticalSmallSpace,
-                          Image.asset(
-                            'assets/images/warning-2.jpg',
-                            width: 50,
-                            height: 50,
-                          ),
-                          verticalMediumSpace,
-                          Text(
-                            LocaleKeys.txtPopUpMainCancelReservation.tr(),
-                            textAlign: TextAlign.center,
-                            style: titleStyle.copyWith(
-                              color: redColor,
+                MaterialButton(
+                  onPressed: () {
+                    showPopUp(
+                      context,
+                      Container(
+                        height: 400,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 10.0),
+                        child: Column(
+                          children: [
+                            verticalSmallSpace,
+                            Image.asset(
+                              'assets/images/warning-2.jpg',
+                              width: 50,
+                              height: 50,
                             ),
-                          ),
-                          verticalMediumSpace,
-                          Text(
-                            LocaleKeys.txtPopUpSecondaryCancelReservation.tr(),
-                            textAlign: TextAlign.center,
-                            style: subTitleSmallStyle,
-                          ),
-                          verticalMediumSpace,
+                            verticalMediumSpace,
+                            Text(
+                              LocaleKeys.txtPopUpMainCancelReservation.tr(),
+                              textAlign: TextAlign.center,
+                              style: titleStyle.copyWith(
+                                color: redColor,
+                              ),
+                            ),
+                            verticalMediumSpace,
+                            Text(
+                              LocaleKeys.txtPopUpSecondaryCancelReservation
+                                  .tr(),
+                              textAlign: TextAlign.center,
+                              style: subTitleSmallStyle,
+                            ),
+                            verticalMediumSpace,
                             ConditionalBuilder(
                               condition:
                                   state is! AppCancelTechRequestsLoadingState,
@@ -140,37 +142,53 @@ class UserRequestsCart extends StatelessWidget {
                               fallback: (context) => const Center(
                                   child: CircularProgressIndicator.adaptive()),
                             ),
-                          verticalSmallSpace,
-                          GeneralButton(
-                            radius: radius,
-                            btnBackgroundColor: greyExtraLightColor,
-                            txtColor: greyDarkColor,
-                            title: LocaleKeys.BtnCancel.tr(),
-                            onPress: () {
-                              Navigator.pop(context);
-                            },
-                          )
-                        ],
+                            verticalSmallSpace,
+                            GeneralButton(
+                              radius: radius,
+                              btnBackgroundColor: greyExtraLightColor,
+                              txtColor: greyDarkColor,
+                              title: LocaleKeys.BtnCancel.tr(),
+                              onPress: () {
+                                Navigator.pop(context);
+                              },
+                            )
+                          ],
+                        ),
                       ),
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: redColor,
+                      borderRadius: BorderRadius.circular(radius),
                     ),
-                  );
-                },
-                child: Container(
+                    child: Center(
+                        child: Text(
+                      LocaleKeys.BtnCancel.tr(),
+                      style: titleStyle.copyWith(
+                          fontSize: 20.0,
+                          color: whiteColor,
+                          fontWeight: FontWeight.normal),
+                    )),
+                  ),
+                ),
+              if (techRequests?.statusEn != 'Pending')
+                Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    color: redColor,
+                    color: mainLightColor,
                     borderRadius: BorderRadius.circular(radius),
                   ),
                   child: Center(
                       child: Text(
-                    LocaleKeys.BtnCancel.tr(),
-                    style: titleStyle.copyWith(
-                        fontSize: 20.0,
-                        color: whiteColor,
-                        fontWeight: FontWeight.normal),
-                  )),
+                        '${techRequests?.status}',
+                        style: titleStyle.copyWith(
+                            fontSize: 20.0,
+                            color: whiteColor,
+                            fontWeight: FontWeight.normal),
+                      )),
                 ),
-              ),
             ],
           ),
         );

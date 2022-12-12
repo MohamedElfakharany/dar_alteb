@@ -27,7 +27,7 @@ class _RegionSettingsScreenState extends State<RegionSettingsScreen> {
     super.initState();
     Timer(
       const Duration(milliseconds: 0),
-          () {
+      () {
         AppCubit.get(context).getBranch(cityID: extraCityId!);
       },
     );
@@ -60,9 +60,21 @@ class _RegionSettingsScreenState extends State<RegionSettingsScreen> {
                   verticalSmallSpace,
                   InkWell(
                     onTap: () {
-                      AppCubit.get(context).changeLanguage().then((_) {
-                        context.setLocale(Locale(AppCubit.get(context).local!));
-                      });
+                      setState(
+                        () async {
+                          AppCubit.get(context).changeLanguage();
+                          await context
+                              .setLocale(Locale(AppCubit.get(context).local!))
+                              .then(
+                                (value) => {
+                              setState(() {
+                                Navigator.pop(context);
+                                cubit.changeBottomScreen(0);
+                              })
+                            },
+                          );
+                        },
+                      );
                     },
                     child: Container(
                       height: 60,
@@ -148,7 +160,7 @@ class _RegionSettingsScreenState extends State<RegionSettingsScreen> {
               ),
             ),
             fallback: (context) =>
-            const Center(child: CircularProgressIndicator.adaptive()),
+                const Center(child: CircularProgressIndicator.adaptive()),
           ),
         );
       },

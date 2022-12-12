@@ -133,14 +133,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                         label: Text(LocaleKeys.TxtFieldOldPassword.tr()),
                         hintStyle:
-                            const TextStyle(color: greyDarkColor, fontSize: 14),
-                        labelStyle: const TextStyle(
+                            TextStyle(color: greyDarkColor, fontSize: 14),
+                        labelStyle: TextStyle(
                             // color: isClickable ? Colors.grey[400] : blueColor,
                             color: greyDarkColor,
                             fontSize: 14),
                         fillColor: Colors.white,
                         filled: true,
-                        errorStyle: const TextStyle(color: redColor),
+                        errorStyle: TextStyle(color: redColor),
                         // floatingLabelBehavior: FloatingLabelBehavior.never,
                         contentPadding: const EdgeInsetsDirectional.only(
                             start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -151,7 +151,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                         ),
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: mainLightColor,
                           fontSize: 18,
                           fontFamily: fontFamily),
@@ -180,14 +180,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                         label: Text(LocaleKeys.TxtFieldNewPassword.tr()),
                         hintStyle:
-                            const TextStyle(color: greyDarkColor, fontSize: 14),
-                        labelStyle: const TextStyle(
+                            TextStyle(color: greyDarkColor, fontSize: 14),
+                        labelStyle: TextStyle(
                             // color: isClickable ? Colors.grey[400] : blueColor,
                             color: greyDarkColor,
                             fontSize: 14),
                         fillColor: Colors.white,
                         filled: true,
-                        errorStyle: const TextStyle(color: redColor),
+                        errorStyle: TextStyle(color: redColor),
                         // floatingLabelBehavior: FloatingLabelBehavior.never,
                         contentPadding: const EdgeInsetsDirectional.only(
                             start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -198,7 +198,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                         ),
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: mainLightColor,
                           fontSize: 18,
                           fontFamily: fontFamily),
@@ -209,32 +209,51 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return LocaleKeys.TxtFieldNewPassword.tr();
-                        } else {
-                          //call function to check password
-                          bool result = validatePassword(value);
-                          if (result) {
-                            // create account event
-                            return null;
-                          } else {
-                            return LocaleKeys.passwordConditions.tr();
-                          }
+                          return '${LocaleKeys.txtFill.tr()} ${LocaleKeys.TxtFieldNewPassword.tr()}';
+                        }else if (value.length < 8){
+                          return LocaleKeys.txtPasswordValidate.tr();
                         }
+                        // else {
+                        //   bool result = validatePassword(value);
+                        // }
+                        // else {
+                        //   //call function to check password
+                        //   if (result) {
+                        //     // create account event
+                        //     return null;
+                        //   } else {
+                        //     return LocaleKeys.passwordConditions.tr();
+                        //   }
+                        // }
                       },
                     ),
-                    verticalSmallSpace,
-                    LinearProgressIndicator(
-                      value: passwordStrength,
-                      backgroundColor: Colors.grey[300],
-                      minHeight: 5,
-                      color: passwordStrength <= 1 / 4
-                          ? Colors.red
-                          : passwordStrength == 2 / 4
-                              ? Colors.yellow
-                              : passwordStrength == 3 / 4
-                                  ? Colors.blue
-                                  : Colors.green,
-                    ),
+                    // verticalSmallSpace,
+                    // LinearProgressIndicator(
+                    //   value: passwordStrength,
+                    //   backgroundColor: Colors.grey[300],
+                    //   minHeight: 5,
+                    //   color: passwordStrength <= 1 / 4
+                    //       ? Colors.red
+                    //       : passwordStrength == 2 / 4
+                    //           ? Colors.yellow
+                    //           : passwordStrength == 3 / 4
+                    //               ? Colors.blue
+                    //               : Colors.green,
+                    // ),
+                    // verticalSmallSpace,
+                    // if (passwordStrength > 0 && passwordStrength < 4)
+                    //   Text(
+                    //     LocaleKeys.passwordConditions.tr(),
+                    //     style: subTitleSmallStyle.copyWith(
+                    //       color: passwordStrength <= 1 / 4
+                    //           ? Colors.red
+                    //           : passwordStrength == 2 / 4
+                    //               ? Colors.yellow
+                    //               : passwordStrength == 3 / 4
+                    //                   ? Colors.blue
+                    //                   : Colors.green,
+                    //     ),
+                    //   ),
                     verticalSmallSpace,
                     TextFormField(
                       focusNode: _focusNodes[2],
@@ -251,14 +270,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                         label: Text(LocaleKeys.TxtFieldConfirmPassword.tr()),
                         hintStyle:
-                            const TextStyle(color: greyDarkColor, fontSize: 14),
-                        labelStyle: const TextStyle(
+                            TextStyle(color: greyDarkColor, fontSize: 14),
+                        labelStyle: TextStyle(
                             // color: isClickable ? Colors.grey[400] : blueColor,
                             color: greyDarkColor,
                             fontSize: 14),
                         fillColor: Colors.white,
                         filled: true,
-                        errorStyle: const TextStyle(color: redColor),
+                        errorStyle: TextStyle(color: redColor),
                         // floatingLabelBehavior: FloatingLabelBehavior.never,
                         contentPadding: const EdgeInsetsDirectional.only(
                             start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -269,7 +288,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                         ),
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: mainLightColor,
                           fontSize: 18,
                           fontFamily: fontFamily),
@@ -297,8 +316,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           }
                         },
                       ),
-                      fallback: (context) =>
-                          const Center(child: CircularProgressIndicator.adaptive()),
+                      fallback: (context) => const Center(
+                          child: CircularProgressIndicator.adaptive()),
                     ),
                   ],
                 ),

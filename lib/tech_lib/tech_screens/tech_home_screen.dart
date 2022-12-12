@@ -94,11 +94,7 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
                           itemBuilder: (context, index) => TechHomeRequestsCart(index: index),
                           separatorBuilder: (context, index) =>
                               horizontalMiniSpace,
-                          itemCount: AppTechCubit.get(context)
-                                  .techRequestsModel
-                                  ?.data
-                                  ?.length ??
-                              0,
+                          itemCount: AppTechCubit.get(context).techRequestsModel?.data?.length ?? 0,
                         ),
                       ),
                       fallback: (context) => Center(

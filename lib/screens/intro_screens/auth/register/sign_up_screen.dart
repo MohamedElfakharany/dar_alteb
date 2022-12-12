@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, body_might_complete_normally_nullable
+// ignore_for_file: must_be_immutable, body_might_complete_normally_nullable, unnecessary_import
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
 import 'package:dar_elteb/cubit/states.dart';
 import 'package:dar_elteb/screens/intro_screens/auth/login_screen.dart';
-import 'package:dar_elteb/screens/intro_screens/reset_password/verification_screen.dart';
+import 'package:dar_elteb/screens/intro_screens/auth/verification_screen.dart';
 import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
@@ -78,6 +78,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isPasswordTyping = false;
 
   @override
+  void initState (){
+    AppCubit.get(context).getTerms();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var cubit = AppCubit.get(context);
@@ -90,7 +95,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               context,
               FadeRoute(
                 page: VerificationScreen(
-                  isRegister: true,
                   phoneCode: nationalCodeController.text,
                   mobileNumber: mobileController.text.toString(),
                 ),
@@ -135,475 +139,466 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         KeyboardActionsItem(focusNode: focusNode))
                     .toList(),
               ),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        LocaleKeys.BtnSignUp.tr(),
-                        style: titleStyle.copyWith(
-                            fontSize: 35.0, fontWeight: FontWeight.w600),
+              child: ConditionalBuilder(
+                condition: state is! AppGetTermsLoadingState,
+                builder: (context) => Column(
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text(
+                          LocaleKeys.BtnSignUp.tr(),
+                          style: titleStyle.copyWith(
+                              fontSize: 35.0, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
-                  ),
-                  verticalMiniSpace,
-                  Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        LocaleKeys.registerTxtSecondary.tr(),
-                        style: titleStyle.copyWith(
-                            fontWeight: FontWeight.normal,
-                            color: greyLightColor),
+                    verticalMiniSpace,
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text(
+                          LocaleKeys.registerTxtSecondary.tr(),
+                          style: titleStyle.copyWith(
+                              fontWeight: FontWeight.normal,
+                              color: greyLightColor),
+                        ),
                       ),
                     ),
-                  ),
-                  verticalMiniSpace,
-                  if (isPasswordTyping == false)
+                    verticalMiniSpace,
+                    if (isPasswordTyping == false)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: DefaultFormField(
+                          height: 90,
+                          focusNode: _focusNodes[0],
+                          controller: userNameController,
+                          type: TextInputType.text,
+                          validatedText: LocaleKeys.txtFieldName.tr(),
+                          label: LocaleKeys.txtFieldName.tr(),
+                          onTap: () {},
+                        ),
+                      ),
+                    if (isPasswordTyping == false) verticalMiniSpace,
+                    if (isPasswordTyping == false)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: GeneralNationalityCode(
+                                canSelect: true,
+                                controller: nationalCodeController,
+                              ),
+                            ),
+                            horizontalMiniSpace,
+                            Expanded(
+                              flex: 3,
+                              child: DefaultFormField(
+                                height: 90,
+                                focusNode: _focusNodes[1],
+                                controller: mobileController,
+                                type: TextInputType.phone,
+                                validatedText: LocaleKeys.txtFieldMobile.tr(),
+                                label: LocaleKeys.txtFieldMobile.tr(),
+                                onTap: () {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (isPasswordTyping == false) verticalMiniSpace,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: whiteColor,
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              offset: Offset(0, 10), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        alignment: AlignmentDirectional.center,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 4),
+                        child: TextFormField(
+                          focusNode: _focusNodes[2],
+                          onEditingComplete: () {
+                            isPasswordTyping = false;
+                          },
+                          onFieldSubmitted: (value) {
+                            isPasswordTyping = false;
+                          },
+                          controller: passwordController,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                AppCubit.get(context)
+                                    .resetChangePasswordVisibility();
+                              },
+                              icon: Icon(AppCubit.get(context).resetSufIcon),
+                              color: mainColor,
+                            ),
+                            label: Text(LocaleKeys.txtFieldPassword.tr()),
+                            hintStyle: const TextStyle(
+                                color: greyDarkColor, fontSize: 14),
+                            labelStyle: const TextStyle(
+                              // color: isClickable ? Colors.grey[400] : blueColor,
+                                color: greyDarkColor,
+                                fontSize: 14),
+                            fillColor: Colors.white,
+                            filled: true,
+                            errorStyle: const TextStyle(color: redColor),
+                            // floatingLabelBehavior: FloatingLabelBehavior.never,
+                            contentPadding: const EdgeInsetsDirectional.only(
+                                start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: greyExtraLightColor,
+                              ),
+                            ),
+                          ),
+                          style: TextStyle(
+                              color: mainLightColor,
+                              fontSize: 18,
+                              fontFamily: fontFamily),
+                          obscureText: AppCubit.get(context).resetIsPassword,
+                          obscuringCharacter: '*',
+                          onChanged: (value) {
+                            isPasswordTyping = true;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return LocaleKeys.txtFieldPassword.tr();
+                            }else if (value.length < 8 ){
+                              return LocaleKeys.txtPasswordValidate.tr();
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    verticalMiniSpace,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: LinearProgressIndicator(
+                        value: passwordStrength,
+                        backgroundColor: Colors.grey[300],
+                        minHeight: 5,
+                        color: passwordStrength <= 1 / 4
+                            ? Colors.red
+                            : passwordStrength == 2 / 4
+                            ? Colors.yellow
+                            : passwordStrength == 3 / 4
+                            ? Colors.blue
+                            : Colors.green,
+                      ),
+                    ),
+                    verticalMiniSpace,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: whiteColor,
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              offset: Offset(0, 10), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        alignment: AlignmentDirectional.center,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 4),
+                        child: TextFormField(
+                          focusNode: _focusNodes[3],
+                          controller: confirmPasswordController,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                AppCubit.get(context)
+                                    .resetConfirmChangePasswordVisibility();
+                              },
+                              icon:
+                              Icon(AppCubit.get(context).resetConfirmSufIcon),
+                              color: mainColor,
+                            ),
+                            label: Text(LocaleKeys.TxtFieldConfirmPassword.tr()),
+                            hintStyle: const TextStyle(
+                                color: greyDarkColor, fontSize: 14),
+                            labelStyle: const TextStyle(
+                              // color: isClickable ? Colors.grey[400] : blueColor,
+                                color: greyDarkColor,
+                                fontSize: 14),
+                            fillColor: Colors.white,
+                            filled: true,
+                            errorStyle: const TextStyle(color: redColor),
+                            // floatingLabelBehavior: FloatingLabelBehavior.never,
+                            contentPadding: const EdgeInsetsDirectional.only(
+                                start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: greyExtraLightColor,
+                              ),
+                            ),
+                          ),
+                          style: TextStyle(
+                              color: mainLightColor,
+                              fontSize: 18,
+                              fontFamily: fontFamily),
+                          obscureText:
+                          AppCubit.get(context).resetConfirmIsPassword,
+                          obscuringCharacter: '*',
+                          onChanged: (value) {
+                            formKey.currentState!.validate();
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return LocaleKeys.TxtFieldConfirmPassword.tr();
+                            } else if (value != passwordController.text) {
+                              return LocaleKeys.txtPasswordsNotMatch.tr();
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    verticalMiniSpace,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: DefaultFormField(
                         height: 90,
-                        focusNode: _focusNodes[0],
-                        controller: userNameController,
-                        type: TextInputType.text,
-                        validatedText: LocaleKeys.txtFieldName.tr(),
-                        label: LocaleKeys.txtFieldName.tr(),
+                        focusNode: _focusNodes[4],
+                        controller: nationalIdController,
+                        type: TextInputType.number,
+                        label: LocaleKeys.txtFieldIdNumber.tr(),
                         onTap: () {},
+                        validatedText: LocaleKeys.txtFieldIdNumber.tr(),
                       ),
                     ),
-                  if (isPasswordTyping == false) verticalMiniSpace,
-                  if (isPasswordTyping == false)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: GeneralNationalityCode(
-                              canSelect: true,
-                              controller: nationalCodeController,
-                            ),
-                          ),
-                          horizontalMiniSpace,
-                          Expanded(
-                            flex: 3,
-                            child: DefaultFormField(
-                              height: 90,
-                              focusNode: _focusNodes[1],
-                              controller: mobileController,
-                              type: TextInputType.phone,
-                              validatedText: LocaleKeys.txtFieldMobile.tr(),
-                              label: LocaleKeys.txtFieldMobile.tr(),
-                              onTap: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (isPasswordTyping == false) verticalMiniSpace,
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: whiteColor,
-                            spreadRadius: 3,
-                            blurRadius: 10,
-                            offset: Offset(0, 10), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      alignment: AlignmentDirectional.center,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 4),
-                      child: TextFormField(
-                        focusNode: _focusNodes[2],
-                        onEditingComplete: () {
-                          isPasswordTyping = false;
-                        },
-                        // onTapOutside: (value) {
-                        //   isPasswordTyping = false;
-                        // },
-                        onFieldSubmitted: (value) {
-                          isPasswordTyping = false;
-                        },
-                        controller: passwordController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              AppCubit.get(context)
-                                  .resetChangePasswordVisibility();
-                            },
-                            icon: Icon(AppCubit.get(context).resetSufIcon),
-                            color: mainColor,
-                          ),
-                          label: Text(LocaleKeys.txtFieldPassword.tr()),
-                          hintStyle: const TextStyle(
-                              color: greyDarkColor, fontSize: 14),
-                          labelStyle: const TextStyle(
-                              // color: isClickable ? Colors.grey[400] : blueColor,
-                              color: greyDarkColor,
-                              fontSize: 14),
-                          fillColor: Colors.white,
-                          filled: true,
-                          errorStyle: const TextStyle(color: redColor),
-                          // floatingLabelBehavior: FloatingLabelBehavior.never,
-                          contentPadding: const EdgeInsetsDirectional.only(
-                              start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 1,
-                              color: greyExtraLightColor,
-                            ),
-                          ),
+                    verticalMiniSpace,
+                    Column(
+                      children: [
+                        Text(
+                          LocaleKeys.txtAgree.tr(),
+                          style: subTitleSmallStyle,
                         ),
-                        style: const TextStyle(
-                            color: mainLightColor,
-                            fontSize: 18,
-                            fontFamily: fontFamily),
-                        obscureText: AppCubit.get(context).resetIsPassword,
-                        obscuringCharacter: '*',
-                        onChanged: (value) {
-                          isPasswordTyping = true;
-                          formKey.currentState!.validate();
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return LocaleKeys.txtFieldPassword.tr();
-                          } else {
-                            //call function to check password
-                            bool result = validatePassword(value);
-                            if (result) {
-                              // create account event
-                              return null;
-                            } else {
-                              return LocaleKeys.passwordConditions.tr();
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              child: Text(
+                                LocaleKeys.txtTitleOfOurTermsOfService.tr(),
+                                style: const TextStyle(color: mainColor),
+                              ),
+                              onPressed: () {
+                                showPopUp(
+                                  context,
+                                  Container(
+                                    height: 500,
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: const EdgeInsetsDirectional.only(
+                                        end: 30.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        verticalMediumSpace,
+                                        Padding(
+                                          padding:
+                                          const EdgeInsetsDirectional.only(
+                                              start: 20.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                LocaleKeys
+                                                    .txtTitleOfOurTermsOfService
+                                                    .tr(),
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: fontFamily,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: mainColor,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              verticalMiniSpace,
+                                              SizedBox(
+                                                height: 350.0,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.vertical,
+                                                  physics:
+                                                  const BouncingScrollPhysics(),
+                                                  child: Text(
+                                                    AppCubit.get(context).termsModel?.data?.terms ?? '',
+                                                    textAlign: TextAlign.center,
+                                                    style: subTitleSmallStyle,
+                                                  ),
+                                                ),
+                                              ),
+                                              verticalMiniSpace,
+                                              GeneralButton(
+                                                title: LocaleKeys.BtnOk.tr(),
+                                                onPress: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            // const Text(
+                            //   'And',
+                            //   style: subTitleSmallStyle,
+                            // ),
+                            TextButton(
+                              onPressed: () {
+                                showPopUp(
+                                  context,
+                                  Container(
+                                    height: 500,
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: const EdgeInsetsDirectional.only(
+                                        end: 30.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        verticalMediumSpace,
+                                        Padding(
+                                          padding:
+                                          const EdgeInsetsDirectional.only(
+                                              start: 20.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                LocaleKeys
+                                                    .txtTitleOfOurPrivacyPolicy
+                                                    .tr(),
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: fontFamily,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: mainColor,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              verticalMiniSpace,
+                                              SizedBox(
+                                                height: 350.0,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.vertical,
+                                                  physics:
+                                                  const BouncingScrollPhysics(),
+                                                  child: Text(
+                                                    AppCubit.get(context).termsModel?.data?.privacy ?? '',
+                                                    textAlign: TextAlign.center,
+                                                    style: subTitleSmallStyle,
+                                                  ),
+                                                ),
+                                              ),
+                                              verticalMiniSpace,
+                                              GeneralButton(
+                                                title: LocaleKeys.BtnOk.tr(),
+                                                onPress: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                LocaleKeys.txtTitleOfOurPrivacyPolicy.tr(),
+                                style: const TextStyle(color: mainColor),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    horizontalMiniSpace,
+                    ConditionalBuilder(
+                      condition: state is! AppRegisterLoadingState,
+                      builder: (context) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: GeneralButton(
+                          title: LocaleKeys.BtnSignUp.tr(),
+                          onPress: () {
+                            if (formKey.currentState!.validate()) {
+                              cubit.register(
+                                name: userNameController.text,
+                                nationalID: nationalIdController.text,
+                                password: passwordController.text,
+                                mobile: mobileController.text,
+                                phoneCode: nationalCodeController.text,
+                                deviceTokenLogin: deviceToken!,
+                              );
                             }
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                  verticalMiniSpace,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: LinearProgressIndicator(
-                      value: passwordStrength,
-                      backgroundColor: Colors.grey[300],
-                      minHeight: 5,
-                      color: passwordStrength <= 1 / 4
-                          ? Colors.red
-                          : passwordStrength == 2 / 4
-                              ? Colors.yellow
-                              : passwordStrength == 3 / 4
-                                  ? Colors.blue
-                                  : Colors.green,
-                    ),
-                  ),
-                  verticalMiniSpace,
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: whiteColor,
-                            spreadRadius: 3,
-                            blurRadius: 10,
-                            offset: Offset(0, 10), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      alignment: AlignmentDirectional.center,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 4),
-                      child: TextFormField(
-                        focusNode: _focusNodes[3],
-                        controller: confirmPasswordController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              AppCubit.get(context)
-                                  .resetConfirmChangePasswordVisibility();
-                            },
-                            icon:
-                                Icon(AppCubit.get(context).resetConfirmSufIcon),
-                            color: mainColor,
-                          ),
-                          label: Text(LocaleKeys.TxtFieldConfirmPassword.tr()),
-                          hintStyle: const TextStyle(
-                              color: greyDarkColor, fontSize: 14),
-                          labelStyle: const TextStyle(
-                              // color: isClickable ? Colors.grey[400] : blueColor,
-                              color: greyDarkColor,
-                              fontSize: 14),
-                          fillColor: Colors.white,
-                          filled: true,
-                          errorStyle: const TextStyle(color: redColor),
-                          // floatingLabelBehavior: FloatingLabelBehavior.never,
-                          contentPadding: const EdgeInsetsDirectional.only(
-                              start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 1,
-                              color: greyExtraLightColor,
-                            ),
-                          ),
+                            cubit.isVisitor = false;
+                          },
                         ),
-                        style: const TextStyle(
-                            color: mainLightColor,
-                            fontSize: 18,
-                            fontFamily: fontFamily),
-                        obscureText:
-                            AppCubit.get(context).resetConfirmIsPassword,
-                        obscuringCharacter: '*',
-                        onChanged: (value) {
-                          formKey.currentState!.validate();
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return LocaleKeys.TxtFieldConfirmPassword.tr();
-                          } else if (value != passwordController.text) {
-                            return LocaleKeys.txtPasswordsNotMatch.tr();
-                          }
-                        },
                       ),
+                      fallback: (context) => const Center(
+                          child: CircularProgressIndicator.adaptive()),
                     ),
-                  ),
-                  verticalMiniSpace,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: DefaultFormField(
-                      height: 90,
-                      focusNode: _focusNodes[4],
-                      controller: nationalIdController,
-                      type: TextInputType.number,
-                      label: LocaleKeys.txtFieldIdNumber.tr(),
-                      onTap: () {},
-                      validatedText: LocaleKeys.txtFieldIdNumber.tr(),
-                    ),
-                  ),
-                  verticalMiniSpace,
-                  Column(
-                    children: [
-                      Text(
-                        LocaleKeys.txtAgree.tr(),
-                        style: subTitleSmallStyle,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            child: Text(
-                              LocaleKeys.txtTitleOfOurTermsOfService.tr(),
-                              style: const TextStyle(color: mainColor),
-                            ),
-                            onPressed: () {
-                              showPopUp(
-                                context,
-                                Container(
-                                  height: 500,
-                                  width: width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: const EdgeInsetsDirectional.only(
-                                      end: 30.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      verticalMediumSpace,
-                                      Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                start: 20.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              LocaleKeys
-                                                  .txtTitleOfOurTermsOfService
-                                                  .tr(),
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: fontFamily,
-                                                fontWeight: FontWeight.bold,
-                                                color: mainColor,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            verticalMiniSpace,
-                                            SizedBox(
-                                              height: 350.0,
-                                              child: SingleChildScrollView(
-                                                scrollDirection: Axis.vertical,
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                child: Text(
-                                                  LocaleKeys.onboardingBody
-                                                      .tr(),
-                                                  textAlign: TextAlign.center,
-                                                  style: subTitleSmallStyle,
-                                                ),
-                                              ),
-                                            ),
-                                            verticalMiniSpace,
-                                            GeneralButton(
-                                              title: LocaleKeys.BtnOk.tr(),
-                                              onPress: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          // const Text(
-                          //   'And',
-                          //   style: subTitleSmallStyle,
-                          // ),
-                          TextButton(
-                            onPressed: () {
-                              showPopUp(
-                                context,
-                                Container(
-                                  height: 500,
-                                  width: width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: const EdgeInsetsDirectional.only(
-                                      end: 30.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      verticalMediumSpace,
-                                      Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                start: 20.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              LocaleKeys
-                                                  .txtTitleOfOurPrivacyPolicy
-                                                  .tr(),
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: fontFamily,
-                                                fontWeight: FontWeight.bold,
-                                                color: mainColor,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            verticalMiniSpace,
-                                            SizedBox(
-                                              height: 350.0,
-                                              child: SingleChildScrollView(
-                                                scrollDirection: Axis.vertical,
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                child: Text(
-                                                  LocaleKeys.onboardingBody
-                                                      .tr(),
-                                                  textAlign: TextAlign.center,
-                                                  style: subTitleSmallStyle,
-                                                ),
-                                              ),
-                                            ),
-                                            verticalMiniSpace,
-                                            GeneralButton(
-                                              title: LocaleKeys.BtnOk.tr(),
-                                              onPress: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              LocaleKeys.txtTitleOfOurPrivacyPolicy.tr(),
-                              style: const TextStyle(color: mainColor),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  horizontalMiniSpace,
-                  ConditionalBuilder(
-                    condition: state is! AppRegisterLoadingState,
-                    builder: (context) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: GeneralButton(
-                        title: LocaleKeys.BtnSignUp.tr(),
-                        onPress: () {
-                          if (formKey.currentState!.validate()) {
-                            cubit.register(
-                              name: userNameController.text,
-                              nationalID: nationalIdController.text,
-                              password: passwordController.text,
-                              mobile: mobileController.text,
-                              phoneCode: nationalCodeController.text,
-                              deviceTokenLogin: deviceToken!,
+                    verticalMediumSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          LocaleKeys.registerTxtHaveAccount.tr(),
+                          style: subTitleSmallStyle,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              FadeRoute(
+                                page: const LoginScreen(),
+                              ),
                             );
-                          }
-                          cubit.isVisitor = false;
-                        },
-                      ),
-                    ),
-                    fallback: (context) => const Center(
-                        child: CircularProgressIndicator.adaptive()),
-                  ),
-                  verticalMediumSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        LocaleKeys.registerTxtHaveAccount.tr(),
-                        style: subTitleSmallStyle,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            FadeRoute(
-                              page: const LoginScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          LocaleKeys.BtnSignIn.tr(),
-                          style: titleSmallStyle.copyWith(color: mainColor),
+                          },
+                          child: Text(
+                            LocaleKeys.BtnSignIn.tr(),
+                            style: titleSmallStyle.copyWith(color: mainColor),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
+                fallback: (context) => const Center(child: CircularProgressIndicator.adaptive(),),
               ),
             ),
           ),

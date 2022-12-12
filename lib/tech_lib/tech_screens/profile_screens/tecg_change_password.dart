@@ -131,14 +131,14 @@ class _TechChangePasswordScreenState extends State<TechChangePasswordScreen> {
                         ),
                         label: Text(LocaleKeys.TxtFieldOldPassword.tr()),
                         hintStyle:
-                        const TextStyle(color: greyDarkColor, fontSize: 14),
-                        labelStyle: const TextStyle(
+                        TextStyle(color: greyDarkColor, fontSize: 14),
+                        labelStyle: TextStyle(
                           // color: isClickable ? Colors.grey[400] : blueColor,
                             color: greyDarkColor,
                             fontSize: 14),
                         fillColor: Colors.white,
                         filled: true,
-                        errorStyle: const TextStyle(color: redColor),
+                        errorStyle: TextStyle(color: redColor),
                         // floatingLabelBehavior: FloatingLabelBehavior.never,
                         contentPadding: const EdgeInsetsDirectional.only(
                             start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -149,7 +149,7 @@ class _TechChangePasswordScreenState extends State<TechChangePasswordScreen> {
                           ),
                         ),
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: mainLightColor,
                           fontSize: 18,
                           fontFamily: fontFamily),
@@ -178,14 +178,14 @@ class _TechChangePasswordScreenState extends State<TechChangePasswordScreen> {
                         ),
                         label: Text(LocaleKeys.TxtFieldNewPassword.tr()),
                         hintStyle:
-                        const TextStyle(color: greyDarkColor, fontSize: 14),
-                        labelStyle: const TextStyle(
+                        TextStyle(color: greyDarkColor, fontSize: 14),
+                        labelStyle: TextStyle(
                           // color: isClickable ? Colors.grey[400] : blueColor,
                             color: greyDarkColor,
                             fontSize: 14),
                         fillColor: Colors.white,
                         filled: true,
-                        errorStyle: const TextStyle(color: redColor),
+                        errorStyle: TextStyle(color: redColor),
                         // floatingLabelBehavior: FloatingLabelBehavior.never,
                         contentPadding: const EdgeInsetsDirectional.only(
                             start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -196,7 +196,7 @@ class _TechChangePasswordScreenState extends State<TechChangePasswordScreen> {
                           ),
                         ),
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: mainLightColor,
                           fontSize: 18,
                           fontFamily: fontFamily),
@@ -249,14 +249,14 @@ class _TechChangePasswordScreenState extends State<TechChangePasswordScreen> {
                         ),
                         label: Text(LocaleKeys.TxtFieldConfirmPassword.tr()),
                         hintStyle:
-                        const TextStyle(color: greyDarkColor, fontSize: 14),
-                        labelStyle: const TextStyle(
+                        TextStyle(color: greyDarkColor, fontSize: 14),
+                        labelStyle: TextStyle(
                           // color: isClickable ? Colors.grey[400] : blueColor,
                             color: greyDarkColor,
                             fontSize: 14),
                         fillColor: Colors.white,
                         filled: true,
-                        errorStyle: const TextStyle(color: redColor),
+                        errorStyle: TextStyle(color: redColor),
                         // floatingLabelBehavior: FloatingLabelBehavior.never,
                         contentPadding: const EdgeInsetsDirectional.only(
                             start: 20.0, end: 10.0, bottom: 15.0, top: 15.0),
@@ -267,7 +267,7 @@ class _TechChangePasswordScreenState extends State<TechChangePasswordScreen> {
                           ),
                         ),
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: mainLightColor,
                           fontSize: 18,
                           fontFamily: fontFamily),

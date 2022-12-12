@@ -11,6 +11,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
 import 'package:dar_elteb/cubit/states.dart';
 import 'package:dar_elteb/screens/intro_screens/reset_password/forget_password_screen.dart';
+import 'package:dar_elteb/screens/main_screens/profile/edit_profile/change_mobile_screen.dart';
 import 'package:dar_elteb/screens/main_screens/profile/edit_profile/change_password.dart';
 import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:dar_elteb/shared/constants/colors.dart';
@@ -239,16 +240,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 color: greyExtraLightColor.withOpacity(0.4),
                               ),
                             ),
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: greyDarkColor, fontSize: 14),
-                            labelStyle: const TextStyle(
+                            labelStyle: TextStyle(
                               // color: isClickable ? Colors.grey[400] : blueColor,
                               color: greyDarkColor,
                               fontSize: 14,
                             ),
                             fillColor: Colors.white,
                             filled: true,
-                            errorStyle: const TextStyle(color: redColor),
+                            errorStyle: TextStyle(color: redColor),
                             // floatingLabelBehavior: FloatingLabelBehavior.never,
                             contentPadding: const EdgeInsetsDirectional.only(
                                 start: 15.0,
@@ -432,7 +433,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           context,
                           FadeRoute(
                               page:
-                                  ForgetPasswordScreen(isChangeMobile: true)));
+                              ChangeMobileScreen()));
                     },
                   ),
                 ],

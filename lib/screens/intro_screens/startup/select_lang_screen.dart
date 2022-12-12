@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:dar_elteb/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,11 @@ class SelectLangScreen extends StatefulWidget {
   State<SelectLangScreen> createState() => _SelectLangScreenState();
 }
 
+bool isEnglish = true;
+
 class _SelectLangScreenState extends State<SelectLangScreen> {
   @override
   Widget build(BuildContext context) {
-    bool isEnglish = isEnglishShared!;
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -48,32 +50,20 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                   ),
                   verticalLargeSpace,
                   InkWell(
-                    onTap: () async {
-                      isFirst = false;
-                      CacheHelper.saveData(key: 'isFirst', value: false);
+                    onTap: () {
                       if (sharedLanguage == 'en') {
-                        await AppCubit.get(context).changeLanguage();
-                        await context.setLocale(Locale(sharedLanguage!));
-                        setState(() async {
-                          setState(() {
-                            Navigator.push(
-                                context, FadeRoute(page: OnBoardingScreen()));
-                          });
-                        });
+                        CacheHelper.saveData(key: 'isEnglish', value: true);
+                        AppCubit.get(context).changeLanguage();
+                        context.setLocale(Locale(sharedLanguage!));
                       } else if (sharedLanguage == 'ar') {
-                        await context.setLocale(Locale(sharedLanguage!));
-                        setState(() async {
-                          Navigator.push(
-                              context, FadeRoute(page: OnBoardingScreen()));
-                        });
+                        CacheHelper.saveData(key: 'isEnglish', value: false);
+                        context.setLocale(Locale(sharedLanguage!));
                       } else {
-                        await context.setLocale(const Locale('ar'));
-                        setState(() async {
-                          CacheHelper.saveData(key: 'local', value: 'ar');
-                          Navigator.push(
-                              context, FadeRoute(page: OnBoardingScreen()));
-                        });
+                        context.setLocale(const Locale('ar'));
+                        CacheHelper.saveData(key: 'isEnglish', value: false);
+                        CacheHelper.saveData(key: 'local', value: 'ar');
                       }
+                      isEnglish = false;
                     },
                     child: Container(
                       height: 60,
@@ -99,7 +89,7 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                               width: 60,
                             ),
                             horizontalMiniSpace,
-                            const Text(
+                            Text(
                               'اللغة العربية',
                               style: titleSmallStyle,
                             ),
@@ -119,41 +109,21 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                   verticalSmallSpace,
                   InkWell(
                     onTap: () {
-                      isFirst = false;
-                      CacheHelper.saveData(key: 'isFirst', value: false);
-                      setState(() async {
-                        if (sharedLanguage == 'ar') {
-                          await AppCubit.get(context).changeLanguage();
-                          await context
-                              .setLocale(Locale(sharedLanguage!))
-                              .then((value) {
-                            Navigator.push(
-                                context, FadeRoute(page: OnBoardingScreen()));
-                          });
-                        } else if (sharedLanguage == 'en') {
-                          await context
-                              .setLocale(Locale(sharedLanguage!))
-                              .then((value) {
-                            Navigator.push(
-                                context, FadeRoute(page: OnBoardingScreen()));
-                          });
-                        } else {
-                          await context
-                              .setLocale(const Locale('en'))
-                              .then((value) {
-                            CacheHelper.saveData(key: 'local', value: 'en');
-                            Navigator.push(
-                                context, FadeRoute(page: OnBoardingScreen()));
-                          });
-                        }
-                        // if (!AppCubit.get(context).isEnglish) {
-                        //   AppCubit.get(context).changeLang();
-                        // }
-                        // print(AppCubit.get(context).isEnglish);
-                      });
-                      if (kDebugMode) {
-                        print(sharedLanguage);
+                      if (sharedLanguage == 'ar') {
+                        CacheHelper.saveData(key: 'isEnglish', value: false);
+                        AppCubit.get(context).changeLanguage();
+                        context.setLocale(Locale(sharedLanguage!));
+                      } else if (sharedLanguage == 'en') {
+                        CacheHelper.saveData(key: 'isEnglish', value: true);
+                        context.setLocale(Locale(sharedLanguage!));
+                      } else {
+                        context.setLocale(const Locale('en'));
+                        CacheHelper.saveData(key: 'isEnglish', value: true);
+                        setState(() async {
+                          CacheHelper.saveData(key: 'local', value: 'en');
+                        });
                       }
+                      isEnglish = true;
                     },
                     child: Container(
                       height: 60,
@@ -179,7 +149,7 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                               width: 60,
                             ),
                             horizontalMiniSpace,
-                            const Text(
+                            Text(
                               'English',
                               style: titleSmallStyle,
                             ),
@@ -197,16 +167,20 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                     ),
                   ),
                   verticalLargeSpace,
-                  // GeneralButton(
-                  //     title: 'Keep going',
-                  //     onPress: () {
-                  //       Navigator.push(
-                  //         context,
-                  //         FadeRoute(
-                  //           page:  OnBoardingScreen(),
-                  //         ),
-                  //       );
-                  //     }),
+                  GeneralButton(
+                      title: LocaleKeys.BtnContinue.tr(),
+                      onPress: () {
+                        isFirst = false;
+                        CacheHelper.saveData(key: 'isFirst', value: false);
+                        CacheHelper.saveData(
+                            key: 'isEnglish', value: isEnglish);
+                        Navigator.push(
+                          context,
+                          FadeRoute(
+                            page: OnBoardingScreen(),
+                          ),
+                        );
+                      }),
                 ],
               ),
             ),

@@ -10,6 +10,10 @@ abstract class  LocaleKeys {
   static const txtFieldNationality = 'txtFieldNationality';
   static const loginTxtMain = 'loginTxtMain';
   static const loginTxtSecondary = 'loginTxtSecondary';
+  static const txtTestList = 'txtTestList';
+  static const txtTestDate = 'txtTestDate';
+  static const txtAskForTech = 'txtAskForTech';
+  static const txtDateRange = 'txtDateRange';
   static const txtFieldMobile = 'txtFieldMobile';
   static const txtFieldPassword = 'txtFieldPassword';
   static const BtnForgetPassword = 'BtnForgetPassword';
@@ -118,6 +122,8 @@ abstract class  LocaleKeys {
   static const BtnPrecautions = 'BtnPrecautions';
   static const TxtPopUpReservationType = 'TxtPopUpReservationType';
   static const BtnAtHome = 'BtnAtHome';
+  static const BtnAtParentHome = 'BtnAtParentHome';
+  static const BtnBrotherHome = 'BtnBrotherHome';
   static const BtnAtLab = 'BtnAtLab';
   static const TxtHomeVisit = 'TxtHomeVisit';
   static const HomeVisitTxtMain = 'HomeVisitTxtMain';

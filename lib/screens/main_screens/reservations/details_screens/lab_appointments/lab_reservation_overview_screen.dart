@@ -151,6 +151,7 @@ class _LabReservationOverviewScreenState
       },
       builder: (context, state) {
         var cartModel = AppCubit.get(context).cartModel;
+        print('widget.branchName : ${widget.branchName}');
         return ScreenUtilInit(
           builder: (ctx, _) => Scaffold(
             backgroundColor: greyExtraLightColor,
@@ -274,7 +275,7 @@ class _LabReservationOverviewScreenState
                                                   color: Colors.white,
                                                 ),
                                                 Text(LocaleKeys.BtnDelete.tr(),
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 20)),
                                               ],
@@ -437,14 +438,10 @@ class _LabReservationOverviewScreenState
                                 child: Row(
                                   children: [
                                     horizontalSmallSpace,
-                                    // Image.asset(
-                                    //   'assets/images/location.jpg',
-                                    //   width: 25,
-                                    //   height: 35,
-                                    // ),
-                                    SvgPicture.asset(
-                                      profileLocationImage,
-                                      height: 0.05.sw,
+                                    Image.asset(
+                                      'assets/images/location.jpg',
+                                      width: 25,
+                                      height: 35,
                                     ),
                                     myVerticalDivider(),
                                     Column(
@@ -537,7 +534,7 @@ class _LabReservationOverviewScreenState
                                       Expanded(
                                         child: DefaultFormField(
                                           controller: couponController,
-                                          type: TextInputType.number,
+                                          type: TextInputType.text,
                                           label: LocaleKeys.txtFieldCoupon.tr(),
                                           validatedText:
                                               LocaleKeys.txtFieldCoupon.tr(),
@@ -826,7 +823,8 @@ class _LabReservationOverviewScreenState
                                     offerId: cartModel.extra!.offers,
                                     testId: cartModel.extra!.tests,
                                   );
-                                } else {
+                                }
+                                else {
                                   if (cartModel.extra!.offers!.isEmpty) {
                                     AppCubit.get(context).createLabReservation(
                                       date: widget.date,
@@ -836,7 +834,8 @@ class _LabReservationOverviewScreenState
                                       coupon: couponController.text,
                                       testId: cartModel.extra?.tests,
                                     );
-                                  } else if (cartModel.extra!.tests!.isEmpty) {
+                                  }
+                                  else if (cartModel.extra!.tests!.isEmpty) {
                                     AppCubit.get(context).createLabReservation(
                                         date: widget.date,
                                         time: widget.time,
@@ -854,7 +853,7 @@ class _LabReservationOverviewScreenState
                                     familyId: widget.familyId,
                                     branchId: widget.branchId,
                                     coupon: couponController.text,
-                                    offerId: [widget.offersDataModel?.id],
+                                    offerId: ["${widget.offersDataModel?.id}"],
                                   );
                                 } else if (widget.offersDataModel?.id == null) {
                                   AppCubit.get(context).createLabReservation(

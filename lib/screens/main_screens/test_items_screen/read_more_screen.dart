@@ -72,7 +72,7 @@ class ReadMoreScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   offersDataModel?.gender ?? testsDataModel?.gender,
-                                  style: const TextStyle(color: whiteColor),
+                                  style: TextStyle(color: whiteColor),
                                 ),
                                 horizontalMicroSpace,
                                 const Icon(
@@ -97,7 +97,7 @@ class ReadMoreScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   offersDataModel?.gender,
-                                  style: const TextStyle(color: whiteColor),
+                                  style: TextStyle(color: whiteColor),
                                 ),
                                 const Icon(
                                   Icons.female,
