@@ -46,7 +46,6 @@ class ChangeMobileScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        nationalCodeController.text = '966';
         return Scaffold(
         backgroundColor: whiteColor,
         appBar: GeneralAppBar(

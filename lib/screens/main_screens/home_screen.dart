@@ -329,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       verticalMiniSpace,
                       ConditionalBuilder(
-                        condition: cubit.testsModel?.data == null,
+                        condition: cubit.testsModel?.data?.isNotEmpty != true,
                         builder: (context) => SizedBox(
                           height: 110.0,
                           width: double.infinity,

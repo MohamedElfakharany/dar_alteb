@@ -1340,13 +1340,15 @@ class AppCubit extends Cubit<AppStates> {
         ),
         data: formData,
       );
+      print('createTokenModel : ${formData.entries}');
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      // print('createTokenModel : $responseJson');
+      print('createTokenModel : $responseJson');
       createTokenModel = CreateTokenModel.fromJson(responseJson);
       emit(AppCreateTokenSuccessState(createTokenModel!));
     } catch (error) {
+      print(error);
       emit(AppCreateTokenErrorState(error.toString()));
     }
   }

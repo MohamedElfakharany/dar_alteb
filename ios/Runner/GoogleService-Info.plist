@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>450437050994-npihrbrk8v7bivjij7n22869o977rb9i.apps.googleusercontent.com</string>
+	<string>1070777426564-o5io50suq8jknjrmc08ot1terv85kuh3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.450437050994-npihrbrk8v7bivjij7n22869o977rb9i</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>450437050994-k87lp5cq656vqvjo54joppm9ncgh8fgt.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.1070777426564-o5io50suq8jknjrmc08ot1terv85kuh3</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAaZjNop2Dl5EomK5iE6Xo3JIsZP-6FfOY</string>
+	<string>AIzaSyCe__YAUeG02wwy55W4-Kx0BX_1_Lfanfg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>450437050994</string>
+	<string>1070777426564</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.darAltep</string>
+	<string>com.orcavision.darAlteb</string>
 	<key>PROJECT_ID</key>
-	<string>dar-eltep</string>
+	<string>dar-elteb-6ff8b</string>
 	<key>STORAGE_BUCKET</key>
-	<string>dar-eltep.appspot.com</string>
+	<string>dar-elteb-6ff8b.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:450437050994:ios:45845bf6b72736968e48eb</string>
-	<key>DATABASE_URL</key>
-	<string>https://dar-eltep-default-rtdb.firebaseio.com</string>
+	<string>1:1070777426564:ios:2e1191af615800de2958d1</string>
 </dict>
 </plist>

@@ -28,16 +28,23 @@ class _ResultsScreenState extends State<ResultsScreen> {
     AppCubit.get(context).getLabResults();
     AppCubit.get(context).getHomeResults();
   }
+
   Color bgColorTest = whiteColor;
   Color bgColorOffer = mainColor;
   Color fontColorTest = mainColor;
   Color fontColorOffer = whiteColor;
+
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        bgColorTest = index == 0 ? mainLightColor : whiteColor;
+        bgColorOffer = index == 1 ? mainLightColor : whiteColor;
+        fontColorTest = index == 1 ? mainLightColor : whiteColor;
+        fontColorOffer = index == 0 ? mainLightColor : whiteColor;
         return DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -59,12 +66,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         elevation: 0.0,
                         bottom: TabBar(
                           indicator: const BoxDecoration(),
-                          onTap: (i){
-                            setState((){
-                              bgColorTest = i == 0 ? mainLightColor : whiteColor;
-                              bgColorOffer = i == 1 ? mainLightColor : whiteColor;
-                              fontColorTest = i == 1 ? mainLightColor : whiteColor;
-                              fontColorOffer = i == 0 ? mainLightColor : whiteColor;
+                          onTap: (i) {
+                            setState(() {
+                              index = i;
                             });
                           },
                           tabs: [
@@ -78,8 +82,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                       color: mainLightColor, width: 2),
                                   boxShadow: [
                                     BoxShadow(
-                                      color:
-                                      Colors.grey.withOpacity(0.15),
+                                      color: Colors.grey.withOpacity(0.15),
                                       spreadRadius: 2,
                                       blurRadius: 2,
                                       offset: const Offset(0, 2),
@@ -88,8 +91,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                   color: bgColorTest,
                                 ),
                                 child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
                                       'assets/images/atLabIcon.png',
@@ -120,8 +122,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                       color: mainLightColor, width: 2),
                                   boxShadow: [
                                     BoxShadow(
-                                      color:
-                                      Colors.grey.withOpacity(0.15),
+                                      color: Colors.grey.withOpacity(0.15),
                                       spreadRadius: 2,
                                       blurRadius: 2,
                                       offset: const Offset(0, 2),
@@ -130,8 +131,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                   color: bgColorOffer,
                                 ),
                                 child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
                                       'assets/images/atHomeIcon.png',
@@ -164,13 +164,18 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         children: [
                           // first tab bar view widget
                           ConditionalBuilder(
-                            condition: AppCubit.get(context).labResultsModel?.data?.isEmpty == false,
-                            builder: (context)=> Column(
+                            condition: AppCubit.get(context)
+                                    .labResultsModel
+                                    ?.data
+                                    ?.isEmpty ==
+                                false,
+                            builder: (context) => Column(
                               children: [
                                 verticalSmallSpace,
                                 ConditionalBuilder(
-                                  condition:
-                                  state is! AppGetLabResultsLoadingState || state is! AppGetHomeResultsLoadingState,
+                                  condition: state
+                                          is! AppGetLabResultsLoadingState ||
+                                      state is! AppGetHomeResultsLoadingState,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -180,7 +185,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                           Navigator.push(
                                             context,
                                             FadeRoute(
-                                              page: ResultDetailsScreen(labResultsDataModel: AppCubit.get(context).labResultsModel!.data![index], index: index,),
+                                              page: ResultDetailsScreen(
+                                                labResultsDataModel:
+                                                    AppCubit.get(context)
+                                                        .labResultsModel!
+                                                        .data![index],
+                                                index: index,
+                                              ),
                                             ),
                                           );
                                         },
@@ -191,11 +202,11 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                         ),
                                       ),
                                       separatorBuilder: (context, index) =>
-                                      verticalMiniSpace,
+                                          verticalMiniSpace,
                                       itemCount: AppCubit.get(context)
-                                          .labResultsModel
-                                          ?.data
-                                          ?.length ??
+                                              .labResultsModel
+                                              ?.data
+                                              ?.length ??
                                           0,
                                     ),
                                   ),
@@ -205,21 +216,24 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                 ),
                               ],
                             ),
-                            fallback: (context)=> ScreenHolder(
+                            fallback: (context) => ScreenHolder(
                                 msg:
-                                '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
+                                    '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
                           ),
                           // second tab bar view widget
                           ConditionalBuilder(
-                            condition:
-                            AppCubit.get(context).homeResultsModel?.data?.isEmpty ==
+                            condition: AppCubit.get(context)
+                                    .homeResultsModel
+                                    ?.data
+                                    ?.isEmpty ==
                                 false,
-                            builder: (context)=> Column(
+                            builder: (context) => Column(
                               children: [
                                 verticalSmallSpace,
                                 ConditionalBuilder(
-                                  condition:
-                                  state is! AppGetLabResultsLoadingState || state is! AppGetHomeResultsLoadingState,
+                                  condition: state
+                                          is! AppGetLabResultsLoadingState ||
+                                      state is! AppGetHomeResultsLoadingState,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -229,23 +243,29 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                           Navigator.push(
                                             context,
                                             FadeRoute(
-                                              page: ResultDetailsScreen(homeResultsDataModel: AppCubit.get(context)
-                                                  .homeResultsModel!.data![index], index: index,),
+                                              page: ResultDetailsScreen(
+                                                homeResultsDataModel:
+                                                    AppCubit.get(context)
+                                                        .homeResultsModel!
+                                                        .data![index],
+                                                index: index,
+                                              ),
                                             ),
                                           );
                                         },
                                         child: ResultsScreenCard(
-                                          homeResultsModel: AppCubit.get(context)
-                                              .homeResultsModel!,
+                                          homeResultsModel:
+                                              AppCubit.get(context)
+                                                  .homeResultsModel!,
                                           index: index,
                                         ),
                                       ),
                                       separatorBuilder: (context, index) =>
-                                      verticalMiniSpace,
+                                          verticalMiniSpace,
                                       itemCount: AppCubit.get(context)
-                                          .homeResultsModel
-                                          ?.data
-                                          ?.length ??
+                                              .homeResultsModel
+                                              ?.data
+                                              ?.length ??
                                           0,
                                     ),
                                   ),
@@ -255,9 +275,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                 ),
                               ],
                             ),
-                            fallback: (context)=> ScreenHolder(
+                            fallback: (context) => ScreenHolder(
                                 msg:
-                                '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
+                                    '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
                           ),
                         ],
                       ),

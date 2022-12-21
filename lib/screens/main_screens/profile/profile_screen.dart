@@ -243,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                           horizontalSmallSpace,
                                           Text(
-                                            '${AppCubit.get(context).userResourceModel?.data?.completedPercentage} %',
+                                            '${AppCubit.get(context).userResourceModel?.data?.completedPercentage ?? 50} %',
                                           ),
                                         ],
                                       ),

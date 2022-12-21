@@ -50,6 +50,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
+          print('$phoneCode$number');
           if (kDebugMode) {
             print('The provided phone number is not valid.');
           }
