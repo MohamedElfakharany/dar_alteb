@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "1070777426564",
+    "project_id": "dar-elteb-6ff8b",
+    "storage_bucket": "dar-elteb-6ff8b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070777426564:android:e0d3d1323e5163882958d1",
+        "android_client_info": {
+          "package_name": "com.orcavision.darAlteb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070777426564-3m6u978r2e6oirnvjks2in1010m6ae3r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.orcavision.darAlteb",
+            "certificate_hash": "ff570f60d7211975428702c8ec86fe8c645b6fee"
+          }
+        },
+        {
+          "client_id": "1070777426564-svrlae0r5ijn646rnggbfj2hok26ms4l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.orcavision.darAlteb",
+            "certificate_hash": "0afd5fe963c793c29e39b3b29695c94387696756"
+          }
+        },
+        {
+          "client_id": "1070777426564-fgifmt3l2r1eccfe8pi8je4t55962l6k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXdTWN5YeV5sm3YMAdfXh-zlGaytzPyIE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070777426564-fgifmt3l2r1eccfe8pi8je4t55962l6k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1070777426564-o5io50suq8jknjrmc08ot1terv85kuh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.orcavision.darAlteb"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
