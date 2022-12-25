@@ -104,6 +104,9 @@ class AppCubit extends Cubit<AppStates> {
   List<NotificationsDataModel>? notificationUnseen = [];
   List<int> notificationUnseenCount = [];
 
+  List<LabReservationsDateModel>? labStatusData = [];
+  List<String> labStatusValues = [];
+
   int? branchIdList;
 
   int? relationIdList;
@@ -448,7 +451,7 @@ class AppCubit extends Cubit<AppStates> {
       }
       emit(AppGetCartSuccessState(cartModel!));
     } catch (error) {
-      print (error);
+      print(error);
       emit(AppGetCartErrorState(error.toString()));
     }
   }
@@ -1834,7 +1837,7 @@ class AppCubit extends Cubit<AppStates> {
       if (cartOfferId != null) 'offerId[]': cartOfferId,
       'coupon': coupon
     });
-        print('AppGetInvoicesSuccessState : ${formData.fields}');
+    print('AppGetInvoicesSuccessState : ${formData.fields}');
     try {
       Dio dio = Dio();
       var response = await dio.post(
@@ -1961,17 +1964,51 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  Future getLabReservations() async {
+  Future getLabReservations({
+    String? status,
+    String? date,
+  }) async {
     emit(AppGetLabReservationsLoadingState());
     var headers = {
       'Accept': 'application/json',
       'Accept-Language': sharedLanguage,
       'Authorization': 'Bearer $token',
     };
+    String url;
+    if (status == null || status == '') {
+      if (date == null) {
+        url = getLabReservationsURL;
+      } else {
+        url = '$getLabReservationsURL?date=$date';
+      }
+    } else {
+      if (date == null) {
+        if (status == LocaleKeys.Canceled.tr()) {
+          url = '$getLabReservationsURL?status=Canceled';
+        } else if (status == LocaleKeys.Pending.tr()) {
+          url = '$getLabReservationsURL?status=Pending';
+        } else if (status == LocaleKeys.Accepted.tr()) {
+          url = '$getLabReservationsURL?status=Accepted';
+        } else {
+          url = '$getLabReservationsURL?status=Finished';
+        }
+      } else {
+        if (status == LocaleKeys.Canceled.tr()) {
+          url = '$getLabReservationsURL?date=$date&status=Canceled';
+        } else if (status == LocaleKeys.Pending.tr()) {
+          url = '$getLabReservationsURL?date=$date&status=Pending';
+        } else if (status == LocaleKeys.Accepted.tr()) {
+          url = '$getLabReservationsURL?date=$date&status=Accepted';
+        } else {
+          url = '$getLabReservationsURL?date=$date&status=Finished';
+        }
+      }
+    }
+    print(url);
     try {
       Dio dio = Dio();
       var response = await dio.get(
-        getLabReservationsURL,
+        url,
         options: Options(
           followRedirects: false,
           responseType: ResponseType.bytes,
@@ -1983,6 +2020,12 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       labReservationsModel = LabReservationsModel.fromJson(responseJson);
+      print(responseJson);
+
+      labStatusData = labReservationsModel?.data;
+      for (var i = 0; i < labStatusValues.length; i++) {
+        labStatusValues.add('${labStatusData?[i].status}');
+      }
       emit(AppGetLabReservationsSuccessState(labReservationsModel!));
     } catch (error) {
       emit(AppGetLabReservationsErrorState(error.toString()));
@@ -2044,17 +2087,52 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  Future getHomeReservations() async {
+  Future getHomeReservations({
+    String? status,
+    String? date,
+  }) async {
     emit(AppGetHomeReservationsLoadingState());
     var headers = {
       'Accept': 'application/json',
       'Accept-Language': sharedLanguage,
       'Authorization': 'Bearer $token',
     };
+    String url;
+    if (status == null || status == '') {
+      if (date == null) {
+        url = getHomeReservationsURL;
+      } else {
+        url = '$getHomeReservationsURL?date=$date';
+      }
+    } else {
+      if (date == null) {
+        if (status == LocaleKeys.Canceled.tr()) {
+          url = '$getHomeReservationsURL?status=Canceled';
+        } else if (status == LocaleKeys.Pending.tr()) {
+          url = '$getHomeReservationsURL?status=Pending';
+        } else if (status == LocaleKeys.Accepted.tr()) {
+          url = '$getHomeReservationsURL?status=Accepted';
+        } else {
+          url = '$getHomeReservationsURL?status=Finished';
+        }
+      } else {
+        if (status == LocaleKeys.Canceled.tr()) {
+          url = '$getHomeReservationsURL?date=$date&status=Canceled';
+        } else if (status == LocaleKeys.Pending.tr()) {
+          url = '$getHomeReservationsURL?date=$date&status=Pending';
+        } else if (status == LocaleKeys.Accepted.tr()) {
+          url = '$getHomeReservationsURL?date=$date&status=Accepted';
+        } else {
+          url = '$getHomeReservationsURL?date=$date&status=Finished';
+        }
+      }
+    }
+    print(url);
+
     try {
       Dio dio = Dio();
       var response = await dio.get(
-        getHomeReservationsURL,
+        url,
         options: Options(
           followRedirects: false,
           responseType: ResponseType.bytes,

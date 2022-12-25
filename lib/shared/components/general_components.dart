@@ -912,7 +912,7 @@ class ScreenHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        '${LocaleKeys.txtThereIsNo.tr()} $msg ${LocaleKeys.txtYet.tr()}',
+        '${LocaleKeys.txtThereIsNo.tr()} $msg',
         textAlign: TextAlign.center,
         style: titleStyle.copyWith(color: mainColor),
       ),

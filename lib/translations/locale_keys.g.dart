@@ -52,6 +52,9 @@ abstract class  LocaleKeys {
   static const txtFamily = 'txtFamily';
   static const txtAddress = 'txtAddress';
   static const txtSampling = 'txtSampling';
+  static const status = 'status';
+  static const Pending = 'Pending';
+  static const Accepted = 'Accepted';
   static const txtRegionSettings = 'txtRegionSettings';
   static const txtTermsAndConditions = 'txtTermsAndConditions';
   static const txtPopUpMainCancelReservation = 'txtPopUpMainCancelReservation';
@@ -63,8 +66,8 @@ abstract class  LocaleKeys {
   static const txtAll = 'txtAll';
   static const txtMedicalInquiries = 'txtMedicalInquiries';
   static const txtNewInquiries = 'txtNewInquiries';
-  static const txtUpcoming = 'txtUpcoming';
-  static const txtCanceled = 'txtCanceled';
+  static const Upcoming = 'txtUpcoming';
+  static const Canceled = 'txtCanceled';
   static const txtOverview = 'txtOverview';
   static const txtReservationSuccess = 'txtReservationSuccess';
   static const txtViewReservation = 'txtViewReservation';
@@ -232,7 +235,7 @@ abstract class  LocaleKeys {
   static const Female = 'Female';
   static const Male = 'Male';
   static const txtSkip = 'txtSkip';
-  static const txtFinished = 'txtFinished';
+  static const Finished = 'txtFinished';
   static const txtLoginAgain = 'txtLoginAgain';
   static const txtLoginError = 'txtLoginError';
   static const txtBirthDayError = 'txtBirthDayError';

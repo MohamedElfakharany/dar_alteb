@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_elteb/models/model_test.dart';
 import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +28,23 @@ class _ReservedScreenState extends State<ReservedScreen> {
     AppCubit.get(context).getLabReservations();
     AppCubit.get(context).getHomeReservations();
   }
+
   Color bgColorTest = whiteColor;
   Color bgColorOffer = mainColor;
   Color fontColorTest = mainColor;
   Color fontColorOffer = whiteColor;
 
   int index = 0;
+  List<String> statusValues = [
+    '',
+    LocaleKeys.Pending.tr(),
+    LocaleKeys.Canceled.tr(),
+    LocaleKeys.Accepted.tr(),
+    LocaleKeys.Finished.tr()
+  ];
+  String? labStatusValue;
+  String? homeStatusValue;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
@@ -63,8 +75,8 @@ class _ReservedScreenState extends State<ReservedScreen> {
                         elevation: 0.0,
                         bottom: TabBar(
                           indicator: const BoxDecoration(),
-                          onTap: (i){
-                            setState((){
+                          onTap: (i) {
+                            setState(() {
                               index = i;
                             });
                           },
@@ -79,8 +91,7 @@ class _ReservedScreenState extends State<ReservedScreen> {
                                       color: mainLightColor, width: 2),
                                   boxShadow: [
                                     BoxShadow(
-                                      color:
-                                      Colors.grey.withOpacity(0.15),
+                                      color: Colors.grey.withOpacity(0.15),
                                       spreadRadius: 2,
                                       blurRadius: 2,
                                       offset: const Offset(0, 2),
@@ -89,8 +100,7 @@ class _ReservedScreenState extends State<ReservedScreen> {
                                   color: bgColorTest,
                                 ),
                                 child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
                                       'assets/images/atLabIcon.png',
@@ -121,8 +131,7 @@ class _ReservedScreenState extends State<ReservedScreen> {
                                       color: mainLightColor, width: 2),
                                   boxShadow: [
                                     BoxShadow(
-                                      color:
-                                      Colors.grey.withOpacity(0.15),
+                                      color: Colors.grey.withOpacity(0.15),
                                       spreadRadius: 2,
                                       blurRadius: 2,
                                       offset: const Offset(0, 2),
@@ -131,8 +140,7 @@ class _ReservedScreenState extends State<ReservedScreen> {
                                   color: bgColorOffer,
                                 ),
                                 child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
                                       'assets/images/atHomeIcon.png',
@@ -164,68 +172,259 @@ class _ReservedScreenState extends State<ReservedScreen> {
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
                           // first tab bar view widget
-                          ConditionalBuilder(
-                            condition: AppCubit.get(context).labReservationsModel?.data?.isEmpty == false,
-                            builder: (context) => Column(
-                              children: [
-                                verticalSmallSpace,
-                                ConditionalBuilder(
-                                  condition: state
-                                      is! AppGetLabReservationsLoadingState,
-                                  builder: (context) => Expanded(
-                                    child: ListView.separated(
-                                      physics: const BouncingScrollPhysics(),
-                                      scrollDirection: Axis.vertical,
-                                      itemBuilder: (context, index) => InkWell(
-                                        onTap: () {
-                                          Navigator.push(
+                          Column(
+                            children: [
+                              verticalSmallSpace,
+                              SizedBox(
+                                height: 60,
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      child: GeneralUnfilledButton(
+                                        width: 100,
+                                        height: 40.0,
+                                        title: LocaleKeys.txtTestDate.tr(),
+                                        onPress: () {
+                                          showCustomBottomSheet(
                                             context,
-                                            FadeRoute(
-                                              page:
-                                                  ReservationDetailsUpcomingScreen(
-                                                topIndex: index,
-                                                labReservationsModel:
-                                                    AppCubit.get(context)
-                                                        .labReservationsModel,
-                                              ),
-                                            ),
+                                            bottomSheetContent:
+                                            const SyncfusionPatientLabReservationsDatePicker(),
+                                            bottomSheetHeight: 0.65,
                                           );
                                         },
-                                        child: ReservedCard(
-                                          labReservationsDataModel:
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 60.0,
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons
+                                                  .location_on_rounded,
+                                              color: greyDarkColor,
+                                            ),
+                                            horizontalMiniSpace,
+                                            Text(
+                                              '${LocaleKeys.status.tr()} : ',
+                                              style:
+                                              titleSmallStyle,
+                                            ),
+                                            Expanded(
+                                              child: DropdownButtonHideUnderline(
+                                                child:
+                                                DropdownButtonFormField<
+                                                    String>(
+                                                  decoration:
+                                                  const InputDecoration(
+                                                    fillColor:
+                                                    greyExtraLightColor,
+                                                    filled: true,
+                                                    errorStyle: TextStyle(
+                                                        color: Color(
+                                                            0xFF4F4F4F)),
+                                                    border:
+                                                    InputBorder
+                                                        .none,
+                                                  ),
+                                                  value:
+                                                  labStatusValue,
+                                                  isExpanded: true,
+                                                  iconSize: 30,
+                                                  icon: const Icon(
+                                                    Icons
+                                                        .keyboard_arrow_down_rounded,
+                                                    color:
+                                                    greyDarkColor,
+                                                  ),
+                                                  items:
+                                                  statusValues.map(
+                                                      buildStatusItem)
+                                                      .toList(),
+                                                  onChanged:
+                                                      (value) {
+                                                    if (value!.isEmpty == false) {
+                                                      setState(() {
+                                                        labStatusValue = value;
+                                                      },);
+                                                    }
+                                                    print(labStatusValue);
+                                                    AppCubit.get(context).getLabReservations(status: labStatusValue);
+                                                  },
+                                                  onSaved: (v) {
+                                                    FocusScope.of(
+                                                        context)
+                                                        .unfocus();
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              ConditionalBuilder(
+                                condition: state is! AppGetLabReservationsLoadingState,
+                                builder: (context) => ConditionalBuilder(
+                                  condition: AppCubit.get(context).labReservationsModel?.data?.isEmpty == false,
+                                  builder: (context) => Expanded(
+                                    child: ListView.separated(
+                                      physics:
+                                      const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      itemBuilder: (context, index) =>
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                FadeRoute(
+                                                  page:
+                                                  ReservationDetailsUpcomingScreen(
+                                                    topIndex: index,
+                                                    labReservationsModel:
+                                                    AppCubit.get(context)
+                                                        .labReservationsModel,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: ReservedCard(
+                                              labReservationsDataModel:
                                               AppCubit.get(context)
                                                   .labReservationsModel!
                                                   .data![index],
-                                        ),
-                                      ),
-                                      separatorBuilder: (context, index) =>
-                                          verticalMiniSpace,
+                                            ),
+                                          ),
+                                      separatorBuilder:
+                                          (context, index) =>
+                                      verticalMiniSpace,
                                       itemCount: AppCubit.get(context)
-                                              .labReservationsModel
-                                              ?.data
-                                              ?.length ??
+                                          .labReservationsModel
+                                          ?.data
+                                          ?.length ??
                                           0,
                                     ),
                                   ),
-                                  fallback: (context) => const Center(
-                                    child: CircularProgressIndicator.adaptive(),
-                                  ),
+                                  fallback: (context) => ScreenHolder(
+                                      msg: '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
                                 ),
-                              ],
-                            ),
-                            fallback: (context) => ScreenHolder(
-                                msg:
-                                    '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
+                                fallback: (context) => const Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                ),
+                              ),
+                            ],
                           ),
                           // second tab bar view widget
                           ConditionalBuilder(
-                            condition: AppCubit.get(context).homeReservationsModel?.data?.isEmpty == false,
+                            condition: AppCubit.get(context)
+                                    .homeReservationsModel
+                                    ?.data
+                                    ?.isEmpty ==
+                                false,
                             builder: (context) => Column(
                               children: [
                                 verticalSmallSpace,
+                                SizedBox(
+                                  height: 60,
+                                  width: double.infinity,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        child: GeneralUnfilledButton(
+                                          width: 100,
+                                          height: 40.0,
+                                          title: LocaleKeys.txtTestDate.tr(),
+                                          onPress: () {
+                                            showCustomBottomSheet(
+                                              context,
+                                              bottomSheetContent:
+                                              const SyncfusionPatientHomeReservationsDatePicker(),
+                                              bottomSheetHeight: 0.65,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 60.0,
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons
+                                                    .location_on_rounded,
+                                                color: greyDarkColor,
+                                              ),
+                                              horizontalMiniSpace,
+                                              Text(
+                                                '${LocaleKeys.status.tr()} : ',
+                                                style:
+                                                titleSmallStyle,
+                                              ),
+                                              Expanded(
+                                                child: DropdownButtonHideUnderline(
+                                                  child:
+                                                  DropdownButtonFormField<
+                                                      String>(
+                                                    decoration:
+                                                    const InputDecoration(
+                                                      fillColor:
+                                                      greyExtraLightColor,
+                                                      filled: true,
+                                                      errorStyle: TextStyle(
+                                                          color: Color(
+                                                              0xFF4F4F4F)),
+                                                      border:
+                                                      InputBorder
+                                                          .none,
+                                                    ),
+                                                    value:
+                                                    homeStatusValue,
+                                                    isExpanded: true,
+                                                    iconSize: 30,
+                                                    icon: const Icon(
+                                                      Icons
+                                                          .keyboard_arrow_down_rounded,
+                                                      color:
+                                                      greyDarkColor,
+                                                    ),
+                                                    items:
+                                                    statusValues.map(
+                                                        buildStatusItem)
+                                                        .toList(),
+                                                    onChanged:
+                                                        (value) {
+                                                      if (value!.isEmpty == false) {
+                                                        setState(() {
+                                                          homeStatusValue = value;
+                                                        },);
+                                                      }
+                                                      print(homeStatusValue);
+                                                      AppCubit.get(context).getHomeReservations(status: homeStatusValue);
+                                                    },
+                                                    onSaved: (v) {
+                                                      FocusScope.of(
+                                                          context)
+                                                          .unfocus();
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                                 ConditionalBuilder(
                                   condition: state
-                                          is! AppGetHomeReservationsLoadingState,
+                                      is! AppGetHomeReservationsLoadingState,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -246,7 +445,8 @@ class _ReservedScreenState extends State<ReservedScreen> {
                                           );
                                         },
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
                                           child: ReservedCard(
                                             homeReservationsDataModel:
                                                 AppCubit.get(context)
@@ -264,11 +464,15 @@ class _ReservedScreenState extends State<ReservedScreen> {
                                           0,
                                     ),
                                   ),
-                                  fallback: (context) => const Center(child: CircularProgressIndicator.adaptive()),
+                                  fallback: (context) => const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive()),
                                 ),
                               ],
                             ),
-                            fallback: (context) => ScreenHolder(msg: '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
+                            fallback: (context) => ScreenHolder(
+                                msg:
+                                    '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
                           ),
                         ],
                       ),
@@ -281,4 +485,12 @@ class _ReservedScreenState extends State<ReservedScreen> {
       },
     );
   }
+
+  DropdownMenuItem<String> buildStatusItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: titleSmallStyle,
+        ),
+      );
 }

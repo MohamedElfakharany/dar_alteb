@@ -161,7 +161,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  LocaleKeys.txtUpcoming.tr(),
+                                  LocaleKeys.Upcoming.tr(),
                                   style: titleSmallStyle.copyWith(
                                     color: fontColorUpcoming,
                                   ),
@@ -200,7 +200,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  LocaleKeys.txtCanceled.tr(),
+                                  LocaleKeys.Canceled.tr(),
                                   style: titleSmallStyle.copyWith(
                                       color: fontColorCanceled),
                                 ),
