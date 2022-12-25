@@ -78,28 +78,29 @@ class _MedicalInquiriesScreenState extends State<MedicalInquiriesScreen> {
                                 content: ConditionalBuilder(
                                   condition:
                                       state is! AppDeleteInquiryLoadingState,
-                                  builder: (context) => Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red,
-                                    ),
-                                    width: 130,
-                                    height: 60,
-                                    child: OverflowBox(
-                                      maxWidth: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
-                                          ),
-                                          Text(LocaleKeys.BtnDelete.tr(),
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20)),
-                                        ],
+                                  builder: (context) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(30),
+                                        color: Colors.red,
+                                      ),
+                                      width: 180,
+                                      height: 60,
+                                      child: OverflowBox(
+                                        maxWidth: 200,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                                textAlign: TextAlign.center,
+                                                LocaleKeys.BtnDelete.tr(),
+                                                style: titleStyle.copyWith(
+                                                    color: whiteColor)),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

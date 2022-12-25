@@ -4,6 +4,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
  import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
 import 'package:dar_elteb/cubit/states.dart';
 import 'package:dar_elteb/screens/main_screens/widgets_components/widgets_components.dart';
@@ -36,7 +37,16 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AppAddToCartSuccessState) {
+          if (state.successModel.status) {
+            showToast(
+                msg: state.successModel.message, state: ToastState.success);
+          } else {
+            showToast(msg: state.successModel.message, state: ToastState.error);
+          }
+        }
+      },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(

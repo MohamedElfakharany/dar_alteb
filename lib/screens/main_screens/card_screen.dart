@@ -33,11 +33,20 @@ class _CartScreenState extends State<CartScreen> {
     AppCubit.get(context).getCart();
     AppCubit.get(context).getGeneral();
   }
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AppCheckCouponSuccessState){
+          if (state.successModel.status){
+            showToast(msg: state.successModel.message,state: ToastState.success);
+          }else {
+            showToast(msg: state.successModel.message,state: ToastState.error);
+          }
+        }
+      },
       builder: (context, state) {
         var cartModel = AppCubit.get(context).cartModel;
         return Scaffold(
@@ -74,28 +83,29 @@ class _CartScreenState extends State<CartScreen> {
                                   content: ConditionalBuilder(
                                     condition:
                                         state is! AppDeleteInquiryLoadingState,
-                                    builder: (context) => Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.red,
-                                      ),
-                                      width: 130,
-                                      height: 60,
-                                      child: OverflowBox(
-                                        maxWidth: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.delete,
-                                              color: Colors.white,
-                                            ),
-                                            Text(LocaleKeys.BtnDelete.tr(),
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 20)),
-                                          ],
+                                    builder: (context) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(30),
+                                          color: Colors.red,
+                                        ),
+                                        width: 180,
+                                        height: 60,
+                                        child: OverflowBox(
+                                          maxWidth: 200,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  textAlign: TextAlign.center,
+                                                  LocaleKeys.BtnDelete.tr(),
+                                                  style: titleStyle.copyWith(
+                                                      color: whiteColor)),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -189,54 +199,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       verticalMiniSpace,
                       Container(
-                        height: 110.0,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.circular(radius),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                LocaleKeys.txtHaveCoupon.tr(),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: DefaultFormField(
-                                        controller: couponController,
-                                        type: TextInputType.text,
-                                        label: LocaleKeys.txtFieldCoupon.tr(),
-                                      ),
-                                    ),
-                                    horizontalMiniSpace,
-                                    Container(
-                                      width: 55,
-                                      height: 55,
-                                      decoration: BoxDecoration(
-                                          color: darkColor,
-                                          borderRadius:
-                                              BorderRadius.circular(radius)),
-                                      child: const Icon(
-                                        Icons.send_outlined,
-                                        color: whiteColor,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      verticalMiniSpace,
-                      Container(
-                        height: 250.0,
+                        // height: 250.0,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: whiteColor,

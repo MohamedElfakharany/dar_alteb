@@ -55,6 +55,11 @@ class _LoginScreenState extends State<LoginScreen> {
   int branchIndex = 0;
 
   @override
+  void initState(){
+    nationalCodeController.text = '966';
+  }
+
+  @override
   Widget build(BuildContext context) {
     var cubit = AppCubit.get(context);
     return BlocConsumer<AppCubit, AppStates>(
@@ -265,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         title: LocaleKeys.BtnSignIn.tr(),
                         onPress: () {
                           if (formKey.currentState!.validate()) {
-                            cubit.isVisitor = false;
+                            isVisitor = false;
                             cubit.login(
                               mobile: mobileController.text,
                               password: passwordController.text,

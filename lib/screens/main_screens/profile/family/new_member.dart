@@ -42,6 +42,7 @@ class _NewMemberScreenState extends State<NewMemberScreen> {
   @override
   void initState() {
     super.initState();
+    nationalCodeController.text = '966';
     Timer(const Duration(milliseconds: 0), () async {
       AppCubit.get(context).getRelations();
     });

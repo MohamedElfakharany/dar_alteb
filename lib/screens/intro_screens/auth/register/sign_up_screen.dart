@@ -80,6 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState (){
     AppCubit.get(context).getTerms();
+    nationalCodeController.text = '966';
   }
 
   @override
@@ -121,6 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       },
       builder: (context, state) {
+
         return Scaffold(
           backgroundColor: whiteColor,
           appBar: GeneralAppBar(
@@ -212,6 +214,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                     // if (isPasswordTyping == false)
+                    verticalMiniSpace,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: LinearProgressIndicator(
+                        value: passwordStrength,
+                        backgroundColor: Colors.grey[300],
+                        minHeight: 5,
+                        color: passwordStrength <= 1 / 4
+                            ? Colors.red
+                            : passwordStrength == 2 / 4
+                            ? Colors.yellow
+                            : passwordStrength == 3 / 4
+                            ? Colors.blue
+                            : Colors.green,
+                      ),
+                    ),
                       verticalMiniSpace,
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -231,6 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 4),
                         child: TextFormField(
+                          // textInputAction: TextInputAction.next,
                           focusNode: _focusNodes[2],
                           onEditingComplete: () {
                             // isPasswordTyping = false;
@@ -277,6 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           obscuringCharacter: '*',
                           onChanged: (value) {
                             // isPasswordTyping = true;
+                            validatePassword(value);
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -286,22 +306,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }
                           },
                         ),
-                      ),
-                    ),
-                    verticalMiniSpace,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: LinearProgressIndicator(
-                        value: passwordStrength,
-                        backgroundColor: Colors.grey[300],
-                        minHeight: 5,
-                        color: passwordStrength <= 1 / 4
-                            ? Colors.red
-                            : passwordStrength == 2 / 4
-                            ? Colors.yellow
-                            : passwordStrength == 3 / 4
-                            ? Colors.blue
-                            : Colors.green,
                       ),
                     ),
                     verticalMiniSpace,
@@ -323,6 +327,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 4),
                         child: TextFormField(
+                          // textInputAction: TextInputAction.next,
                           focusNode: _focusNodes[3],
                           controller: confirmPasswordController,
                           keyboardType: TextInputType.text,
@@ -364,7 +369,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           AppCubit.get(context).resetConfirmIsPassword,
                           obscuringCharacter: '*',
                           onChanged: (value) {
-                            formKey.currentState!.validate();
+                            // formKey.currentState!.validate();
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -567,7 +572,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 deviceTokenLogin: deviceToken!,
                               );
                             }
-                            cubit.isVisitor = false;
+                            isVisitor = false;
                           },
                         ),
                       ),

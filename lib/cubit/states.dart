@@ -12,6 +12,7 @@ import 'package:dar_elteb/models/patient_models/auth_models/user_resource_model.
 import 'package:dar_elteb/models/patient_models/home_appointments_model/home_appointments_model.dart';
 import 'package:dar_elteb/models/patient_models/home_appointments_model/home_reservation_model.dart';
 import 'package:dar_elteb/models/patient_models/home_appointments_model/home_result_model.dart';
+import 'package:dar_elteb/models/patient_models/invoiceModel.dart';
 import 'package:dar_elteb/models/patient_models/lab_appointments_model/lab_appointment_model.dart';
 import 'package:dar_elteb/models/patient_models/lab_appointments_model/lab_reservation_model.dart';
 import 'package:dar_elteb/models/patient_models/lab_appointments_model/lab_result_model.dart';
@@ -446,8 +447,8 @@ class AppCheckCouponErrorState extends AppStates{
 class AppGetInvoicesLoadingState extends AppStates{}
 
 class AppGetInvoicesSuccessState extends AppStates{
-  final SuccessModel successModel;
-  AppGetInvoicesSuccessState(this.successModel);
+  final InvoiceModel invoiceModel;
+  AppGetInvoicesSuccessState(this.invoiceModel);
 }
 
 class AppGetInvoicesErrorState extends AppStates{

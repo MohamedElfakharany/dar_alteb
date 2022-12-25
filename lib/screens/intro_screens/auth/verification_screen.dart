@@ -114,6 +114,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
   void initState() {
     super.initState();
       fetchOtp(number: widget.mobileNumber, phoneCode: widget.phoneCode);
+    print('${widget.phoneCode}${widget.mobileNumber}');
   }
 
   @override

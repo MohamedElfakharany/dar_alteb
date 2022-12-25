@@ -46,6 +46,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     AppCubit.get(context).getOnboarding();
   }
 
+  // Future getData() async {
+  //   await AppCubit.get(context).getOnboarding();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
@@ -85,8 +89,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         return Scaffold(
           backgroundColor: whiteColor,
           body: Padding(
-            padding:
-                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
+            padding: const EdgeInsets.only(
+                left: 20.0, right: 20.0, bottom: 30.0),
             child: Column(
               children: [
                 Expanded(
@@ -95,19 +99,19 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     controller: boardController,
                     children: [
                       buildBoardingItem(
-                        title: '${item1?.title}',
-                        image: '${item1?.image}',
-                        description: '${item1?.description}',
+                        title: '${item1?.title ?? ''}',
+                        image: '${item1?.image ?? ''}',
+                        description: '${item1?.description ?? ''}',
                       ),
                       buildBoardingItem(
-                        title: '${item2?.title}',
-                        image: '${item2?.image}',
-                        description: '${item2?.description}',
+                        title: '${item2?.title ?? ''}',
+                        image: '${item2?.image ?? ''}',
+                        description: '${item2?.description ?? ''}',
                       ),
                       buildBoardingItem(
-                        title: '${item3?.title}',
-                        image: '${item3?.image}',
-                        description: '${item3?.description}',
+                        title: '${item3?.title ?? ''}',
+                        image: '${item3?.image ?? ''}',
+                        description: '${item3?.description ?? ''}',
                       ),
                     ],
                   ),
@@ -163,7 +167,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   // color: blueColor,
-                                  borderRadius: BorderRadius.circular(radius),
+                                  borderRadius:
+                                  BorderRadius.circular(radius),
                                 ),
                                 height: 50.0,
                                 width: double.infinity,
@@ -182,7 +187,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           child: ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all<Color>(mainColor),
+                              MaterialStateProperty.all<Color>(
+                                  mainColor),
                             ),
                             onPressed: () {
                               Navigator.push(
@@ -195,7 +201,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: mainColor,
-                                borderRadius: BorderRadius.circular(radius),
+                                borderRadius:
+                                BorderRadius.circular(radius),
                               ),
                               height: 50.0,
                               width: double.infinity,
@@ -219,7 +226,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
                 TextButton(
                   onPressed: () {
-                    AppCubit.get(context).isVisitor = true;
+                    isVisitor = true;
                     AppCubit.get(context).getCountry();
                   },
                   child: Text(
@@ -230,6 +237,19 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               ],
             ),
           ),
+          // FutureBuilder(
+          //
+          //   future: getData(),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.hasData) {
+          //       return ;
+          //     } else {
+          //       return const Center(
+          //         child: CircularProgressIndicator.adaptive(),
+          //       );
+          //     }
+          //   },
+          // ),
         );
       },
     );
@@ -254,13 +274,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ),
           verticalMiniSpace,
           Text(
-            title,
+            "$title",
             textAlign: TextAlign.center,
             style: titleStyle,
           ),
           verticalMiniSpace,
           Text(
-            description,
+            "$description",
             textAlign: TextAlign.center,
             style: subTitleSmallStyle,
             maxLines: 2,

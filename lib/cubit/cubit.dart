@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dar_elteb/models/patient_models/invoiceModel.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -82,6 +83,7 @@ class AppCubit extends Cubit<AppStates> {
   CartModel? cartModel;
   GeneralModel? generalModel;
   BannerModel? bannerModel;
+  InvoiceModel? invoiceModel;
 
   List<BranchesDataModel>? branchNames = [];
   List<String> branchName = [];
@@ -99,6 +101,9 @@ class AppCubit extends Cubit<AppStates> {
     LocaleKeys.BtnAtHome.tr(),
   ];
 
+  List<NotificationsDataModel>? notificationUnseen = [];
+  List<int> notificationUnseenCount = [];
+
   int? branchIdList;
 
   int? relationIdList;
@@ -107,9 +112,11 @@ class AppCubit extends Cubit<AppStates> {
 
   int? branchIdForReservationList;
 
+  String selectedAddress = '';
+
   void selectAddressId({required String address}) {
     for (int i = 0; i < addressNames!.length; i++) {
-      if (addressNames![i].address == address) {
+      if (addressNames![i].title == address) {
         addressIdList = addressNames![i].id;
       }
     }
@@ -139,6 +146,12 @@ class AppCubit extends Cubit<AppStates> {
       }
     }
   }
+
+  String? cart;
+  bool? showBadge;
+
+  String? notification;
+  bool? showBadgeNotification;
 
   Future register({
     required String name,
@@ -221,9 +234,8 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       if (kDebugMode) {
-        // print('formData : ${formData.entries}');
-        // print('convertedResponse : $convertedResponse');
-        // print('responseJson : $responseJson');
+        print('formData : ${formData.entries}');
+        print('responseJson : $responseJson');
       }
       userResourceModel = UserResourceModel.fromJson(responseJson);
       emit(AppLoginSuccessState(userResourceModel!));
@@ -415,9 +427,28 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
+      print('get cart : $responseJson');
       cartModel = CartModel.fromJson(responseJson);
+      if (cartModel != null) {
+        if (cartModel!.data!.length > 9) {
+          cart = '+9';
+          showBadge = true;
+        } else if (cartModel!.data!.length <= 9) {
+          if (cartModel!.data!.length > 0) {
+            cart = cartModel!.data!.length.toString();
+            showBadge = true;
+          } else {
+            cart = '';
+            showBadge = false;
+          }
+        }
+      } else {
+        cart = '';
+        showBadge = false;
+      }
       emit(AppGetCartSuccessState(cartModel!));
     } catch (error) {
+      print (error);
       emit(AppGetCartErrorState(error.toString()));
     }
   }
@@ -537,6 +568,35 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       notificationsModel = NotificationsModel.fromJson(responseJson);
+      notificationUnseen = notificationsModel?.data;
+      for (var i = 0; i < notificationUnseen!.length; i++) {
+        if (notificationUnseen?[i].isRead.toString() == '0') {
+          notificationUnseenCount.add(notificationUnseen?[i].isRead);
+        }
+      }
+      if (kDebugMode) {
+        print('notificationUnseenCount : $notificationUnseenCount');
+        print('notificationJson : $responseJson');
+      }
+
+      if (notificationUnseenCount != 0) {
+        if (notificationUnseenCount.length > 9) {
+          notification = '+9';
+          showBadgeNotification = true;
+        } else if (notificationUnseenCount.length < 9) {
+          if (notificationUnseenCount.length > 0) {
+            notification = notificationUnseenCount.length.toString();
+            showBadgeNotification = true;
+          } else {
+            notification = '';
+            showBadgeNotification = false;
+          }
+        }
+        notificationUnseenCount = [];
+      } else {
+        notification = '';
+        showBadgeNotification = false;
+      }
       emit(AppGetNotificationsSuccessState(notificationsModel!));
     } catch (error) {
       if (kDebugMode) {
@@ -569,7 +629,7 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       print(responseJson);
       successModel = SuccessModel.fromJson(responseJson);
-      getNotifications();
+      notificationUnseenCount = [];
       emit(AppSeenNotificationsSuccessState(successModel!));
     } catch (e) {
       emit(AppSeenNotificationsErrorState(e.toString()));
@@ -717,6 +777,7 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       generalModel = GeneralModel.fromJson(responseJson);
       emit(AppGetGeneralSuccessState(generalModel!));
+      print(generalModel?.data?.homeReservations);
     } catch (error) {
       if (kDebugMode) {
         // print(error);
@@ -753,6 +814,8 @@ class AppCubit extends Cubit<AppStates> {
       addressNames = addressModel?.data;
       for (var i = 0; i < addressNames!.length; i++) {
         addressName.add(addressNames?[i].title);
+        selectedAddress = addressModel?.data?[i].title;
+        addressIdList = addressModel?.data?[i].id;
       }
       emit(AppGetAddressSuccessState(addressModel!));
     } catch (error) {
@@ -1744,6 +1807,7 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       successModel = SuccessModel.fromJson(responseJson);
+      print('response : $responseJson');
       emit(AppCheckCouponSuccessState(successModel!));
     } catch (error) {
       emit(AppCheckCouponErrorState(error.toString()));
@@ -1751,8 +1815,11 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future getInvoices({
-    List<int>? testId,
-    List<int>? offerId,
+    String? coupon,
+    int? testId,
+    int? offerId,
+    List<dynamic>? cartTestId,
+    List<dynamic>? cartOfferId,
   }) async {
     emit(AppGetInvoicesLoadingState());
     var headers = {
@@ -1760,14 +1827,18 @@ class AppCubit extends Cubit<AppStates> {
       'Accept-Language': sharedLanguage,
       'Authorization': 'Bearer $token',
     };
-    var formData = {
+    var formData = FormData.fromMap({
       if (offerId != null) 'offerId[]': offerId,
       if (testId != null) 'testId[]': testId,
-    };
+      if (cartTestId != null) 'testId[]': cartTestId,
+      if (cartOfferId != null) 'offerId[]': cartOfferId,
+      'coupon': coupon
+    });
+        print('AppGetInvoicesSuccessState : ${formData.fields}');
     try {
       Dio dio = Dio();
       var response = await dio.post(
-        labCheckCouponsURL,
+        invoicesURL,
         options: Options(
           followRedirects: false,
           responseType: ResponseType.bytes,
@@ -1780,11 +1851,13 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       if (kDebugMode) {
-        // print('AppGetInvoicesSuccessState : $responseJson');
+        print('AppGetInvoicesSuccessState : $responseJson');
       }
-      successModel = SuccessModel.fromJson(responseJson);
-      emit(AppGetInvoicesSuccessState(successModel!));
+      invoiceModel = InvoiceModel.fromJson(responseJson);
+      print('invoiceModel : ${invoiceModel?.data?.total}');
+      emit(AppGetInvoicesSuccessState(invoiceModel!));
     } catch (error) {
+      print('7mada $error');
       emit(AppGetInvoicesErrorState(error.toString()));
     }
   }
@@ -1795,8 +1868,8 @@ class AppCubit extends Cubit<AppStates> {
     required int branchId,
     int? familyId,
     String? coupon,
-    List<String>? testId,
-    List<String>? offerId,
+    List<dynamic>? testId,
+    List<dynamic>? offerId,
   }) async {
     emit(AppCreateLabReservationLoadingState());
     var headers = {
@@ -1923,8 +1996,8 @@ class AppCubit extends Cubit<AppStates> {
     int? familyId,
     required int branchId,
     String? coupon,
-    List<String>? testId,
-    List<String>? offerId,
+    List<dynamic>? testId,
+    List<dynamic>? offerId,
   }) async {
     emit(AppCreateHomeReservationLoadingState());
     var headers = {
@@ -2289,8 +2362,6 @@ class AppCubit extends Cubit<AppStates> {
   IconData loginSufIcon = Icons.visibility_off;
   bool loginIsPassword = true;
 
-  bool? isVisitor;
-
   bool isEnglish = isEnglishShared ?? true;
 
   String? local = sharedLanguage;
@@ -2439,6 +2510,7 @@ class AppCubit extends Cubit<AppStates> {
   void signOut(context) async {
     CacheHelper.removeData(key: 'token').then((value) {
       token = null;
+
       currentIndex = 0;
       if (value) {
         navigateAndFinish(

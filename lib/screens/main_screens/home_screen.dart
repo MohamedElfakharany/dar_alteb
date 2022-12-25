@@ -38,13 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     permission();
-    if (AppCubit.get(context).isVisitor == false) {
+    if (isVisitor == false) {
       AppCubit.get(context).getCarouselData();
       AppCubit.get(context).getTerms();
       AppCubit.get(context).getProfile();
       AppCubit.get(context).getNotifications();
+      AppCubit.get(context).getCart();
     }
-    if (AppCubit.get(context).isVisitor == true) {
+    if (isVisitor == true) {
       Timer(
         const Duration(microseconds: 0),
         () async {
@@ -102,7 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       content: InkWell(
                         onTap: () async {
                           print('tapped');
-                          var url = '${AppCubit.get(context).bannerModel?.data?.link}';
+                          var url =
+                              '${AppCubit.get(context).bannerModel?.data?.link}';
                           if (await canLaunchUrl(Uri(path: url))) {
                             await launchUrl(Uri(path: url));
                           } else {
@@ -127,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             Text(
-                              AppCubit.get(context).bannerModel?.data?.title ?? '',
+                              AppCubit.get(context).bannerModel?.data?.title ??
+                                  '',
                               style: titleSmallStyle,
                             ),
                             Expanded(
@@ -135,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 300,
                                 width: 300,
                                 imageUrl:
-                                '${AppCubit.get(context).bannerModel?.data?.image}',
+                                    '${AppCubit.get(context).bannerModel?.data?.image}',
                               ),
                             ),
                           ],
@@ -329,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       verticalMiniSpace,
                       ConditionalBuilder(
-                        condition: cubit.testsModel?.data?.isNotEmpty != true,
+                        condition: cubit.testsModel?.data?.isNotEmpty != false,
                         builder: (context) => SizedBox(
                           height: 110.0,
                           width: double.infinity,
@@ -411,19 +414,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                           '${LocaleKeys.TxtReservationScreenTitle.tr()} ${LocaleKeys.txtNow.tr()}',
                                       fontSize: 15,
                                       onPress: () {
-                                        if (AppCubit.get(context).isVisitor ==
+                                        if (isVisitor ==
                                             true) {
                                           showPopUp(
                                             context,
                                             const VisitorHoldingPopUp(),
                                           );
-                                        } else {
+                                        } else if (isVisitor ==
+                                            false) {
                                           Navigator.push(
                                             context,
                                             FadeRoute(
                                               page:
                                                   const CreateTechSupportScreen(),
                                             ),
+                                          );
+                                        } else {
+                                          showPopUp(
+                                            context,
+                                            const VisitorHoldingPopUp(),
                                           );
                                         }
                                       },

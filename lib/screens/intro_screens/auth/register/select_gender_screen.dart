@@ -52,7 +52,7 @@ class SelectGenderScreen extends StatelessWidget {
             navigateAndFinish(context, const HomeLayoutScreen());
           }
         }
-        if (AppCubit.get(context).isVisitor == true) {
+        if (isVisitor == true) {
           if (state is AppCompleteProfileSuccessState) {
             AppCubit.get(context).dataSaving(
               type: state.userResourceModel.data!.type,

@@ -67,10 +67,10 @@ class _AddressScreenState extends State<AddressScreen> {
     await Future.delayed(
       const Duration(seconds: 5),
     );
-    if (position?.longitude != null ){
+    if (position?.longitude != null) {
       return true;
-    }else {
-    return false;
+    } else {
+      return false;
     }
   }
 
@@ -85,6 +85,15 @@ class _AddressScreenState extends State<AddressScreen> {
             title: LocaleKeys.txtAddress.tr(),
             appBarColor: greyExtraLightColor,
             centerTitle: false,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context, AppCubit.get(context).selectedAddress);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: greyDarkColor,
+              ),
+            ),
           ),
           body: FutureBuilder(
             future: positionDone,
@@ -150,29 +159,29 @@ class _AddressScreenState extends State<AddressScreen> {
                                       content: ConditionalBuilder(
                                         condition: state
                                             is! AppDeleteAddressLoadingState,
-                                        builder: (context) => Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            color: Colors.red,
-                                          ),
-                                          width: 130,
-                                          height: 60,
-                                          child: OverflowBox(
-                                            maxWidth: double.infinity,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(
-                                                  Icons.delete,
-                                                  color: Colors.white,
-                                                ),
-                                                Text(LocaleKeys.BtnDelete.tr(),
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20)),
-                                              ],
+                                        builder: (context) => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Colors.red,
+                                            ),
+                                            width: 180,
+                                            height: 60,
+                                            child: OverflowBox(
+                                              maxWidth: 200,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      textAlign: TextAlign.center,
+                                                      LocaleKeys.BtnDelete.tr(),
+                                                      style: titleStyle.copyWith(
+                                                          color: whiteColor)),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -230,7 +239,8 @@ class _AddressScreenState extends State<AddressScreen> {
                   ),
                 );
               } else {
-                return const Center(child: CircularProgressIndicator.adaptive());
+                return const Center(
+                    child: CircularProgressIndicator.adaptive());
               }
             },
           ),

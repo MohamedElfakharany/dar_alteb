@@ -295,30 +295,19 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
       },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
-
-        String cart;
-        if (AppCubit.get(context).cartModel != null) {
-          if (AppCubit.get(context).cartModel!.data!.length > 9) {
-            cart = '+9';
-          } else {
-            cart = AppCubit.get(context).cartModel!.data!.length.toString();
-          }
-        } else {
-          cart = '';
-        }
         return AppBar(
           backgroundColor: greyExtraLightColor,
           elevation: 0.0,
           title: Row(
             children: [
-              if (AppCubit.get(context).isVisitor == true)
+              if (isVisitor == true)
                 CircleAvatar(
                   backgroundColor: whiteColor,
                   radius: 15,
                   child: CachedNetworkImageCircular(
                       imageUrl: cubit.userResourceModel?.data?.profile ?? ''),
                 ),
-              if (AppCubit.get(context).isVisitor == false)
+              if (isVisitor == false)
                 CircleAvatar(
                   backgroundColor: whiteColor,
                   radius: 15,
@@ -355,7 +344,7 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                   ),
                 ),
               horizontalMiniSpace,
-              if (AppCubit.get(context).isVisitor == false)
+              if (isVisitor == false)
                 Expanded(
                   child: Text(
                     '${cubit.userResourceModel?.data?.name ?? ''} ,',
@@ -365,7 +354,7 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              if (AppCubit.get(context).isVisitor == true)
+              if (isVisitor == true)
                 Expanded(
                   child: Text(
                     '${LocaleKeys.homeTxtWelcome.tr()} ,',
@@ -393,7 +382,7 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                 color: mainColor,
               ),
             ),
-            if (AppCubit.get(context).isVisitor == false)
+            if (isVisitor == false)
               InkWell(
                 onTap: () {
                   Navigator.push(context, FadeRoute(page: const CartScreen()));
@@ -403,9 +392,10 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                   alignment: AlignmentDirectional.centerEnd,
                   animationType: BadgeAnimationType.slide,
                   badgeContent: Text(
-                    cart,
+                    '${AppCubit.get(context).cart}',
                     style: titleSmallStyle2.copyWith(color: whiteColor),
                   ),
+                  showBadge: AppCubit.get(context).showBadge ?? false,
                   child: const ImageIcon(
                     AssetImage(
                       'assets/images/lab.png',
@@ -415,7 +405,7 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                 ),
               ),
             horizontalSmallSpace,
-            if (AppCubit.get(context).isVisitor == false)
+            if (isVisitor == false)
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -425,36 +415,24 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                     ),
                   );
                 },
-                child: Stack(
+                child: Badge(
+                  position: BadgePosition.topEnd(top: 0),
                   alignment: AlignmentDirectional.centerEnd,
-                  children: [
-                    const Center(
-                      child: ImageIcon(
-                        AssetImage(
-                          'assets/images/notification.png',
-                        ),
-                        color: mainLightColor,
-                      ),
+                  animationType: BadgeAnimationType.slide,
+                  badgeContent: Text(
+                    AppCubit.get(context).notification ?? '',
+                    style: titleSmallStyle2.copyWith(color: whiteColor),
+                  ),
+                  showBadge: AppCubit.get(context).showBadgeNotification ?? false,
+                  child: const ImageIcon(
+                    AssetImage(
+                      'assets/images/notification.png',
                     ),
-                    if (AppCubit.get(context)
-                            .notificationsModel
-                            ?.data
-                            ?.isEmpty ==
-                        false)
-                      if (AppCubit.get(context)
-                              .notificationsModel
-                              ?.data
-                              ?.first
-                              .isRead ==
-                          0)
-                        const CircleAvatar(
-                          backgroundColor: redColor,
-                          radius: 4,
-                        ),
-                  ],
+                    color: mainLightColor,
+                  ),
                 ),
               ),
-            if (AppCubit.get(context).isVisitor == false) horizontalSmallSpace,
+            if (isVisitor == false) horizontalSmallSpace,
           ],
         );
       },
@@ -649,15 +627,15 @@ class DefaultFormField extends StatelessWidget {
             icon: Icon(suffixIcon),
             color: mainColor,
           ),
-          hintStyle: TextStyle(color: greyDarkColor, fontSize: 14),
-          labelStyle: TextStyle(
+          hintStyle: const TextStyle(color: greyDarkColor, fontSize: 14),
+          labelStyle: const TextStyle(
             // color: isClickable ? Colors.grey[400] : blueColor,
             color: greyDarkColor,
             fontSize: 14,
           ),
           fillColor: Colors.white,
           filled: true,
-          errorStyle: TextStyle(color: redColor),
+          errorStyle: const TextStyle(color: redColor),
           // floatingLabelBehavior: FloatingLabelBehavior.never,
           contentPadding: contentPadding ??
               const EdgeInsetsDirectional.only(
@@ -702,7 +680,6 @@ class _GeneralNationalityCodeState extends State<GeneralNationalityCode> {
             onSelect: (Country country) {
               setState(() {
                 widget.controller.text = country.phoneCode;
-                print('widget.controller.text : ${widget.controller.text}');
               });
             },
           );
@@ -717,15 +694,15 @@ class _GeneralNationalityCodeState extends State<GeneralNationalityCode> {
             color: greyExtraLightColor.withOpacity(0.4),
           ),
         ),
-        hintStyle: TextStyle(color: greyDarkColor, fontSize: 14),
-        labelStyle: TextStyle(
+        hintStyle: const TextStyle(color: greyDarkColor, fontSize: 14),
+        labelStyle: const TextStyle(
           // color: isClickable ? Colors.grey[400] : blueColor,
           color: greyDarkColor,
           fontSize: 14,
         ),
         fillColor: Colors.white,
         filled: true,
-        errorStyle: TextStyle(color: redColor),
+        errorStyle: const TextStyle(color: redColor),
         // floatingLabelBehavior: FloatingLabelBehavior.never,
         contentPadding: const EdgeInsetsDirectional.only(
             start: 5.0, end: 0.0, bottom: 0.0, top: 0.0),

@@ -252,6 +252,7 @@ class AddressCard extends StatelessWidget {
       builder: (context, state) {
         Widget isSelectedAddress;
         if (AppCubit.get(context).addressModel?.data?[index].isSelected == '1') {
+          AppCubit.get(context).selectedAddress = AppCubit.get(context).addressModel?.data?[index].title;
           isSelectedAddress = SvgPicture.asset(
             'assets/images/checkTrue.svg',
             width: 20,

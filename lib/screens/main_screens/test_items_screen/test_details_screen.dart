@@ -184,7 +184,7 @@ class TestDetailsScreen extends StatelessWidget {
                             Expanded(
                               child: MaterialButton(
                                 onPressed: () {
-                                  if (AppCubit.get(context).isVisitor ==
+                                  if (isVisitor ==
                                       false) {
                                     Navigator.push(
                                         context, FadeRoute(page: CartScreen()));
@@ -242,6 +242,7 @@ class TestDetailsScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        print(' AppCubit.get(context).generalModel?.data?.homeReservations : ${AppCubit.get(context).generalModel?.data?.homeReservations}');
         return Scaffold(
           backgroundColor: whiteColor,
           appBar: GeneralAppBar(title: LocaleKeys.txtTestDetails.tr()),
@@ -434,7 +435,7 @@ class TestDetailsScreen extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        if (AppCubit.get(context).isVisitor == false) {
+                        if (isVisitor == false) {
                           showCustomBottomSheet(
                             context,
                             bottomSheetContent: Container(
@@ -514,11 +515,7 @@ class TestDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   verticalSmallSpace,
-                                  if (AppCubit.get(context)
-                                          .generalModel
-                                          ?.data
-                                          ?.homeReservations ==
-                                      1)
+                                  if (AppCubit.get(context).generalModel?.data?.homeReservations == 1)
                                     InkWell(
                                       onTap: () {
                                         if (kDebugMode) {
@@ -625,9 +622,9 @@ class TestDetailsScreen extends StatelessWidget {
                     Expanded(
                       child: ConditionalBuilder(
                         condition: state is! AppAddToCartLoadingState,
-                        builder: (context) => MaterialButton(
-                          onPressed: () {
-                            if (AppCubit.get(context).isVisitor == true) {
+                        builder: (context) => InkWell(
+                          onTap: () {
+                            if (isVisitor == true) {
                               showPopUp(
                                 context,
                                 const VisitorHoldingPopUp(),

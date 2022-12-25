@@ -259,7 +259,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                   ),
                   verticalMiniSpace,
                   Container(
-                    height: 220.0,
+                    height: 240.0,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: whiteColor,
@@ -375,7 +375,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                   ),
                   verticalMiniSpace,
                   Container(
-                    height: 205.0,
+                    // height: 205.0,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: whiteColor,

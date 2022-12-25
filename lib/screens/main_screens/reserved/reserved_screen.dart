@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,11 +51,11 @@ class _ReservedScreenState extends State<ReservedScreen> {
               child: Column(
                 children: <Widget>[
                   // the tab bar with two items
-                  if (AppCubit.get(context).isVisitor == true)
+                  if (isVisitor == true)
                     const Expanded(
                       child: VisitorHolderScreen(),
                     ),
-                  if (AppCubit.get(context).isVisitor == false)
+                  if (isVisitor == false)
                     SizedBox(
                       height: 60,
                       child: AppBar(
@@ -157,7 +158,7 @@ class _ReservedScreenState extends State<ReservedScreen> {
                       ),
                     ),
                   // create widgets for each tab bar here
-                  if (AppCubit.get(context).isVisitor == false)
+                  if (isVisitor == false)
                     Expanded(
                       child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),

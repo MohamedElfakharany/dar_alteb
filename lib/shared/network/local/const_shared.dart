@@ -28,6 +28,8 @@ String? sharedLanguage = 'en';
 
 bool? isEnglishShared = true;
 
+bool? isVisitor = false;
+
 String fontFamily = 'Cairo';
 
 String appLogo  = "assets/images/darEltepLogo.png";

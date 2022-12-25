@@ -26,63 +26,70 @@ class _TestItemsScreenState extends State<TestItemsScreen> {
     Timer(
       const Duration(milliseconds: 0),
       () {
-        // AppCubit.get(context).getTests(categoriesId: widget.categoryId);
+        AppCubit.get(context).getTests(categoriesId: widget.categoryId);
+        AppCubit.get(context).getGeneral();
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getTests(categoriesId: widget.categoryId),
-      child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return Scaffold(
-            appBar: GeneralAppBar(
-              title: AppCubit.get(context)
-                      .categoriesModel
-                      ?.data?[widget.categoryId - 1]
-                      .title ??
-                  '',
-              centerTitle: false,
-              // actions: [
-              //   IconButton(
-              //     onPressed: () {
-              //       Navigator.push(
-              //         context,
-              //         FadeRoute(
-              //           page: const SearchScreen(),
-              //         ),
-              //       );
-              //     },
-              //     icon: const Icon(
-              //       Icons.search,
-              //       size: 30,
-              //       color: blueColor,
-              //     ),
-              //   ),
-              //   horizontalMiniSpace
-              // ],
-            ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: ConditionalBuilder(
-                condition: state is! AppGetTestsLoadingState,
-                builder: (context) => ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) => TestItemCard(index: index),
-                  separatorBuilder: (context, index) => verticalMiniSpace,
-                  itemCount: AppCubit.get(context).testsModel?.data?.length ?? 0,
-                ),
-                fallback: (context) =>
-                    const Center(child: CircularProgressIndicator.adaptive()),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {
+        if (state is AppAddToCartSuccessState) {
+          if (state.successModel.status) {
+            showToast(
+                msg: state.successModel.message, state: ToastState.success);
+          } else {
+            showToast(msg: state.successModel.message, state: ToastState.error);
+          }
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: GeneralAppBar(
+            title: AppCubit.get(context)
+                    .categoriesModel
+                    ?.data?[widget.categoryId - 1]
+                    .title ??
+                '',
+            centerTitle: false,
+            // actions: [
+            //   IconButton(
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         FadeRoute(
+            //           page: const SearchScreen(),
+            //         ),
+            //       );
+            //     },
+            //     icon: const Icon(
+            //       Icons.search,
+            //       size: 30,
+            //       color: blueColor,
+            //     ),
+            //   ),
+            //   horizontalMiniSpace
+            // ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: ConditionalBuilder(
+              condition: state is! AppGetTestsLoadingState,
+              builder: (context) => ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) => TestItemCard(index: index),
+                separatorBuilder: (context, index) => verticalMiniSpace,
+                itemCount: AppCubit.get(context).testsModel?.data?.length ?? 0,
               ),
+              fallback: (context) =>
+                  const Center(child: CircularProgressIndicator.adaptive()),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

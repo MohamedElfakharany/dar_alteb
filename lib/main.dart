@@ -148,7 +148,9 @@ void main() async {
             Locale('en'),
             Locale('ar'),
           ],
-          fallbackLocale: const Locale('en'),
+          fallbackLocale: const Locale('ar'),
+          startLocale: const Locale('ar'),
+          saveLocale: true,
           assetLoader: const CodegenLoader(),
           child: const MyApp(
             startWidget: SplashScreen(),
@@ -183,8 +185,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (BuildContext context) => AppCubit()
-            ..getCarouselData()
-            ..getOnboarding(),
+            ..getCarouselData(),
         ),
         BlocProvider(create: (BuildContext context) => AppTechCubit()),
       ],

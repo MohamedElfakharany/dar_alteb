@@ -50,7 +50,9 @@ class CodegenLoader extends AssetLoader {
     "txtTermsAndConditions": "Terms & Conditions",
     "txtUpcoming": "Upcoming",
     "txtCanceled": "Canceled",
-    "txtFieldCoupon": "Enter your code",
+    "txtFieldCoupon": "Your code",
+    "txtBefore": "Before Coupon",
+    "txtDiscount": "Discount",
     "BtnRegister": "Create Account",
     "BtnContinueAsGuest": "Continue As Guest",
     "loginTxtDontHaveAccount": "Don't have an account?",
@@ -270,7 +272,7 @@ class CodegenLoader extends AssetLoader {
     "txtLabReservation": "Lab Reservation",
     "txtAnalysisPreparations": "Analysis preparations",
     "txtLastReservations": "Last Reservations",
-    "txtPleaseSignInFirst": "Please Sign in First 😅 ",
+    "txtPleaseSignInFirst": "Please Sign in First  ",
   };
   static const Map<String, dynamic> ar = {
     "onboardingTitle": "عنوان رقم ١",
@@ -310,7 +312,9 @@ class CodegenLoader extends AssetLoader {
     "txtTermsAndConditions": "الشروط و الاحكام",
     "txtUpcoming": "القادمة",
     "txtCanceled": "تم الإلغاء",
-    "txtFieldCoupon": "أدخل كود الخصم",
+    "txtFieldCoupon": "كود الخصم",
+    "txtBefore": "قبل الخصم",
+    "txtDiscount": "الخصم",
     "BtnBrowse": "إستكشف",
     "BtnCheckout": "السلة",
     "BtnRegister": "إنشاء حساب",
@@ -319,7 +323,7 @@ class CodegenLoader extends AssetLoader {
     "txtTestList": "قائمة الحجز",
     "txtTestDate": "حدد تاريخ",
     "txtDateRange": "حدد يوم معين او فترة",
-    "txtReservationDetails": "تفاصيل الحجوزات",
+    "txtReservationDetails": "تفاصيل الحجز",
     "loginTxtDontHaveAccount": "لا تملك حساب؟",
     "registerTxtMain": "إنضم الآن",
     "registerTxtSecondary": "قُم الآن بإدخال البيانات الخاصة بك لإنشاء حسابك",
@@ -526,7 +530,7 @@ class CodegenLoader extends AssetLoader {
     "txtPatient": "إسم المريض",
     "txtAnalysisPreparations": "تحضيرات التحاليل",
     "txtLastReservations": "آخر الحجوزات",
-    "txtPleaseSignInFirst": "الرجاء تسجيل الدخول أولاً 😅",
+    "txtPleaseSignInFirst": "الرجاء تسجيل الدخول أولاً ",
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {
     "en": en,

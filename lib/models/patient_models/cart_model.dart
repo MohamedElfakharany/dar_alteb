@@ -44,18 +44,18 @@ class Extra {
   dynamic tax;
   dynamic taxPrice;
   dynamic total;
-  List<String>? tests;
-  List<String>? offers;
+  List<dynamic>? tests;
+  List<dynamic>? offers;
 
   Extra({this.price, this.tax, this.taxPrice, this.total, this.tests, this.offers});
 
-  Extra.fromJson(Map<String, dynamic> json) {
+  Extra.fromJson(Map<dynamic, dynamic> json) {
     price = json['price'];
     tax = json['tax'];
     taxPrice = json['taxPrice'];
     total = json['total'];
-    tests = json['tests'].cast<String>();
-    offers = json['offers'].cast<String>();
+    tests = json['tests'];
+    offers = json['offers'];
   }
 }
 

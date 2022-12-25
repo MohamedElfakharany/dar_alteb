@@ -75,7 +75,7 @@ class HomeAppointmentsCard extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Container(
-            height: 95,
+            // height: 95,
             padding: const EdgeInsets.symmetric(
                 vertical: 8.0, horizontal: 10.0),
             decoration: BoxDecoration(
@@ -84,7 +84,7 @@ class HomeAppointmentsCard extends StatelessWidget {
             ),
             child: Container(
               padding: const EdgeInsets.symmetric(
-                  vertical: 5.0, horizontal: 10.0),
+                  vertical: 10.0, horizontal: 15.0),
               decoration: BoxDecoration(
                 color: cardBgColor,
                 border: Border.all(color: mainColor),

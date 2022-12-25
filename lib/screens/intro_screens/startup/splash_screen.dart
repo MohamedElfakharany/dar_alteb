@@ -36,11 +36,11 @@ class _SplashScreenState extends State<SplashScreen> {
     extraBranchTitle = CacheHelper.getData(key: 'extraBranchTitle');
     isEnglishShared = CacheHelper.getData(key: 'isEnglish');
 
-    isEnglishShared ??= true;
+    isEnglishShared ??= false;
 
-    if (sharedLanguage == 'en'){
+    if (sharedLanguage == 'en') {
       fontFamily = 'Poppins';
-    }else {
+    } else {
       fontFamily = 'Cairo';
     }
 
@@ -58,22 +58,25 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     if (token != null) {
-      if (verified != null){
-      if (verified == 1) {
-        if (type == 'Technical'){
-          widget = const TechHomeLayoutScreen();
-        }else{
-        AppCubit.get(context).isVisitor = false;
-        widget = const HomeLayoutScreen();}
+      if (verified != null) {
+        if (verified == 1) {
+          if (type == 'Technical') {
+            widget = const TechHomeLayoutScreen();
+          } else {
+            isVisitor = false;
+            widget = const HomeLayoutScreen();
+          }
+        } else {
+          widget = const LoginScreen();
+        }
       } else {
-        widget = const LoginScreen();
-      }
-      }else {
-      if (isFirst != null){
-        widget = OnBoardingScreen(isSignOut: false,);
-      }else{
-        widget = const SelectLangScreen();
-      }
+        if (isFirst != null) {
+          widget = OnBoardingScreen(
+            isSignOut: false,
+          );
+        } else {
+          widget = const SelectLangScreen();
+        }
       }
     } else {
       widget = const SelectLangScreen();
@@ -82,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
       const Duration(milliseconds: 2000),
-          () {
+      () {
         navigateAndFinish(context, widget);
       },
     );
@@ -97,7 +100,11 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(appLogo, width: 150, height: 150,),
+            Image.asset(
+              appLogo,
+              width: 250,
+              height: 250,
+            ),
             verticalLargeSpace,
             verticalLargeSpace,
             const CircularProgressIndicator.adaptive(),

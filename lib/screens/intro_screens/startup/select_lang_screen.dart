@@ -22,7 +22,7 @@ class SelectLangScreen extends StatefulWidget {
   State<SelectLangScreen> createState() => _SelectLangScreenState();
 }
 
-bool isEnglish = true;
+bool isEnglish = isEnglishShared ?? false;
 
 class _SelectLangScreenState extends State<SelectLangScreen> {
   @override
@@ -45,8 +45,8 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                 children: [
                   Image.asset(
                     appLogo,
-                    width: 150,
-                    height: 150,
+                    width: 250,
+                    height: 250,
                   ),
                   verticalLargeSpace,
                   InkWell(
@@ -63,7 +63,9 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                         CacheHelper.saveData(key: 'isEnglish', value: false);
                         CacheHelper.saveData(key: 'local', value: 'ar');
                       }
-                      isEnglish = false;
+                      setState(() {
+                        isEnglish = false;
+                      });
                     },
                     child: Container(
                       height: 60,
@@ -119,11 +121,11 @@ class _SelectLangScreenState extends State<SelectLangScreen> {
                       } else {
                         context.setLocale(const Locale('en'));
                         CacheHelper.saveData(key: 'isEnglish', value: true);
-                        setState(() async {
-                          CacheHelper.saveData(key: 'local', value: 'en');
-                        });
+                        CacheHelper.saveData(key: 'local', value: 'en');
                       }
-                      isEnglish = true;
+                      setState(() {
+                        isEnglish = true;
+                      });
                     },
                     child: Container(
                       height: 60,

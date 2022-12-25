@@ -92,7 +92,7 @@ class _TechSupportOverviewScreenState extends State<TechSupportOverviewScreen> {
                 ),
                 verticalMiniSpace,
                 Container(
-                  height: 250.0,
+                  height: 260.0,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: whiteColor,
@@ -124,7 +124,7 @@ class _TechSupportOverviewScreenState extends State<TechSupportOverviewScreen> {
                                   style: titleStyle.copyWith(
                                       color: greyLightColor),
                                 ),
-                                if (AppCubit.get(context).isVisitor == false)
+                                if (isVisitor == false)
                                   Text(
                                     widget.familyName ??
                                         AppCubit.get(context)
@@ -162,7 +162,7 @@ class _TechSupportOverviewScreenState extends State<TechSupportOverviewScreen> {
                                     style: titleStyle.copyWith(
                                         color: greyLightColor),
                                   ),
-                                  if (AppCubit.get(context).isVisitor == false)
+                                  if (isVisitor == false)
                                     Text(
                                       widget.addressTitle,
                                       textAlign: TextAlign.start,

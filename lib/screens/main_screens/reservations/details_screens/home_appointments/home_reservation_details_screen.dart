@@ -44,7 +44,16 @@ class _HomeReservationDetailsScreenState
     super.initState();
     AppCubit.get(context).getBranch(cityID: extraCityId!);
     AppCubit.get(context).getFamilies();
-    AppCubit.get(context).getAddress();
+
+    print(AppCubit.get(context).addressName.length);
+    getAddressHome();
+  }
+
+  getAddressHome() async {
+    await AppCubit.get(context).getAddress();
+    locationValue = await AppCubit.get(context).addressName.elementAt(
+        AppCubit.get(context).addressName.indexWhere(
+            (element) => element == AppCubit.get(context).selectedAddress));
   }
 
   var formKey = GlobalKey<FormState>();
@@ -77,7 +86,7 @@ class _HomeReservationDetailsScreenState
                       style: titleStyle.copyWith(fontWeight: FontWeight.w500),
                     ),
                     verticalMiniSpace,
-                    if (AppCubit.get(context).isVisitor == true)
+                    if (isVisitor == true)
                       Container(
                         height: 50.0,
                         width: double.infinity,
@@ -106,7 +115,7 @@ class _HomeReservationDetailsScreenState
                           ),
                         ),
                       ),
-                    if (AppCubit.get(context).isVisitor == false)
+                    if (isVisitor == false)
                       Container(
                         height: 50.0,
                         width: double.infinity,
@@ -141,7 +150,8 @@ class _HomeReservationDetailsScreenState
                               Icons.keyboard_arrow_down_rounded,
                               color: mainColor,
                             ),
-                            hint: Text('${AppCubit.get(context).userResourceModel?.data?.name}'),
+                            hint: Text(
+                                '${AppCubit.get(context).userResourceModel?.data?.name}'),
                             items: AppCubit.get(context)
                                 .familiesName
                                 .map(buildMenuItem)
@@ -212,11 +222,12 @@ class _HomeReservationDetailsScreenState
                                     color: greyLightColor,
                                     size: 30,
                                   ),
-                                  contentPadding: const EdgeInsetsDirectional.only(
-                                      start: 20.0,
-                                      end: 0.0,
-                                      bottom: 0.0,
-                                      top: 10.0),
+                                  contentPadding:
+                                      const EdgeInsetsDirectional.only(
+                                          start: 20.0,
+                                          end: 0.0,
+                                          bottom: 0.0,
+                                          top: 10.0),
                                   fillColor: Colors.white,
                                   filled: true,
                                   errorStyle:
@@ -263,6 +274,7 @@ class _HomeReservationDetailsScreenState
                         ],
                       ),
                     ),
+                    verticalLargeSpace,
                     MaterialButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
@@ -321,13 +333,19 @@ class _HomeReservationDetailsScreenState
         value: item,
         child: Row(
           children: [
-            Text(item,style: titleSmallStyle,),
+            Text(
+              item,
+              style: titleSmallStyle,
+            ),
           ],
         ),
       );
 
   DropdownMenuItem<String> buildLocationItem(String item) => DropdownMenuItem(
         value: item,
-        child: Text(item,style: titleSmallStyle,),
+        child: Text(
+          item,
+          style: titleSmallStyle,
+        ),
       );
 }

@@ -37,6 +37,15 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
     super.initState();
     AppCubit.get(context).getAddress();
     AppCubit.get(context).getFamilies();
+    print(AppCubit.get(context).addressName.length);
+    getAddressHome();
+  }
+
+  getAddressHome() async {
+    await AppCubit.get(context).getAddress();
+    locationValue = await AppCubit.get(context).addressName.elementAt(
+        AppCubit.get(context).addressName.indexWhere(
+                (element) => element == AppCubit.get(context).selectedAddress));
   }
 
   final dateController = TextEditingController();
@@ -62,15 +71,16 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                   const EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
               child: Form(
                 key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       LocaleKeys.txtPatient.tr(),
                       style: titleStyle.copyWith(fontWeight: FontWeight.w500),
                     ),
                     verticalMiniSpace,
-                    if (AppCubit.get(context).isVisitor == true)
+                    if (isVisitor == true)
                       Container(
                         height: 50.0,
                         width: double.infinity,
@@ -99,7 +109,7 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                           ),
                         ),
                       ),
-                    if (AppCubit.get(context).isVisitor == false)
+                    if (isVisitor == false)
                       Container(
                         height: 50.0,
                         width: double.infinity,
@@ -127,7 +137,8 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                               errorStyle: TextStyle(color: Color(0xFF4F4F4F)),
                               border: InputBorder.none,
                             ),
-                            hint: Text(LocaleKeys.TxtFieldMemberOfVisit.tr()),
+                            hint: Text(
+                                '${AppCubit.get(context).userResourceModel?.data?.name}'),
                             value: memberValue,
                             isExpanded: true,
                             iconSize: 30,
@@ -152,12 +163,12 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                       ),
                     verticalMiniSpace,
                     Text(
-                      LocaleKeys.TxtPopUpReservationType.tr(),
+                      LocaleKeys.txtReservationDetails.tr(),
                       style: titleStyle.copyWith(fontWeight: FontWeight.w500),
                     ),
                     verticalMiniSpace,
                     Container(
-                      height: 275.0,
+                      // height: 275.0,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: whiteColor,
@@ -196,9 +207,7 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                                   locale: LocaleType.en);
                             },
                           ),
-                          const Spacer(),
                           myHorizontalDivider(),
-                          const Spacer(),
                           DefaultFormField(
                             controller: timeController,
                             type: TextInputType.none,
@@ -223,9 +232,7 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                                   locale: LocaleType.en);
                             },
                           ),
-                          const Spacer(),
                           myHorizontalDivider(),
-                          const Spacer(),
                           DropdownButtonHideUnderline(
                             child: DropdownButtonFormField<String>(
                               validator: (value) {
@@ -250,17 +257,21 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                                         top: 10.0),
                                 fillColor: Colors.white,
                                 filled: true,
-                                errorStyle: TextStyle(color: Color(0xFF4F4F4F)),
+                                errorStyle:
+                                    const TextStyle(color: Color(0xFF4F4F4F)),
                                 border: InputBorder.none,
                                 suffixIcon: IconButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     AppCubit.get(context).getAddress();
-                                    Navigator.push(
+                                    var result = await Navigator.push(
                                       context,
                                       FadeRoute(
                                         page: const AddressScreen(),
                                       ),
                                     );
+                                    setState(() {
+                                      locationValue = result;
+                                    });
                                   },
                                   icon: const Icon(
                                     Icons.add_location_alt_outlined,
@@ -292,7 +303,7 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
                         ],
                       ),
                     ),
-                    const Spacer(),
+                    verticalLargeSpace,
                     MaterialButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
@@ -342,7 +353,10 @@ class _CreateTechSupportScreenState extends State<CreateTechSupportScreen> {
         value: item,
         child: Row(
           children: [
-            Text(item,style: titleSmallStyle,),
+            Text(
+              item,
+              style: titleSmallStyle,
+            ),
           ],
         ),
       );

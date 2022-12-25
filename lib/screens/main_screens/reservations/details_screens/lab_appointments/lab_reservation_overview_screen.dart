@@ -56,10 +56,13 @@ class _LabReservationOverviewScreenState
   final _focusNodes =
       Iterable<int>.generate(1).map((_) => FocusNode()).toList();
 
+  bool isInvoiceDone = false;
+
   @override
   void initState() {
     if (widget.testsDataModel == null && widget.offersDataModel == null) {
       // AppCubit.get(context).getCart();
+      AppCubit.get(context).getInvoices();
     }
   }
 
@@ -69,26 +72,31 @@ class _LabReservationOverviewScreenState
       listener: (context, state) {
         if (state is AppCheckCouponSuccessState) {
           if (state.successModel.status) {
-            AppCubit.get(context).getInvoices(testId: [
-              widget.testsDataModel?.id ?? widget.offersDataModel?.id
-            ]);
+            if (widget.testsDataModel != null ||
+                widget.offersDataModel != null) {
+              if (widget.testsDataModel != null) {
+                AppCubit.get(context).getInvoices(
+                  testId: widget.testsDataModel?.id,
+                  coupon: couponController.text,
+                );
+              } else {
+                AppCubit.get(context).getInvoices(
+                  offerId: widget.offersDataModel?.id,
+                  coupon: couponController.text,
+                );
+              }
+            } else {
+              AppCubit.get(context).getInvoices(
+                cartTestId: AppCubit.get(context).cartModel?.extra?.tests,
+                cartOfferId: AppCubit.get(context).cartModel?.extra?.offers,
+                coupon: couponController.text,
+              );
+            }
           } else {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                content: Text(state.successModel.message),
-              ),
-            );
+            showToast(msg: state.successModel.message, state: ToastState.error);
           }
         } else if (state is AppCheckCouponErrorState) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              content: Text(
-                state.error.toString(),
-              ),
-            ),
-          );
+          showToast(msg: state.error, state: ToastState.error);
         }
         if (state is AppCreateLabReservationSuccessState) {
           if (state.successModel.status) {
@@ -105,53 +113,27 @@ class _LabReservationOverviewScreenState
                   branchName: widget.branchName),
             );
           } else {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                content: Text(state.successModel.message),
-              ),
-            );
+            showToast(msg: state.successModel.message, state: ToastState.error);
           }
         } else if (state is AppCreateLabReservationErrorState) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              content: Text(
-                state.error.toString(),
-              ),
-            ),
-          );
+          showToast(msg: state.error, state: ToastState.error);
         }
         if (state is AppGetInvoicesSuccessState) {
-          if (state.successModel.status) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                content: Text(state.successModel.message),
-              ),
-            );
+          if (state.invoiceModel.status == true) {
+            isInvoiceDone = true;
           } else {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                content: Text(state.successModel.message),
-              ),
-            );
+            isInvoiceDone = false;
+            showToast(msg: state.invoiceModel.message, state: ToastState.error);
           }
         } else if (state is AppGetInvoicesErrorState) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              content: Text(
-                state.error.toString(),
-              ),
-            ),
-          );
+          isInvoiceDone = false;
+          showToast(msg: state.error, state: ToastState.error);
         }
       },
       builder: (context, state) {
+        print(
+            'AppCubit.get(context).invoiceModel?.data?.total : ${AppCubit.get(context).invoiceModel?.data?.total}');
         var cartModel = AppCubit.get(context).cartModel;
-        print('widget.branchName : ${widget.branchName}');
         return ScreenUtilInit(
           builder: (ctx, _) => Scaffold(
             backgroundColor: greyExtraLightColor,
@@ -183,8 +165,6 @@ class _LabReservationOverviewScreenState
                         if (widget.testsDataModel != null ||
                             widget.offersDataModel != null)
                           Container(
-                            height: 110.0,
-                            width: 110.0,
                             decoration: BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadius.circular(radius),
@@ -256,29 +236,33 @@ class _LabReservationOverviewScreenState
                                       content: ConditionalBuilder(
                                         condition: state
                                             is! AppDeleteInquiryLoadingState,
-                                        builder: (context) => Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            color: Colors.red,
-                                          ),
-                                          width: 130,
-                                          height: 60,
-                                          child: OverflowBox(
-                                            maxWidth: double.infinity,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(
-                                                  Icons.delete,
-                                                  color: Colors.white,
-                                                ),
-                                                Text(LocaleKeys.BtnDelete.tr(),
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20)),
-                                              ],
+                                        builder: (context) => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Colors.red,
+                                            ),
+                                            width: 180,
+                                            height: 60,
+                                            child: OverflowBox(
+                                              maxWidth: 200,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      LocaleKeys.BtnDelete.tr(),
+                                                      style:
+                                                          titleStyle.copyWith(
+                                                              color:
+                                                                  whiteColor)),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -381,7 +365,7 @@ class _LabReservationOverviewScreenState
                         ),
                         verticalMiniSpace,
                         Container(
-                          height: 250.0,
+                          height: 260.0,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: whiteColor,
@@ -415,8 +399,7 @@ class _LabReservationOverviewScreenState
                                           style: titleStyle.copyWith(
                                               color: greyLightColor),
                                         ),
-                                        if (AppCubit.get(context).isVisitor ==
-                                            false)
+                                        if (isVisitor == false)
                                           Text(
                                             widget.familyName ??
                                                 AppCubit.get(context)
@@ -514,7 +497,7 @@ class _LabReservationOverviewScreenState
                         ),
                         verticalMiniSpace,
                         Container(
-                          height: 120.0,
+                          // height: 120.0,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: whiteColor,
@@ -528,45 +511,41 @@ class _LabReservationOverviewScreenState
                                 Text(
                                   LocaleKeys.txtHaveCoupon.tr(),
                                 ),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: DefaultFormField(
-                                          controller: couponController,
-                                          type: TextInputType.text,
-                                          label: LocaleKeys.txtFieldCoupon.tr(),
-                                          validatedText:
-                                              LocaleKeys.txtFieldCoupon.tr(),
-                                          onTap: () {},
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: DefaultFormField(
+                                        controller: couponController,
+                                        type: TextInputType.text,
+                                        label: LocaleKeys.txtFieldCoupon.tr(),
+                                        validatedText:
+                                            LocaleKeys.txtFieldCoupon.tr(),
+                                        onTap: () {},
+                                      ),
+                                    ),
+                                    horizontalMiniSpace,
+                                    InkWell(
+                                      onTap: () {
+                                        if (formKey.currentState!.validate()) {
+                                          AppCubit.get(context).checkCoupon(
+                                              coupon: couponController.text);
+                                        }
+                                      },
+                                      child: Container(
+                                        width: 55,
+                                        height: 55,
+                                        decoration: BoxDecoration(
+                                            color: darkColor,
+                                            borderRadius:
+                                                BorderRadius.circular(radius)),
+                                        child: const Icon(
+                                          Icons.send_outlined,
+                                          color: whiteColor,
+                                          size: 30,
                                         ),
                                       ),
-                                      horizontalMiniSpace,
-                                      InkWell(
-                                        onTap: () {
-                                          if (formKey.currentState!
-                                              .validate()) {
-                                            AppCubit.get(context).checkCoupon(
-                                                coupon: couponController.text);
-                                          }
-                                        },
-                                        child: Container(
-                                          width: 55,
-                                          height: 55,
-                                          decoration: BoxDecoration(
-                                              color: darkColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      radius)),
-                                          child: const Icon(
-                                            Icons.send_outlined,
-                                            color: whiteColor,
-                                            size: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -579,7 +558,167 @@ class _LabReservationOverviewScreenState
                             condition: state is! AppCheckCouponLoadingState &&
                                 state is! AppGetInvoicesLoadingState,
                             builder: (context) => Container(
-                              height: 150.0,
+                              // height: 150.0,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.circular(radius),
+                              ),
+                              alignment: AlignmentDirectional.center,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 4),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  verticalSmallSpace,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Text(
+                                      LocaleKeys.txtSummary.tr(),
+                                      //'${LocaleKeys.txtSummary.tr()} ${LocaleKeys.txtBefore.tr()}',
+                                      style: titleSmallStyle.copyWith(
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  myHorizontalDivider(),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocaleKeys.txtPrice.tr(),
+                                              style: titleSmallStyle.copyWith(
+                                                  color: greyDarkColor,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              '${widget.offersDataModel?.discount ?? widget.testsDataModel?.price} ${LocaleKeys.salary.tr()}',
+                                              textAlign: TextAlign.start,
+                                              style: titleSmallStyle,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                        verticalMicroSpace,
+                                        if (isInvoiceDone)
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                LocaleKeys.txtVAT.tr(),
+                                                style: titleSmallStyle.copyWith(
+                                                    color: greyDarkColor,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                '${cartModel?.extra?.tax}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        if (isInvoiceDone) verticalMicroSpace,
+                                        if (isInvoiceDone)
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                LocaleKeys.txtDiscount.tr(),
+                                                style: titleSmallStyle.copyWith(
+                                                    color: greyDarkColor,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        verticalMicroSpace,
+                                        const MySeparator(),
+                                        verticalMicroSpace,
+                                        if (isInvoiceDone)
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                LocaleKeys.txtTotal.tr(),
+                                                style: titleSmallStyle.copyWith(
+                                                    color: greyDarkColor,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                '${AppCubit.get(context).invoiceModel?.data?.total} ${LocaleKeys.salary.tr()}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              LocaleKeys.txtAddedTax.tr(),
+                                              textAlign: TextAlign.start,
+                                              style: titleSmallStyle.copyWith(
+                                                  color: greyDarkColor,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            fallback: (context) => const Center(
+                                child: CircularProgressIndicator.adaptive()),
+                          ),
+                        if (widget.testsDataModel?.id == null &&
+                            widget.offersDataModel?.id == null)
+                          ConditionalBuilder(
+                            condition: state is! AppCheckCouponLoadingState &&
+                                state is! AppGetInvoicesLoadingState,
+                            builder: (context) => Container(
+                              // height: 260.0,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 color: whiteColor,
@@ -616,7 +755,7 @@ class _LabReservationOverviewScreenState
                                               MainAxisAlignment.start,
                                           children: [
                                             Text(
-                                              LocaleKeys.txtPrice.tr(),
+                                              LocaleKeys.txtItems.tr(),
                                               style: titleSmallStyle.copyWith(
                                                   color: greyDarkColor,
                                                   fontWeight:
@@ -624,7 +763,7 @@ class _LabReservationOverviewScreenState
                                             ),
                                             const Spacer(),
                                             Text(
-                                              '${widget.offersDataModel?.discount ?? widget.testsDataModel?.price} ${LocaleKeys.salary.tr()}',
+                                              '${cartModel?.data?.length ?? 1}',
                                               textAlign: TextAlign.start,
                                               style: titleSmallStyle,
                                               maxLines: 1,
@@ -633,9 +772,111 @@ class _LabReservationOverviewScreenState
                                           ],
                                         ),
                                         verticalMicroSpace,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocaleKeys.txtPrice.tr(),
+                                              style: titleSmallStyle.copyWith(
+                                                  color: greyDarkColor,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              '${cartModel?.extra?.price} ${LocaleKeys.salary.tr()}',
+                                              textAlign: TextAlign.start,
+                                              style: titleSmallStyle,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                        verticalMicroSpace,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocaleKeys.txtVAT.tr(),
+                                              style: titleSmallStyle.copyWith(
+                                                  color: greyDarkColor,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              '${cartModel?.extra?.tax}',
+                                              textAlign: TextAlign.start,
+                                              style: titleSmallStyle,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                        if (isInvoiceDone)
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                LocaleKeys.txtDiscount.tr(),
+                                                style: titleSmallStyle.copyWith(
+                                                    color: greyDarkColor,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        verticalMicroSpace,
                                         const MySeparator(),
                                         verticalMicroSpace,
-                                        verticalMicroSpace,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocaleKeys.txtTotal.tr(),
+                                              style: titleSmallStyle.copyWith(
+                                                  color: greyDarkColor,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const Spacer(),
+                                            if (isInvoiceDone)
+                                              Text(
+                                                '${AppCubit.get(context).invoiceModel?.data?.total} ${LocaleKeys.salary.tr()}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            if (!isInvoiceDone)
+                                              Text(
+                                                '${cartModel?.extra?.total} ${LocaleKeys.salary.tr()}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                          ],
+                                        ),
                                         Row(
                                           children: [
                                             Text(
@@ -659,152 +900,7 @@ class _LabReservationOverviewScreenState
                             fallback: (context) => const Center(
                                 child: CircularProgressIndicator.adaptive()),
                           ),
-                        if (widget.testsDataModel?.id == null &&
-                            widget.offersDataModel?.id == null)
-                          Container(
-                            height: 250.0,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.circular(radius),
-                            ),
-                            alignment: AlignmentDirectional.center,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 4),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                verticalSmallSpace,
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Text(
-                                    LocaleKeys.txtSummary.tr(),
-                                    style: titleSmallStyle.copyWith(
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                                myHorizontalDivider(),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            LocaleKeys.txtItems.tr(),
-                                            style: titleSmallStyle.copyWith(
-                                                color: greyDarkColor,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                          const Spacer(),
-                                          Text(
-                                            '${cartModel?.data?.length ?? 1}',
-                                            textAlign: TextAlign.start,
-                                            style: titleSmallStyle,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                      verticalMicroSpace,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            LocaleKeys.txtPrice.tr(),
-                                            style: titleSmallStyle.copyWith(
-                                                color: greyDarkColor,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                          const Spacer(),
-                                          Text(
-                                            '${cartModel?.extra?.price} ${LocaleKeys.salary.tr()}',
-                                            textAlign: TextAlign.start,
-                                            style: titleSmallStyle,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                      verticalMicroSpace,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            LocaleKeys.txtVAT.tr(),
-                                            style: titleSmallStyle.copyWith(
-                                                color: greyDarkColor,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                          const Spacer(),
-                                          Text(
-                                            '${cartModel?.extra?.tax}',
-                                            textAlign: TextAlign.start,
-                                            style: titleSmallStyle,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                      verticalMicroSpace,
-                                      const MySeparator(),
-                                      verticalMicroSpace,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            LocaleKeys.txtTotal.tr(),
-                                            style: titleSmallStyle.copyWith(
-                                                color: greyDarkColor,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const Spacer(),
-                                          Text(
-                                            '${cartModel?.extra?.total} ${LocaleKeys.salary.tr()}',
-                                            textAlign: TextAlign.start,
-                                            style: titleSmallStyle,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            LocaleKeys.txtAddedTax.tr(),
-                                            textAlign: TextAlign.start,
-                                            style: titleSmallStyle.copyWith(
-                                                color: greyDarkColor,
-                                                fontWeight: FontWeight.normal),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        verticalSmallSpace,
+                        verticalLargeSpace,
                         ConditionalBuilder(
                           condition:
                               state is! AppCreateLabReservationLoadingState,
@@ -823,8 +919,7 @@ class _LabReservationOverviewScreenState
                                     offerId: cartModel.extra!.offers,
                                     testId: cartModel.extra!.tests,
                                   );
-                                }
-                                else {
+                                } else {
                                   if (cartModel.extra!.offers!.isEmpty) {
                                     AppCubit.get(context).createLabReservation(
                                       date: widget.date,
@@ -834,8 +929,7 @@ class _LabReservationOverviewScreenState
                                       coupon: couponController.text,
                                       testId: cartModel.extra?.tests,
                                     );
-                                  }
-                                  else if (cartModel.extra!.tests!.isEmpty) {
+                                  } else if (cartModel.extra!.tests!.isEmpty) {
                                     AppCubit.get(context).createLabReservation(
                                         date: widget.date,
                                         time: widget.time,
@@ -853,7 +947,7 @@ class _LabReservationOverviewScreenState
                                     familyId: widget.familyId,
                                     branchId: widget.branchId,
                                     coupon: couponController.text,
-                                    offerId: ["${widget.offersDataModel?.id}"],
+                                    offerId: [widget.offersDataModel?.id],
                                   );
                                 } else if (widget.offersDataModel?.id == null) {
                                   AppCubit.get(context).createLabReservation(
@@ -862,7 +956,7 @@ class _LabReservationOverviewScreenState
                                       familyId: widget.familyId,
                                       branchId: widget.branchId,
                                       coupon: couponController.text,
-                                      testId: ['${widget.testsDataModel?.id}']);
+                                      testId: [widget.testsDataModel?.id]);
                                 }
                               }
                             },

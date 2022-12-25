@@ -12,11 +12,24 @@ import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 
-class ChangeMobileScreen extends StatelessWidget {
+class ChangeMobileScreen extends StatefulWidget {
   ChangeMobileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ChangeMobileScreen> createState() => _ChangeMobileScreenState();
+}
+
+class _ChangeMobileScreenState extends State<ChangeMobileScreen> {
   final mobileController = TextEditingController();
+
   final nationalCodeController = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
+
+  @override
+  void initState(){
+    nationalCodeController.text = '966';
+  }
 
   @override
   Widget build(BuildContext context) {

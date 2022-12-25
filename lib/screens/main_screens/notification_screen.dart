@@ -107,7 +107,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     showPopUp(
                       context,
                       Container(
-                        height: 200,
+                        height: 230,
                         width: MediaQuery.of(context).size.width * 0.9,
                         padding: const EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 10.0),

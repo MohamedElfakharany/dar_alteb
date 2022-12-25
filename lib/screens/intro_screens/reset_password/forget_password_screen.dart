@@ -12,11 +12,24 @@ import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
+class ForgetPasswordScreen extends StatefulWidget {
   ForgetPasswordScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final mobileController = TextEditingController();
+
   final nationalCodeController = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
+
+  @override
+  void initState(){
+    nationalCodeController.text = '966';
+  }
 
   @override
   Widget build(BuildContext context) {

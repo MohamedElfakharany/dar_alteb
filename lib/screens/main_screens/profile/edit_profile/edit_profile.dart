@@ -38,6 +38,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       Iterable<int>.generate(2).map((_) => FocusNode()).toList();
 
   @override
+  void initState(){
+    userNameController.text = AppCubit.get(context).userResourceModel?.data?.name ?? '';
+    idNumberController.text =
+        AppCubit.get(context).userResourceModel?.data?.nationalId.toString() ?? '';
+    mobileController.text = AppCubit.get(context).userResourceModel?.data?.phone ?? '';
+    nationalCodeController.text =
+        AppCubit.get(context).userResourceModel?.data?.phoneCode ?? '';
+    emailController.text = AppCubit.get(context).userResourceModel?.data?.email ?? '';
+    birthdayController.text = AppCubit.get(context).userResourceModel?.data?.birthday ?? '';
+  }
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) async {
@@ -62,19 +73,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         var cubit = AppCubit.get(context);
         var profileImage = AppCubit.get(context).profileImage;
         Gender gender;
-        if (cubit.userResourceModel?.data?.gender == 'Male') {
+        if (AppCubit.get(context).userResourceModel?.data?.gender == 'Male') {
           gender = Gender.Male;
         } else {
           gender = Gender.Female;
         }
-        userNameController.text = cubit.userResourceModel?.data?.name ?? '';
-        idNumberController.text =
-            cubit.userResourceModel?.data?.nationalId.toString() ?? '';
-        mobileController.text = cubit.userResourceModel?.data?.phone ?? '';
-        nationalCodeController.text =
-            cubit.userResourceModel?.data?.phoneCode ?? '';
-        emailController.text = cubit.userResourceModel?.data?.email ?? '';
-        birthdayController.text = cubit.userResourceModel?.data?.birthday ?? '';
         return Scaffold(
           backgroundColor: greyExtraLightColor,
           appBar: GeneralAppBar(

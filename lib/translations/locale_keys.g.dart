@@ -17,6 +17,7 @@ abstract class  LocaleKeys {
   static const txtFieldMobile = 'txtFieldMobile';
   static const txtFieldPassword = 'txtFieldPassword';
   static const BtnForgetPassword = 'BtnForgetPassword';
+  static const txtBefore = 'txtBefore';
   static const forgetTxtMain = 'forgetTxtMain';
   static const TxtFieldMemberOfVisit = 'TxtFieldMemberOfVisit';
   static const TxtFieldAddressOfVisit = 'TxtFieldAddressOfVisit';
@@ -118,6 +119,7 @@ abstract class  LocaleKeys {
   static const homeTxtTestLibrary = 'homeTxtTestLibrary';
   static const homeTxtNotifications = 'homeTxtNotifications';
   static const homeTxtOffers = 'homeTxtOffers';
+  static const txtDiscount = 'txtDiscount';
   static const homeTxtContactUs = 'homeTxtContactUs';
   static const BtnPrecautions = 'BtnPrecautions';
   static const TxtPopUpReservationType = 'TxtPopUpReservationType';

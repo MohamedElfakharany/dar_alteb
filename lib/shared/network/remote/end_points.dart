@@ -109,7 +109,7 @@
 
       const labCheckCouponsURL = '$labURL/check-coupons';
 
-      const labInvoicesURL = '$labURL/invoices';
+      const invoicesURL = '$labURL/invoices';
 
       const labReservationsCreateURL = '$labURL/reservations/create';
 

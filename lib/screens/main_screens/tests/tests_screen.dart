@@ -42,18 +42,17 @@ class _TestsScreenState extends State<TestsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = AppCubit.get(context);
-    int index = cubit.tapIndex;
     return BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
+          int index = AppCubit.get(context).tapIndex;
           bgColorTest = index == 0 ? mainLightColor : whiteColor;
           bgColorOffer = index == 1 ? mainLightColor : whiteColor;
           fontColorTest = index == 1 ? mainLightColor : whiteColor;
           fontColorOffer = index == 0 ? mainLightColor : whiteColor;
           return DefaultTabController(
             length: 2,
-            initialIndex: cubit.tapIndex,
+            initialIndex: index,
             child: Scaffold(
               backgroundColor: greyExtraLightColor,
               body: Column(
@@ -68,7 +67,7 @@ class _TestsScreenState extends State<TestsScreen> {
                         indicator: const BoxDecoration(),
                         onTap: (i) {
                           setState(() {
-                            index = i;
+                            AppCubit.get(context).tapIndex = i;
                           });
                         },
                         tabs: [
