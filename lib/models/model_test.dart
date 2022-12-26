@@ -186,6 +186,7 @@ class SyncfusionPatientLabReservationsDatePickerState
                   print('date $selectedDate');
                   AppCubit.get(context).getLabReservations(date: selectedDate);
                   Navigator.pop(context);
+                  Navigator.pop(context);
                 },
               ),
               fallback: (context) =>
@@ -265,6 +266,168 @@ class SyncfusionPatientHomeReservationsDatePickerState
                 onPress: () {
                   print('date $selectedDate');
                   AppCubit.get(context).getHomeReservations(date: selectedDate);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+              fallback: (context) =>
+              const Center(child: CircularProgressIndicator.adaptive()),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+
+class SyncfusionPatientLabResultsDatePicker extends StatefulWidget {
+  const SyncfusionPatientLabResultsDatePicker({Key? key,}) : super(key: key);
+
+  @override
+  SyncfusionPatientLabResultsDatePickerState createState() =>
+      SyncfusionPatientLabResultsDatePickerState();
+}
+
+/// State for SyncfusionPatientLabResultsDatePicker
+class SyncfusionPatientLabResultsDatePickerState
+    extends State<SyncfusionPatientLabResultsDatePicker> {
+
+  String selectedDate = '';
+
+  void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    setState(() {
+       if (args.value is DateTime) {
+         DateTime data;
+        data = args.value;
+        String day = data.day.toString();
+        String month = data.month.toString();
+        if (day.length == 1){
+          day = '0$day';
+        }
+        if (month.length == 1){
+          month = '0$month';
+        }
+         selectedDate = '${data.year}/$month/$day';
+        print(selectedDate);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+            Text(selectedDate,style: titleStyle.copyWith(color: mainColor)),
+            SfDateRangePicker(
+              onSelectionChanged: onSelectionChanged,
+              selectionMode: DateRangePickerSelectionMode.single,
+            ),
+            ConditionalBuilder(
+              condition: state is! AppGetLabResultsLoadingState,
+              builder: (context) => GeneralButton(
+                title: LocaleKeys.BtnSubmit.tr(),
+                onPress: () {
+                  print('date $selectedDate');
+                  AppCubit.get(context).getLabResults(date: selectedDate);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+              fallback: (context) =>
+              const Center(child: CircularProgressIndicator.adaptive()),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+
+
+class SyncfusionPatientHomeResultsDatePicker extends StatefulWidget {
+  const SyncfusionPatientHomeResultsDatePicker({Key? key,}) : super(key: key);
+
+  @override
+  SyncfusionPatientHomeResultsDatePickerState createState() =>
+      SyncfusionPatientHomeResultsDatePickerState();
+}
+
+/// State for SyncfusionPatientHomeResultsDatePicker
+class SyncfusionPatientHomeResultsDatePickerState
+    extends State<SyncfusionPatientHomeResultsDatePicker> {
+
+  String selectedDate = '';
+
+  void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    setState(() {
+       if (args.value is DateTime) {
+         DateTime data;
+        data = args.value;
+        String day = data.day.toString();
+        String month = data.month.toString();
+        if (day.length == 1){
+          day = '0$day';
+        }
+        if (month.length == 1){
+          month = '0$month';
+        }
+         selectedDate = '${data.year}/$month/$day';
+        print(selectedDate);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+            Text(selectedDate,style: titleStyle.copyWith(color: mainColor)),
+            SfDateRangePicker(
+              onSelectionChanged: onSelectionChanged,
+              selectionMode: DateRangePickerSelectionMode.single,
+            ),
+            ConditionalBuilder(
+              condition: state is! AppGetHomeResultsLoadingState,
+              builder: (context) => GeneralButton(
+                title: LocaleKeys.BtnSubmit.tr(),
+                onPress: () {
+                  print('date $selectedDate');
+                  AppCubit.get(context).getHomeResults(date: selectedDate);
+                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
               ),

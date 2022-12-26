@@ -29,6 +29,9 @@ class _ReservedScreenState extends State<ReservedScreen> {
     AppCubit.get(context).getHomeReservations();
   }
 
+  var labSearchController = TextEditingController();
+  var homeSearchController = TextEditingController();
+
   Color bgColorTest = whiteColor;
   Color bgColorOffer = mainColor;
   Color fontColorTest = mainColor;
@@ -48,7 +51,16 @@ class _ReservedScreenState extends State<ReservedScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AppGetLabReservationsSuccessState){
+          labSearchController.text = '';
+          homeSearchController.text = '';
+        }
+        if (state is AppGetHomeReservationsSuccessState){
+          labSearchController.text = '';
+          homeSearchController.text = '';
+        }
+      },
       builder: (context, state) {
         bgColorTest = index == 0 ? mainLightColor : whiteColor;
         bgColorOffer = index == 1 ? mainLightColor : whiteColor;
@@ -175,143 +187,231 @@ class _ReservedScreenState extends State<ReservedScreen> {
                           Column(
                             children: [
                               verticalSmallSpace,
-                              SizedBox(
-                                height: 60,
-                                width: double.infinity,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: GeneralUnfilledButton(
-                                        width: 100,
-                                        height: 40.0,
-                                        title: LocaleKeys.txtTestDate.tr(),
-                                        onPress: () {
-                                          showCustomBottomSheet(
-                                            context,
-                                            bottomSheetContent:
-                                            const SyncfusionPatientLabReservationsDatePicker(),
-                                            bottomSheetHeight: 0.65,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: 60.0,
-                                        child: Row(
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.filter_list,
+                                  color: mainColor,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      content: SizedBox(
+                                        height: 200,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
-                                            const Icon(
-                                              Icons
-                                                  .location_on_rounded,
-                                              color: greyDarkColor,
-                                            ),
-                                            horizontalMiniSpace,
-                                            Text(
-                                              '${LocaleKeys.status.tr()} : ',
-                                              style:
-                                              titleSmallStyle,
-                                            ),
-                                            Expanded(
-                                              child: DropdownButtonHideUnderline(
-                                                child:
-                                                DropdownButtonFormField<
-                                                    String>(
-                                                  decoration:
-                                                  const InputDecoration(
-                                                    fillColor:
-                                                    greyExtraLightColor,
-                                                    filled: true,
-                                                    errorStyle: TextStyle(
-                                                        color: Color(
-                                                            0xFF4F4F4F)),
-                                                    border:
-                                                    InputBorder
-                                                        .none,
+                                            Container(
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              height: 60,
+                                              child: TextFormField(
+                                                controller: labSearchController,
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                decoration: InputDecoration(
+                                                  prefixIcon:
+                                                      const Icon(Icons.search),
+                                                  label: Text(LocaleKeys
+                                                      .TxtFieldSearch.tr()),
+                                                  hintStyle: const TextStyle(
+                                                      color: greyDarkColor,
+                                                      fontSize: 14),
+                                                  labelStyle: const TextStyle(
+                                                      color: greyDarkColor,
+                                                      fontSize: 14),
+                                                  fillColor: Colors.white,
+                                                  filled: true,
+                                                  errorStyle: const TextStyle(
+                                                      color: redColor),
+                                                  contentPadding:
+                                                      const EdgeInsetsDirectional
+                                                              .only(
+                                                          start: 20.0,
+                                                          end: 10.0,
+                                                          bottom: 0.0,
+                                                          top: 0.0),
+                                                  border:
+                                                      const OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      width: 1,
+                                                      color:
+                                                          greyExtraLightColor,
+                                                    ),
                                                   ),
-                                                  value:
-                                                  labStatusValue,
-                                                  isExpanded: true,
-                                                  iconSize: 30,
-                                                  icon: const Icon(
-                                                    Icons
-                                                        .keyboard_arrow_down_rounded,
-                                                    color:
-                                                    greyDarkColor,
-                                                  ),
-                                                  items:
-                                                  statusValues.map(
-                                                      buildStatusItem)
-                                                      .toList(),
-                                                  onChanged:
-                                                      (value) {
-                                                    if (value!.isEmpty == false) {
-                                                      setState(() {
-                                                        labStatusValue = value;
-                                                      },);
-                                                    }
-                                                    print(labStatusValue);
-                                                    AppCubit.get(context).getLabReservations(status: labStatusValue);
-                                                  },
-                                                  onSaved: (v) {
-                                                    FocusScope.of(
-                                                        context)
-                                                        .unfocus();
-                                                  },
                                                 ),
+                                                onFieldSubmitted: (String v) {
+                                                  AppCubit.get(context)
+                                                      .getLabReservations(
+                                                          search: v,
+                                                          status:
+                                                              labStatusValue)
+                                                      .then((value) {
+                                                    Navigator.pop(context);
+                                                  });
+                                                },
+                                                // onChanged: (String v){
+                                                //   print(v);
+                                                //   AppCubit.get(context).getLabReservations(search: v,status: labStatusValue).then((value){
+                                                //     Navigator.pop(context);
+                                                //   });
+                                                // },
+                                                style: TextStyle(
+                                                  color: mainLightColor,
+                                                  fontSize: 18,
+                                                  fontFamily: fontFamily,
+                                                ),
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                            verticalSmallSpace,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                              child: GeneralUnfilledButton(
+                                                width: double.infinity,
+                                                height: 40.0,
+                                                title:
+                                                    LocaleKeys.txtTestDate.tr(),
+                                                onPress: () {
+                                                  showCustomBottomSheet(
+                                                    context,
+                                                    bottomSheetContent:
+                                                        const SyncfusionPatientLabReservationsDatePicker(),
+                                                    bottomSheetHeight: 0.65,
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            verticalSmallSpace,
+                                            SizedBox(
+                                              height: 60.0,
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.location_on_rounded,
+                                                    color: greyDarkColor,
+                                                  ),
+                                                  horizontalMiniSpace,
+                                                  Text(
+                                                    '${LocaleKeys.status.tr()} : ',
+                                                    style: titleSmallStyle,
+                                                  ),
+                                                  Expanded(
+                                                    child:
+                                                        DropdownButtonHideUnderline(
+                                                      child:
+                                                          DropdownButtonFormField<
+                                                              String>(
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          fillColor:
+                                                              greyExtraLightColor,
+                                                          filled: true,
+                                                          errorStyle: TextStyle(
+                                                              color: Color(
+                                                                  0xFF4F4F4F)),
+                                                          border:
+                                                              InputBorder.none,
+                                                        ),
+                                                        value: labStatusValue,
+                                                        isExpanded: true,
+                                                        iconSize: 30,
+                                                        icon: const Icon(
+                                                          Icons
+                                                              .keyboard_arrow_down_rounded,
+                                                          color: greyDarkColor,
+                                                        ),
+                                                        items: statusValues
+                                                            .map(
+                                                                buildStatusItem)
+                                                            .toList(),
+                                                        onChanged: (value) {
+                                                          if (value!.isEmpty ==
+                                                              false) {
+                                                            setState(
+                                                              () {
+                                                                labStatusValue =
+                                                                    value;
+                                                              },
+                                                            );
+                                                          }
+                                                          print(labStatusValue);
+                                                          AppCubit.get(context)
+                                                              .getLabReservations(
+                                                                  status:
+                                                                      labStatusValue)
+                                                              .then((value) {
+                                                            Navigator.pop(
+                                                                context);
+                                                          });
+                                                        },
+                                                        onSaved: (v) {
+                                                          FocusScope.of(context)
+                                                              .unfocus();
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
                               ConditionalBuilder(
-                                condition: state is! AppGetLabReservationsLoadingState,
+                                condition:
+                                    state is! AppGetLabReservationsLoadingState,
                                 builder: (context) => ConditionalBuilder(
-                                  condition: AppCubit.get(context).labReservationsModel?.data?.isEmpty == false,
+                                  condition: AppCubit.get(context)
+                                          .labReservationsModel
+                                          ?.data
+                                          ?.isEmpty ==
+                                      false,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
-                                      physics:
-                                      const BouncingScrollPhysics(),
+                                      physics: const BouncingScrollPhysics(),
                                       scrollDirection: Axis.vertical,
-                                      itemBuilder: (context, index) =>
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                FadeRoute(
-                                                  page:
+                                      itemBuilder: (context, index) => InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            FadeRoute(
+                                              page:
                                                   ReservationDetailsUpcomingScreen(
-                                                    topIndex: index,
-                                                    labReservationsModel:
+                                                topIndex: index,
+                                                labReservationsModel:
                                                     AppCubit.get(context)
                                                         .labReservationsModel,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: ReservedCard(
-                                              labReservationsDataModel:
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: ReservedCard(
+                                          labReservationsDataModel:
                                               AppCubit.get(context)
                                                   .labReservationsModel!
                                                   .data![index],
-                                            ),
-                                          ),
-                                      separatorBuilder:
-                                          (context, index) =>
-                                      verticalMiniSpace,
+                                        ),
+                                      ),
+                                      separatorBuilder: (context, index) =>
+                                          verticalMiniSpace,
                                       itemCount: AppCubit.get(context)
-                                          .labReservationsModel
-                                          ?.data
-                                          ?.length ??
+                                              .labReservationsModel
+                                              ?.data
+                                              ?.length ??
                                           0,
                                     ),
                                   ),
                                   fallback: (context) => ScreenHolder(
-                                      msg: '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
+                                      msg:
+                                          '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
                                 ),
                                 fallback: (context) => const Center(
                                   child: CircularProgressIndicator.adaptive(),
@@ -321,110 +421,295 @@ class _ReservedScreenState extends State<ReservedScreen> {
                           ),
                           // second tab bar view widget
                           ConditionalBuilder(
-                            condition: AppCubit.get(context)
-                                    .homeReservationsModel
-                                    ?.data
-                                    ?.isEmpty ==
-                                false,
+                            condition:
+                                state is! AppGetHomeReservationsLoadingState,
                             builder: (context) => Column(
                               children: [
                                 verticalSmallSpace,
-                                SizedBox(
-                                  height: 60,
-                                  width: double.infinity,
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        child: GeneralUnfilledButton(
-                                          width: 100,
-                                          height: 40.0,
-                                          title: LocaleKeys.txtTestDate.tr(),
-                                          onPress: () {
-                                            showCustomBottomSheet(
-                                              context,
-                                              bottomSheetContent:
-                                              const SyncfusionPatientHomeReservationsDatePicker(),
-                                              bottomSheetHeight: 0.65,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: SizedBox(
-                                          height: 60.0,
-                                          child: Row(
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.filter_list,
+                                    color: mainColor,
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: SizedBox(
+                                          height: 200,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-                                              const Icon(
-                                                Icons
-                                                    .location_on_rounded,
-                                                color: greyDarkColor,
-                                              ),
-                                              horizontalMiniSpace,
-                                              Text(
-                                                '${LocaleKeys.status.tr()} : ',
-                                                style:
-                                                titleSmallStyle,
-                                              ),
-                                              Expanded(
-                                                child: DropdownButtonHideUnderline(
-                                                  child:
-                                                  DropdownButtonFormField<
-                                                      String>(
-                                                    decoration:
-                                                    const InputDecoration(
-                                                      fillColor:
-                                                      greyExtraLightColor,
-                                                      filled: true,
-                                                      errorStyle: TextStyle(
-                                                          color: Color(
-                                                              0xFF4F4F4F)),
-                                                      border:
-                                                      InputBorder
-                                                          .none,
+                                              Container(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                height: 60,
+                                                child: TextFormField(
+                                                  controller:
+                                                      homeSearchController,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: const Icon(
+                                                        Icons.search),
+                                                    label: Text(LocaleKeys
+                                                        .TxtFieldSearch.tr()),
+                                                    hintStyle: const TextStyle(
+                                                        color: greyDarkColor,
+                                                        fontSize: 14),
+                                                    labelStyle: const TextStyle(
+                                                        color: greyDarkColor,
+                                                        fontSize: 14),
+                                                    fillColor: Colors.white,
+                                                    filled: true,
+                                                    errorStyle: const TextStyle(
+                                                        color: redColor),
+                                                    contentPadding:
+                                                        const EdgeInsetsDirectional
+                                                                .only(
+                                                            start: 20.0,
+                                                            end: 10.0,
+                                                            bottom: 0.0,
+                                                            top: 0.0),
+                                                    border:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        width: 1,
+                                                        color:
+                                                            greyExtraLightColor,
+                                                      ),
                                                     ),
-                                                    value:
-                                                    homeStatusValue,
-                                                    isExpanded: true,
-                                                    iconSize: 30,
-                                                    icon: const Icon(
-                                                      Icons
-                                                          .keyboard_arrow_down_rounded,
-                                                      color:
-                                                      greyDarkColor,
-                                                    ),
-                                                    items:
-                                                    statusValues.map(
-                                                        buildStatusItem)
-                                                        .toList(),
-                                                    onChanged:
-                                                        (value) {
-                                                      if (value!.isEmpty == false) {
-                                                        setState(() {
-                                                          homeStatusValue = value;
-                                                        },);
-                                                      }
-                                                      print(homeStatusValue);
-                                                      AppCubit.get(context).getHomeReservations(status: homeStatusValue);
-                                                    },
-                                                    onSaved: (v) {
-                                                      FocusScope.of(
-                                                          context)
-                                                          .unfocus();
-                                                    },
                                                   ),
+                                                  onFieldSubmitted: (String v) {
+                                                    AppCubit.get(context)
+                                                        .getHomeReservations(
+                                                            search: v,
+                                                            status:
+                                                                homeStatusValue)
+                                                        .then((value) {
+                                                      Navigator.pop(context);
+                                                    });
+                                                  },
+                                                  // onChanged: (String v){
+                                                  //   print(v);
+                                                  //   AppCubit.get(context).getLabReservations(search: v,status: labStatusValue).then((value){
+                                                  //     Navigator.pop(context);
+                                                  //   });
+                                                  // },
+                                                  style: TextStyle(
+                                                    color: mainLightColor,
+                                                    fontSize: 18,
+                                                    fontFamily: fontFamily,
+                                                  ),
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              verticalSmallSpace,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: GeneralUnfilledButton(
+                                                  width: double.infinity,
+                                                  height: 40.0,
+                                                  title: LocaleKeys.txtTestDate
+                                                      .tr(),
+                                                  onPress: () {
+                                                    showCustomBottomSheet(
+                                                      context,
+                                                      bottomSheetContent:
+                                                          const SyncfusionPatientHomeReservationsDatePicker(),
+                                                      bottomSheetHeight: 0.65,
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              verticalSmallSpace,
+                                              SizedBox(
+                                                height: 60.0,
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.location_on_rounded,
+                                                      color: greyDarkColor,
+                                                    ),
+                                                    horizontalMiniSpace,
+                                                    Text(
+                                                      '${LocaleKeys.status.tr()} : ',
+                                                      style: titleSmallStyle,
+                                                    ),
+                                                    Expanded(
+                                                      child:
+                                                          DropdownButtonHideUnderline(
+                                                        child:
+                                                            DropdownButtonFormField<
+                                                                String>(
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            fillColor:
+                                                                greyExtraLightColor,
+                                                            filled: true,
+                                                            errorStyle: TextStyle(
+                                                                color: Color(
+                                                                    0xFF4F4F4F)),
+                                                            border: InputBorder
+                                                                .none,
+                                                          ),
+                                                          value:
+                                                              homeStatusValue,
+                                                          isExpanded: true,
+                                                          iconSize: 30,
+                                                          icon: const Icon(
+                                                            Icons
+                                                                .keyboard_arrow_down_rounded,
+                                                            color:
+                                                                greyDarkColor,
+                                                          ),
+                                                          items: statusValues
+                                                              .map(
+                                                                  buildStatusItem)
+                                                              .toList(),
+                                                          onChanged: (value) {
+                                                            if (value!
+                                                                    .isEmpty ==
+                                                                false) {
+                                                              setState(
+                                                                () {
+                                                                  homeStatusValue =
+                                                                      value;
+                                                                },
+                                                              );
+                                                            }
+                                                            print(
+                                                                homeStatusValue);
+                                                            AppCubit.get(
+                                                                    context)
+                                                                .getHomeReservations(
+                                                                    status:
+                                                                        homeStatusValue)
+                                                                .then((value) {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            });
+                                                          },
+                                                          onSaved: (v) {
+                                                            FocusScope.of(
+                                                                    context)
+                                                                .unfocus();
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 ),
+                                // SizedBox(
+                                //   height: 60,
+                                //   width: double.infinity,
+                                //   child: Row(
+                                //     children: [
+                                //       Padding(
+                                //         padding: const EdgeInsets.symmetric(
+                                //             horizontal: 20),
+                                //         child: GeneralUnfilledButton(
+                                //           width: 100,
+                                //           height: 40.0,
+                                //           title: LocaleKeys.txtTestDate.tr(),
+                                //           onPress: () {
+                                //             showCustomBottomSheet(
+                                //               context,
+                                //               bottomSheetContent:
+                                //                   const SyncfusionPatientHomeReservationsDatePicker(),
+                                //               bottomSheetHeight: 0.65,
+                                //             );
+                                //           },
+                                //         ),
+                                //       ),
+                                //       Expanded(
+                                //         child: SizedBox(
+                                //           height: 60.0,
+                                //           child: Row(
+                                //             children: [
+                                //               const Icon(
+                                //                 Icons.location_on_rounded,
+                                //                 color: greyDarkColor,
+                                //               ),
+                                //               horizontalMiniSpace,
+                                //               Text(
+                                //                 '${LocaleKeys.status.tr()} : ',
+                                //                 style: titleSmallStyle,
+                                //               ),
+                                //               Expanded(
+                                //                 child:
+                                //                     DropdownButtonHideUnderline(
+                                //                   child:
+                                //                       DropdownButtonFormField<
+                                //                           String>(
+                                //                     decoration:
+                                //                         const InputDecoration(
+                                //                       fillColor:
+                                //                           greyExtraLightColor,
+                                //                       filled: true,
+                                //                       errorStyle: TextStyle(
+                                //                           color: Color(
+                                //                               0xFF4F4F4F)),
+                                //                       border: InputBorder.none,
+                                //                     ),
+                                //                     value: homeStatusValue,
+                                //                     isExpanded: true,
+                                //                     iconSize: 30,
+                                //                     icon: const Icon(
+                                //                       Icons
+                                //                           .keyboard_arrow_down_rounded,
+                                //                       color: greyDarkColor,
+                                //                     ),
+                                //                     items: statusValues
+                                //                         .map(buildStatusItem)
+                                //                         .toList(),
+                                //                     onChanged: (value) {
+                                //                       if (value!.isEmpty ==
+                                //                           false) {
+                                //                         setState(
+                                //                           () {
+                                //                             homeStatusValue =
+                                //                                 value;
+                                //                           },
+                                //                         );
+                                //                       }
+                                //                       print(homeStatusValue);
+                                //                       AppCubit.get(context)
+                                //                           .getHomeReservations(
+                                //                               status:
+                                //                                   homeStatusValue);
+                                //                     },
+                                //                     onSaved: (v) {
+                                //                       FocusScope.of(context)
+                                //                           .unfocus();
+                                //                     },
+                                //                   ),
+                                //                 ),
+                                //               ),
+                                //             ],
+                                //           ),
+                                //         ),
+                                //       )
+                                //     ],
+                                //   ),
+                                // ),
                                 ConditionalBuilder(
-                                  condition: state
-                                      is! AppGetHomeReservationsLoadingState,
+                                  condition: AppCubit.get(context)
+                                          .homeReservationsModel
+                                          ?.data
+                                          ?.isEmpty ==
+                                      false,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -464,15 +749,14 @@ class _ReservedScreenState extends State<ReservedScreen> {
                                           0,
                                     ),
                                   ),
-                                  fallback: (context) => const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive()),
+                                  fallback: (context) => ScreenHolder(
+                                      msg:
+                                          '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
                                 ),
                               ],
                             ),
-                            fallback: (context) => ScreenHolder(
-                                msg:
-                                    '${LocaleKeys.txtReservations.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
+                            fallback: (context) => const Center(
+                                child: CircularProgressIndicator.adaptive()),
                           ),
                         ],
                       ),

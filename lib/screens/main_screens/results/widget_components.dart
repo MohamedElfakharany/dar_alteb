@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:dar_elteb/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:dar_elteb/models/patient_models/home_appointments_model/home_result_model.dart';
 import 'package:dar_elteb/models/patient_models/lab_appointments_model/lab_result_model.dart';
@@ -65,7 +67,7 @@ class ResultsScreenCard extends StatelessWidget {
                             .ellipsis,
                       ),
                       Text(
-                        '${labResultsModel?.data?[index].countResult ?? homeResultsModel?.data?[index].countResult}',
+                        '${LocaleKeys.txtCount.tr()} ${labResultsModel?.data?[index].countResult ?? homeResultsModel?.data?[index].countResult}',
                         style:
                         subTitleSmallStyle2,
                         maxLines: 1,

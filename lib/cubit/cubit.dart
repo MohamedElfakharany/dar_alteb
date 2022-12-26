@@ -1967,6 +1967,7 @@ class AppCubit extends Cubit<AppStates> {
   Future getLabReservations({
     String? status,
     String? date,
+    String? search,
   }) async {
     emit(AppGetLabReservationsLoadingState());
     var headers = {
@@ -1977,30 +1978,66 @@ class AppCubit extends Cubit<AppStates> {
     String url;
     if (status == null || status == '') {
       if (date == null) {
-        url = getLabReservationsURL;
+        if (search == null) {
+          url = getLabReservationsURL;
+        } else {
+          url = '$getLabReservationsURL?search=$search';
+        }
       } else {
-        url = '$getLabReservationsURL?date=$date';
+        if (search == null) {
+          url = '$getLabReservationsURL?date=$date';
+        } else {
+          url = '$getLabReservationsURL?date=$date&search=$search';
+        }
       }
     } else {
       if (date == null) {
-        if (status == LocaleKeys.Canceled.tr()) {
-          url = '$getLabReservationsURL?status=Canceled';
-        } else if (status == LocaleKeys.Pending.tr()) {
-          url = '$getLabReservationsURL?status=Pending';
-        } else if (status == LocaleKeys.Accepted.tr()) {
-          url = '$getLabReservationsURL?status=Accepted';
+        if (search == null) {
+          if (status == LocaleKeys.Canceled.tr()) {
+            url = '$getLabReservationsURL?status=Canceled';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url = '$getLabReservationsURL?status=Pending';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url = '$getLabReservationsURL?status=Accepted';
+          } else {
+            url = '$getLabReservationsURL?status=Finished';
+          }
         } else {
-          url = '$getLabReservationsURL?status=Finished';
+          if (status == LocaleKeys.Canceled.tr()) {
+            url = '$getLabReservationsURL?status=Canceled&search=$search';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url = '$getLabReservationsURL?status=Pending&search=$search';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url = '$getLabReservationsURL?status=Accepted&search=$search';
+          } else {
+            url = '$getLabReservationsURL?status=Finished&search=$search';
+          }
         }
       } else {
-        if (status == LocaleKeys.Canceled.tr()) {
-          url = '$getLabReservationsURL?date=$date&status=Canceled';
-        } else if (status == LocaleKeys.Pending.tr()) {
-          url = '$getLabReservationsURL?date=$date&status=Pending';
-        } else if (status == LocaleKeys.Accepted.tr()) {
-          url = '$getLabReservationsURL?date=$date&status=Accepted';
+        if (search == null) {
+          if (status == LocaleKeys.Canceled.tr()) {
+            url = '$getLabReservationsURL?date=$date&status=Canceled';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url = '$getLabReservationsURL?date=$date&status=Pending';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url = '$getLabReservationsURL?date=$date&status=Accepted';
+          } else {
+            url = '$getLabReservationsURL?date=$date&status=Finished';
+          }
         } else {
-          url = '$getLabReservationsURL?date=$date&status=Finished';
+          if (status == LocaleKeys.Canceled.tr()) {
+            url =
+                '$getLabReservationsURL?date=$date&status=Canceled&search=$search';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url =
+                '$getLabReservationsURL?date=$date&status=Pending&search=$search';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url =
+                '$getLabReservationsURL?date=$date&status=Accepted&search=$search';
+          } else {
+            url =
+                '$getLabReservationsURL?date=$date&status=Finished&search=$search';
+          }
         }
       }
     }
@@ -2090,6 +2127,7 @@ class AppCubit extends Cubit<AppStates> {
   Future getHomeReservations({
     String? status,
     String? date,
+    String? search,
   }) async {
     emit(AppGetHomeReservationsLoadingState());
     var headers = {
@@ -2100,30 +2138,66 @@ class AppCubit extends Cubit<AppStates> {
     String url;
     if (status == null || status == '') {
       if (date == null) {
-        url = getHomeReservationsURL;
+        if (search == null) {
+          url = getHomeReservationsURL;
+        } else {
+          url = '$getHomeReservationsURL?search=$search';
+        }
       } else {
-        url = '$getHomeReservationsURL?date=$date';
+        if (search == null) {
+          url = '$getHomeReservationsURL?date=$date';
+        } else {
+          url = '$getHomeReservationsURL?date=$date&search=$search';
+        }
       }
     } else {
       if (date == null) {
-        if (status == LocaleKeys.Canceled.tr()) {
-          url = '$getHomeReservationsURL?status=Canceled';
-        } else if (status == LocaleKeys.Pending.tr()) {
-          url = '$getHomeReservationsURL?status=Pending';
-        } else if (status == LocaleKeys.Accepted.tr()) {
-          url = '$getHomeReservationsURL?status=Accepted';
+        if (search == null) {
+          if (status == LocaleKeys.Canceled.tr()) {
+            url = '$getHomeReservationsURL?status=Canceled';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url = '$getHomeReservationsURL?status=Pending';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url = '$getHomeReservationsURL?status=Accepted';
+          } else {
+            url = '$getHomeReservationsURL?status=Finished';
+          }
         } else {
-          url = '$getHomeReservationsURL?status=Finished';
+          if (status == LocaleKeys.Canceled.tr()) {
+            url = '$getHomeReservationsURL?status=Canceled&search=$search';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url = '$getHomeReservationsURL?status=Pending&search=$search';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url = '$getHomeReservationsURL?status=Accepted&search=$search';
+          } else {
+            url = '$getHomeReservationsURL?status=Finished&search=$search';
+          }
         }
       } else {
-        if (status == LocaleKeys.Canceled.tr()) {
-          url = '$getHomeReservationsURL?date=$date&status=Canceled';
-        } else if (status == LocaleKeys.Pending.tr()) {
-          url = '$getHomeReservationsURL?date=$date&status=Pending';
-        } else if (status == LocaleKeys.Accepted.tr()) {
-          url = '$getHomeReservationsURL?date=$date&status=Accepted';
+        if (search == null) {
+          if (status == LocaleKeys.Canceled.tr()) {
+            url = '$getHomeReservationsURL?date=$date&status=Canceled';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url = '$getHomeReservationsURL?date=$date&status=Pending';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url = '$getHomeReservationsURL?date=$date&status=Accepted';
+          } else {
+            url = '$getHomeReservationsURL?date=$date&status=Finished';
+          }
         } else {
-          url = '$getHomeReservationsURL?date=$date&status=Finished';
+          if (status == LocaleKeys.Canceled.tr()) {
+            url =
+                '$getHomeReservationsURL?date=$date&status=Canceled&search=$search';
+          } else if (status == LocaleKeys.Pending.tr()) {
+            url =
+                '$getHomeReservationsURL?date=$date&status=Pending&search=$search';
+          } else if (status == LocaleKeys.Accepted.tr()) {
+            url =
+                '$getHomeReservationsURL?date=$date&status=Accepted&search=$search';
+          } else {
+            url =
+                '$getHomeReservationsURL?date=$date&status=Finished&search=$search';
+          }
         }
       }
     }
@@ -2153,6 +2227,8 @@ class AppCubit extends Cubit<AppStates> {
 
   Future getLabResults({
     int? resultId,
+    String? date,
+    String? search,
   }) async {
     emit(AppGetLabResultsLoadingState());
     var headers = {
@@ -2160,17 +2236,44 @@ class AppCubit extends Cubit<AppStates> {
       'Accept-Language': sharedLanguage,
       'Authorization': 'Bearer $token',
     };
-    String getLabResultUrl;
-    if (resultId != null) {
-      getLabResultUrl = '$getLabResultsURL?resultId=$resultId';
+
+    String url;
+    if (resultId == null || resultId == '') {
+      if (date == null) {
+        if (search == null) {
+          url = getLabResultsURL;
+        } else {
+          url = '$getLabResultsURL?search=$search';
+        }
+      } else {
+        if (search == null) {
+          url = '$getLabResultsURL?date=$date';
+        } else {
+          url = '$getLabResultsURL?date=$date&search=$search';
+        }
+      }
     } else {
-      getLabResultUrl = getLabResultsURL;
+      if (date == null) {
+        if (search == null) {
+          url = '$getLabResultsURL?resultId=$resultId';
+        } else {
+          url = '$getLabResultsURL?resultId=$resultId&search=$search';
+        }
+      } else {
+        if (search == null) {
+          url = '$getLabResultsURL?date=$date&resultId=$resultId';
+        } else {
+          url =
+              '$getLabResultsURL?date=$date&resultId=$resultId&search=$search';
+        }
+      }
     }
+    print(url);
 
     try {
       Dio dio = Dio();
       var response = await dio.get(
-        getLabResultUrl,
+        url,
         options: Options(
           followRedirects: false,
           responseType: ResponseType.bytes,
@@ -2191,6 +2294,8 @@ class AppCubit extends Cubit<AppStates> {
 
   Future getHomeResults({
     int? resultId,
+    String? date,
+    String? search,
   }) async {
     emit(AppGetHomeResultsLoadingState());
     var headers = {
@@ -2198,16 +2303,44 @@ class AppCubit extends Cubit<AppStates> {
       'Accept-Language': sharedLanguage,
       'Authorization': 'Bearer $token',
     };
-    String getHomeResultUrl;
-    if (resultId != null) {
-      getHomeResultUrl = '$getHomeResultsURL?resultId=$resultId';
+    String url;
+    if (resultId == null || resultId == '') {
+      if (date == null) {
+        if (search == null) {
+          url = getHomeResultsURL;
+        } else {
+          url = '$getHomeResultsURL?search=$search';
+        }
+      } else {
+        if (search == null) {
+          url = '$getHomeResultsURL?date=$date';
+        } else {
+          url = '$getHomeResultsURL?date=$date&search=$search';
+        }
+      }
     } else {
-      getHomeResultUrl = getHomeResultsURL;
+      if (date == null) {
+        if (search == null) {
+          url = '$getHomeResultsURL?resultId=$resultId';
+        } else {
+          url = '$getHomeResultsURL?resultId=$resultId&search=$search';
+        }
+      } else {
+        if (search == null) {
+          url = '$getHomeResultsURL?date=$date&resultId=$resultId';
+        } else {
+          url =
+          '$getHomeResultsURL?date=$date&resultId=$resultId&search=$search';
+        }
+      }
     }
+    print(url);
+
+
     try {
       Dio dio = Dio();
       var response = await dio.get(
-        getHomeResultUrl,
+        url,
         options: Options(
           followRedirects: false,
           responseType: ResponseType.bytes,

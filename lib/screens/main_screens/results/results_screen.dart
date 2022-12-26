@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_elteb/models/model_test.dart';
 import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ class ResultsScreen extends StatefulWidget {
 }
 
 class _ResultsScreenState extends State<ResultsScreen> {
-  var searchController = TextEditingController();
+  var labSearchController = TextEditingController();
+  var homeSearchController = TextEditingController();
 
   @override
   void initState() {
@@ -40,7 +42,16 @@ class _ResultsScreenState extends State<ResultsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AppGetLabResultsSuccessState){
+          labSearchController.text = '';
+          homeSearchController.text = '';
+        }
+        if (state is AppGetHomeResultsSuccessState){
+          labSearchController.text = '';
+          homeSearchController.text = '';
+        }
+      },
       builder: (context, state) {
         bgColorTest = index == 0 ? mainLightColor : whiteColor;
         bgColorOffer = index == 1 ? mainLightColor : whiteColor;
@@ -165,18 +176,121 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         children: [
                           // first tab bar view widget
                           ConditionalBuilder(
-                            condition: AppCubit.get(context)
-                                    .labResultsModel
-                                    ?.data
-                                    ?.isEmpty ==
-                                false,
+                            condition: state is! AppGetLabResultsLoadingState ||
+                                state is! AppGetHomeResultsLoadingState,
                             builder: (context) => Column(
                               children: [
-                                verticalSmallSpace,
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.filter_list,
+                                    color: mainColor,
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: SizedBox(
+                                          height: 125,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                height: 60,
+                                                child: TextFormField(
+                                                  controller:
+                                                      labSearchController,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: const Icon(
+                                                        Icons.search),
+                                                    label: Text(LocaleKeys
+                                                        .TxtFieldSearch.tr()),
+                                                    hintStyle: const TextStyle(
+                                                        color: greyDarkColor,
+                                                        fontSize: 14),
+                                                    labelStyle: const TextStyle(
+                                                        color: greyDarkColor,
+                                                        fontSize: 14),
+                                                    fillColor: Colors.white,
+                                                    filled: true,
+                                                    errorStyle: const TextStyle(
+                                                        color: redColor),
+                                                    contentPadding:
+                                                        const EdgeInsetsDirectional
+                                                                .only(
+                                                            start: 20.0,
+                                                            end: 10.0,
+                                                            bottom: 0.0,
+                                                            top: 0.0),
+                                                    border:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        width: 1,
+                                                        color:
+                                                            greyExtraLightColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onFieldSubmitted: (String v) {
+                                                    AppCubit.get(context)
+                                                        .getLabResults(
+                                                      search: v,
+                                                    )
+                                                        .then((value) {
+                                                      Navigator.pop(context);
+                                                    });
+                                                  },
+                                                  // onChanged: (String v){
+                                                  //   print(v);
+                                                  //   AppCubit.get(context).getLabResults(search: v,status: labStatusValue).then((value){
+                                                  //     Navigator.pop(context);
+                                                  //   });
+                                                  // },
+                                                  style: TextStyle(
+                                                    color: mainLightColor,
+                                                    fontSize: 18,
+                                                    fontFamily: fontFamily,
+                                                  ),
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              verticalSmallSpace,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: GeneralUnfilledButton(
+                                                  width: double.infinity,
+                                                  height: 40.0,
+                                                  title: LocaleKeys.txtTestDate
+                                                      .tr(),
+                                                  onPress: () {
+                                                    showCustomBottomSheet(
+                                                      context,
+                                                      bottomSheetContent:
+                                                          const SyncfusionPatientLabResultsDatePicker(),
+                                                      bottomSheetHeight: 0.65,
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                                 ConditionalBuilder(
-                                  condition: state
-                                          is! AppGetLabResultsLoadingState ||
-                                      state is! AppGetHomeResultsLoadingState,
+                                  condition: AppCubit.get(context)
+                                          .labResultsModel
+                                          ?.data
+                                          ?.isEmpty ==
+                                      false,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -211,30 +325,133 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                           0,
                                     ),
                                   ),
-                                  fallback: (context) => const Center(
-                                    child: CircularProgressIndicator.adaptive(),
-                                  ),
+                                  fallback: (context) => ScreenHolder(
+                                      msg:
+                                          '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
                                 ),
                               ],
                             ),
-                            fallback: (context) => ScreenHolder(
-                                msg:
-                                    '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtLab.tr()}'),
+                            fallback: (context) => const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
                           ),
                           // second tab bar view widget
                           ConditionalBuilder(
-                            condition: AppCubit.get(context)
-                                    .homeResultsModel
-                                    ?.data
-                                    ?.isEmpty ==
-                                false,
+                            condition: state is! AppGetLabResultsLoadingState ||
+                                state is! AppGetHomeResultsLoadingState,
                             builder: (context) => Column(
                               children: [
-                                verticalSmallSpace,
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.filter_list,
+                                    color: mainColor,
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: SizedBox(
+                                          height: 125,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                height: 60,
+                                                child: TextFormField(
+                                                  controller:
+                                                      homeSearchController,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: const Icon(
+                                                        Icons.search),
+                                                    label: Text(LocaleKeys
+                                                        .TxtFieldSearch.tr()),
+                                                    hintStyle: const TextStyle(
+                                                        color: greyDarkColor,
+                                                        fontSize: 14),
+                                                    labelStyle: const TextStyle(
+                                                        color: greyDarkColor,
+                                                        fontSize: 14),
+                                                    fillColor: Colors.white,
+                                                    filled: true,
+                                                    errorStyle: const TextStyle(
+                                                        color: redColor),
+                                                    contentPadding:
+                                                        const EdgeInsetsDirectional
+                                                                .only(
+                                                            start: 20.0,
+                                                            end: 10.0,
+                                                            bottom: 0.0,
+                                                            top: 0.0),
+                                                    border:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        width: 1,
+                                                        color:
+                                                            greyExtraLightColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onFieldSubmitted: (String v) {
+                                                    AppCubit.get(context)
+                                                        .getHomeResults(
+                                                      search: v,
+                                                    )
+                                                        .then((value) {
+                                                      Navigator.pop(context);
+                                                    });
+                                                  },
+                                                  // onChanged: (String v){
+                                                  //   print(v);
+                                                  //   AppCubit.get(context).getLabResults(search: v,status: labStatusValue).then((value){
+                                                  //     Navigator.pop(context);
+                                                  //   });
+                                                  // },
+                                                  style: TextStyle(
+                                                    color: mainLightColor,
+                                                    fontSize: 18,
+                                                    fontFamily: fontFamily,
+                                                  ),
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              verticalSmallSpace,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: GeneralUnfilledButton(
+                                                  width: double.infinity,
+                                                  height: 40.0,
+                                                  title: LocaleKeys.txtTestDate
+                                                      .tr(),
+                                                  onPress: () {
+                                                    showCustomBottomSheet(
+                                                      context,
+                                                      bottomSheetContent:
+                                                          const SyncfusionPatientHomeResultsDatePicker(),
+                                                      bottomSheetHeight: 0.65,
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                                 ConditionalBuilder(
-                                  condition: state
-                                          is! AppGetLabResultsLoadingState ||
-                                      state is! AppGetHomeResultsLoadingState,
+                                  condition: AppCubit.get(context)
+                                          .homeResultsModel
+                                          ?.data
+                                          ?.isEmpty ==
+                                      false,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -270,15 +487,15 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                           0,
                                     ),
                                   ),
-                                  fallback: (context) => const Center(
-                                    child: CircularProgressIndicator.adaptive(),
-                                  ),
+                                  fallback: (context) => ScreenHolder(
+                                      msg:
+                                          '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
                                 ),
                               ],
                             ),
-                            fallback: (context) => ScreenHolder(
-                                msg:
-                                    '${LocaleKeys.txtNoResults.tr()} ${LocaleKeys.BtnAtHome.tr()}'),
+                            fallback: (context) => const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
                           ),
                         ],
                       ),
