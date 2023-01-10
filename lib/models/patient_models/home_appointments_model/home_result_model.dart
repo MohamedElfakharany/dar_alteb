@@ -1,138 +1,180 @@
-// To parse this JSON data, do
-//
-//     final homeResultsModel = homeResultsModelFromJson(jsondynamic);
-
-import 'dart:convert';
-
-HomeResultsModel homeResultsModelFromJson(dynamic str) => HomeResultsModel.fromJson(json.decode(str));
-
 class HomeResultsModel {
-  HomeResultsModel({
-    this.status,
-    this.message,
-    this.data,
-    this.extra,
-    this.errors,
-  });
-
-  dynamic status;
-  dynamic message;
+  bool? status;
+  String? message;
   List<HomeResultsDataModel>? data;
   Extra? extra;
   Errors? errors;
 
-  factory HomeResultsModel.fromJson(Map<dynamic, dynamic> json) => HomeResultsModel(
-    status: json["status"],
-    message: json["message"],
-    data: List<HomeResultsDataModel>.from(json["data"].map((x) => HomeResultsDataModel.fromJson(x))),
-    extra: Extra.fromJson(json["extra"]),
-    errors: Errors.fromJson(json["errors"]),
-  );
+  HomeResultsModel({this.status, this.message, this.data, this.extra, this.errors});
+
+  HomeResultsModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <HomeResultsDataModel>[];
+      json['data'].forEach((v) { data!.add(new HomeResultsDataModel.fromJson(v)); });
+    }
+    extra = json['extra'] != null ? new Extra.fromJson(json['extra']) : null;
+    errors = json['errors'] != null ? new Errors.fromJson(json['errors']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    if (this.extra != null) {
+      data['extra'] = this.extra!.toJson();
+    }
+    if (this.errors != null) {
+      data['errors'] = this.errors!.toJson();
+    }
+    return data;
+  }
 }
 
 class HomeResultsDataModel {
-  HomeResultsDataModel({
-    this.id,
-    this.countResult,
-    this.date,
-    this.results,
-  });
-
-  dynamic id;
-  dynamic countResult;
-  HomeResultsDataDateModel? date;
+  int? id;
+  int? countResult;
+  Date? date;
   List<HomeResultsDataFileModel>? results;
 
-  factory HomeResultsDataModel.fromJson(Map<dynamic, dynamic> json) => HomeResultsDataModel(
-    id: json["id"],
-    countResult: json["countResult"],
-    date: HomeResultsDataDateModel.fromJson(json["date"]),
-    results: List<HomeResultsDataFileModel>.from(json["results"].map((x) => HomeResultsDataFileModel.fromJson(x))),
-  );
+  HomeResultsDataModel({this.id, this.countResult, this.date, this.results});
+
+  HomeResultsDataModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    countResult = json['countResult'];
+    date = json['date'] != null ? new Date.fromJson(json['date']) : null;
+    if (json['results'] != null) {
+      results = <HomeResultsDataFileModel>[];
+      json['results'].forEach((v) { results!.add(new HomeResultsDataFileModel.fromJson(v)); });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['countResult'] = this.countResult;
+    if (this.date != null) {
+      data['date'] = this.date!.toJson();
+    }
+    if (this.results != null) {
+      data['results'] = this.results!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
-class HomeResultsDataDateModel {
-  HomeResultsDataDateModel({
-    this.date,
-    this.time,
-  });
+class Date {
+  String? date;
+  String? time;
 
-  dynamic date;
-  dynamic time;
+  Date({this.date, this.time});
 
-  factory HomeResultsDataDateModel.fromJson(Map<dynamic, dynamic> json) => HomeResultsDataDateModel(
-    date: json["date"],
-    time: json["time"],
-  );
+  Date.fromJson(Map<String, dynamic> json) {
+    date = json['date'];
+    time = json['time'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['date'] = this.date;
+    data['time'] = this.time;
+    return data;
+  }
 }
 
 class HomeResultsDataFileModel {
-  HomeResultsDataFileModel({
-    this.id,
-    this.file,
-    this.title,
-    this.date,
-    this.notes,
-  });
+  int? id;
+  String? file;
+  String? title;
+  Date? date;
+  String? notes;
+  String? isViewed;
 
-  dynamic id;
-  dynamic file;
-  dynamic title;
-  HomeResultsDataDateModel? date;
-  dynamic notes;
+  HomeResultsDataFileModel({this.id, this.file, this.title, this.date, this.notes, this.isViewed});
 
-  factory HomeResultsDataFileModel.fromJson(Map<dynamic, dynamic> json) => HomeResultsDataFileModel(
-    id: json["id"],
-    file: json["file"],
-    title: json["title"],
-    date: HomeResultsDataDateModel.fromJson(json["date"]),
-    notes: json["notes"],
-  );
-}
+  HomeResultsDataFileModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    file = json['file'];
+    title = json['title'];
+    date = json['date'] != null ? new Date.fromJson(json['date']) : null;
+    notes = json['notes'];
+    isViewed = json['isViewed'];
+  }
 
-class Errors {
-  Errors();
-
-  factory Errors.fromJson(Map<dynamic, dynamic> json) => Errors(
-  );
-
-  Map<dynamic, dynamic> toJson() => {
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['file'] = this.file;
+    data['title'] = this.title;
+    if (this.date != null) {
+      data['date'] = this.date!.toJson();
+    }
+    data['notes'] = this.notes;
+    data['isViewed'] = this.isViewed;
+    return data;
+  }
 }
 
 class Extra {
-  Extra({
-    this.pagination,
-  });
-
   Pagination? pagination;
 
-  factory Extra.fromJson(Map<dynamic, dynamic> json) => Extra(
-    pagination: Pagination.fromJson(json["pagination"]),
-  );
+  Extra({this.pagination});
+
+  Extra.fromJson(Map<String, dynamic> json) {
+    pagination = json['pagination'] != null ? new Pagination.fromJson(json['pagination']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.pagination != null) {
+      data['pagination'] = this.pagination!.toJson();
+    }
+    return data;
+  }
 }
 
 class Pagination {
-  Pagination({
-    this.total,
-    this.count,
-    this.perPage,
-    this.currentPage,
-    this.lastPage,
-  });
+  int? total;
+  int? count;
+  int? perPage;
+  int? currentPage;
+  int? lastPage;
 
-  dynamic total;
-  dynamic count;
-  dynamic perPage;
-  dynamic currentPage;
-  dynamic lastPage;
+  Pagination({this.total, this.count, this.perPage, this.currentPage, this.lastPage});
 
-  factory Pagination.fromJson(Map<dynamic, dynamic> json) => Pagination(
-    total: json["total"],
-    count: json["count"],
-    perPage: json["perPage"],
-    currentPage: json["currentPage"],
-    lastPage: json["lastPage"],
-  );
+  Pagination.fromJson(Map<String, dynamic> json) {
+    total = json['total'];
+    count = json['count'];
+    perPage = json['perPage'];
+    currentPage = json['currentPage'];
+    lastPage = json['lastPage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total'] = this.total;
+    data['count'] = this.count;
+    data['perPage'] = this.perPage;
+    data['currentPage'] = this.currentPage;
+    data['lastPage'] = this.lastPage;
+    return data;
+  }
 }
 
+class Errors {
+
+
+  Errors();
+
+Errors.fromJson(Map<String, dynamic> json) {
+}
+
+Map<String, dynamic> toJson() {
+  final Map<String, dynamic> data = new Map<String, dynamic>();
+  return data;
+}
+}

@@ -77,15 +77,15 @@ class _HomeReservationOverviewScreenState
                 );
               }
             } else {
-                AppCubit.get(context).getInvoices(
-                  cartTestId: AppCubit.get(context).cartModel?.extra?.tests,
-                  cartOfferId: AppCubit.get(context).cartModel?.extra?.offers,
-                  coupon: couponController.text,
-                );
+              AppCubit.get(context).getInvoices(
+                cartTestId: AppCubit.get(context).cartModel?.extra?.tests,
+                cartOfferId: AppCubit.get(context).cartModel?.extra?.offers,
+                coupon: couponController.text,
+              );
             }
-          }else {
+          } else {
             isInvoiceDone = false;
-            showToast(state: ToastState.error,msg: state.successModel.message);
+            showToast(state: ToastState.error, msg: state.successModel.message);
           }
         } else if (state is AppCheckCouponErrorState) {
           isInvoiceDone = false;
@@ -569,20 +569,19 @@ class _HomeReservationOverviewScreenState
                                   if (isInvoiceDone)
                                     Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          LocaleKeys.txtVAT.tr(),
+                                          LocaleKeys.txtDiscount.tr(),
                                           style: titleSmallStyle.copyWith(
                                               color: greyDarkColor,
-                                              fontWeight:
-                                              FontWeight.normal),
+                                              fontWeight: FontWeight.normal),
                                         ),
                                         const Spacer(),
                                         Text(
-                                          '${cartModel?.extra?.tax}',
+                                          '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
                                           textAlign: TextAlign.start,
                                           style: titleSmallStyle,
                                           maxLines: 1,
@@ -590,25 +589,23 @@ class _HomeReservationOverviewScreenState
                                         ),
                                       ],
                                     ),
-                                  if (isInvoiceDone)
-                                    verticalMicroSpace,
+                                  if (isInvoiceDone) verticalMicroSpace,
                                   if (isInvoiceDone)
                                     Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          LocaleKeys.txtDiscount.tr(),
+                                          LocaleKeys.txtVAT.tr(),
                                           style: titleSmallStyle.copyWith(
                                               color: greyDarkColor,
-                                              fontWeight:
-                                              FontWeight.normal),
+                                              fontWeight: FontWeight.normal),
                                         ),
                                         const Spacer(),
                                         Text(
-                                          '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
+                                          '${cartModel?.extra?.tax}',
                                           textAlign: TextAlign.start,
                                           style: titleSmallStyle,
                                           maxLines: 1,
@@ -622,16 +619,15 @@ class _HomeReservationOverviewScreenState
                                   if (isInvoiceDone)
                                     Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
                                           LocaleKeys.txtTotal.tr(),
                                           style: titleSmallStyle.copyWith(
                                               color: greyDarkColor,
-                                              fontWeight:
-                                              FontWeight.bold),
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         const Spacer(),
                                         Text(
@@ -745,6 +741,30 @@ class _HomeReservationOverviewScreenState
                                     ],
                                   ),
                                   verticalMicroSpace,
+                                  if (isInvoiceDone)
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          LocaleKeys.txtDiscount.tr(),
+                                          style: titleSmallStyle.copyWith(
+                                              color: greyDarkColor,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                        const Spacer(),
+                                        Text(
+                                          '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
+                                          textAlign: TextAlign.start,
+                                          style: titleSmallStyle,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  verticalMicroSpace,
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -759,29 +779,6 @@ class _HomeReservationOverviewScreenState
                                       const Spacer(),
                                       Text(
                                         cartModel?.extra?.tax,
-                                        textAlign: TextAlign.start,
-                                        style: titleSmallStyle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                  verticalMicroSpace,
-                                  if (isInvoiceDone)
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        LocaleKeys.txtDiscount.tr(),
-                                        style: titleSmallStyle.copyWith(
-                                            color: greyDarkColor,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
                                         textAlign: TextAlign.start,
                                         style: titleSmallStyle,
                                         maxLines: 1,
@@ -805,21 +802,21 @@ class _HomeReservationOverviewScreenState
                                       ),
                                       const Spacer(),
                                       if (isInvoiceDone == false)
-                                      Text(
-                                        '${cartModel?.extra?.total} ${LocaleKeys.salary.tr()}',
-                                        textAlign: TextAlign.start,
-                                        style: titleSmallStyle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                        Text(
+                                          '${cartModel?.extra?.total} ${LocaleKeys.salary.tr()}',
+                                          textAlign: TextAlign.start,
+                                          style: titleSmallStyle,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       if (isInvoiceDone == true)
-                                      Text(
-                                        '${AppCubit.get(context).invoiceModel?.data?.total} ${LocaleKeys.salary.tr()}',
-                                        textAlign: TextAlign.start,
-                                        style: titleSmallStyle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                        Text(
+                                          '${AppCubit.get(context).invoiceModel?.data?.total} ${LocaleKeys.salary.tr()}',
+                                          textAlign: TextAlign.start,
+                                          style: titleSmallStyle,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                     ],
                                   ),
                                   verticalMicroSpace,

@@ -35,6 +35,7 @@ class _CartScreenState extends State<CartScreen> {
   }
   var formKey = GlobalKey<FormState>();
 
+  String test  = 'test';
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
@@ -75,7 +76,7 @@ class _CartScreenState extends State<CartScreen> {
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) => SwipeActionCell(
-                            key: const ValueKey(1),
+                            key: ValueKey(AppCubit.get(context).cartModel?.data?[index]),
                             trailingActions: [
                               SwipeAction(
                                 nestedAction: SwipeNestedAction(
@@ -128,11 +129,15 @@ class _CartScreenState extends State<CartScreen> {
                                         .data![index]
                                         .cartId,
                                   );
+
+                                  setState((){
+                                    test = 'test ${index + 1}';
+                                  });
                                 },
                               ),
                             ],
                             child: Container(
-                              height: 110.0,
+                              // height: 110.0,
                               width: 110.0,
                               decoration: BoxDecoration(
                                 color: whiteColor,
@@ -144,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                               alignment: AlignmentDirectional.center,
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 4),
+                                  vertical: 15, horizontal: 4),
                               child: Stack(
                                 alignment: AlignmentDirectional.topEnd,
                                 children: [
@@ -198,6 +203,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       verticalMiniSpace,
+                      Text(test),
                       Container(
                         // height: 250.0,
                         width: double.infinity,

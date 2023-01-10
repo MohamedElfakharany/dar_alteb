@@ -27,7 +27,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   var formKey = GlobalKey<FormState>();
 
   @override
-  void initState(){
+  void initState() {
     nationalCodeController.text = '966';
   }
 
@@ -37,13 +37,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       listener: (context, state) async {
         if (state is AppCreateTokenSuccessState) {
           if (state.createTokenModel.status == true) {
+            String mobileText = removeZeroMobile(number: mobileController.text);
             Navigator.push(
               context,
               FadeRoute(
                 page: VerificationResetScreen(
                   phoneCode: nationalCodeController.text,
                   resetToken: state.createTokenModel.data!.resetToken,
-                  mobileNumber: mobileController.text.toString(),
+                  mobileNumber: mobileText,
                 ),
               ),
             );
@@ -61,14 +62,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-        backgroundColor: whiteColor,
-        appBar: GeneralAppBar(
-          title: '',
-        ),
-        body: Form(
-          key: formKey,
-          child: ListView(
-            children: [
+          backgroundColor: whiteColor,
+          appBar: GeneralAppBar(
+            title: '',
+          ),
+          body: Form(
+            key: formKey,
+            child: ListView(
+              children: [
                 Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Padding(
@@ -80,67 +81,73 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                   ),
                 ),
-              verticalMiniSpace,
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    LocaleKeys.resetEnterMobile.tr(),
-                    style: titleSmallStyle.copyWith(
-                        fontWeight: FontWeight.normal, color: greyLightColor),
+                verticalMiniSpace,
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      LocaleKeys.resetEnterMobile.tr(),
+                      style: titleSmallStyle.copyWith(
+                          fontWeight: FontWeight.normal, color: greyLightColor),
+                    ),
                   ),
                 ),
-              ),
-              verticalMiniSpace,
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: GeneralNationalityCode(
-                        canSelect: true,
-                        controller: nationalCodeController,
+                verticalMiniSpace,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: GeneralNationalityCode(
+                          canSelect: true,
+                          controller: nationalCodeController,
+                        ),
                       ),
-                    ),
-                    horizontalMiniSpace,
-                    Expanded(
-                      flex: 3,
-                      child: DefaultFormField(
-                        height: 90,
-                        controller: mobileController,
-                        type: TextInputType.phone,
-                        validatedText: LocaleKeys.txtFieldMobile.tr(),
-                        label: LocaleKeys.txtFieldMobile.tr(),
-                        onTap: () {},
+                      horizontalMiniSpace,
+                      Expanded(
+                        flex: 3,
+                        child: DefaultFormField(
+                          height: 90,
+                          controller: mobileController,
+                          type: TextInputType.phone,
+                          validatedText: LocaleKeys.txtFieldMobile.tr(),
+                          label: LocaleKeys.txtFieldMobile.tr(),
+                          onTap: () {},
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              verticalMediumSpace,
-              ConditionalBuilder(
-                condition: state is! AppCreateTokenLoadingState,
-                builder: (context) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: GeneralButton(
-                    title: LocaleKeys.BtnContinue.tr(),
-                    onPress: () {
-                      if (formKey.currentState!.validate()) {
-                        AppCubit.get(context).createToken(phoneCode: nationalCodeController.text,mobile: mobileController.text);
-                      }
-                    },
+                    ],
                   ),
                 ),
-                fallback: (context) => const Center(
-                  child: CircularProgressIndicator.adaptive(),
+                verticalMediumSpace,
+                ConditionalBuilder(
+                  condition: state is! AppCreateTokenLoadingState,
+                  builder: (context) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: GeneralButton(
+                      title: LocaleKeys.BtnContinue.tr(),
+                      onPress: () {
+
+                        if (formKey.currentState!.validate()) {
+                          String mobileText = removeZeroMobile(number: mobileController.text);
+                          print('mobileText : $mobileText');
+                          AppCubit.get(context).createToken(
+                            phoneCode: nationalCodeController.text,
+                            mobile: mobileText,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  fallback: (context) => const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
+        );
       },
     );
   }

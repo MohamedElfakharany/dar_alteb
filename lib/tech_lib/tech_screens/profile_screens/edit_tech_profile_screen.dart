@@ -50,13 +50,7 @@ class _EditTechProfileScreenState extends State<EditTechProfileScreen> {
               Navigator.pop(context);
             });
           } else {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text(state.successModel.message),
-                  );
-                });
+            showToast(msg: state.successModel.message,state: ToastState.error);
           }
         }
       },
@@ -71,7 +65,7 @@ class _EditTechProfileScreenState extends State<EditTechProfileScreen> {
         }
         userNameController.text = cubit.userResourceModel?.data?.name ?? '';
         idNumberController.text =
-            cubit.userResourceModel?.data?.nationalId.toString() ?? '';
+            cubit.userResourceModel?.data?.nationalId ?? '';
         mobileController.text = cubit.userResourceModel?.data?.phone ?? '';
         nationalCodeController.text =
             cubit.userResourceModel?.data?.phoneCode ?? '';

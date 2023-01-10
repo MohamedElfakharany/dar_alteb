@@ -59,14 +59,6 @@ class _LabReservationOverviewScreenState
   bool isInvoiceDone = false;
 
   @override
-  void initState() {
-    if (widget.testsDataModel == null && widget.offersDataModel == null) {
-      // AppCubit.get(context).getCart();
-      AppCubit.get(context).getInvoices();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
@@ -131,9 +123,8 @@ class _LabReservationOverviewScreenState
         }
       },
       builder: (context, state) {
-        print(
-            'AppCubit.get(context).invoiceModel?.data?.total : ${AppCubit.get(context).invoiceModel?.data?.total}');
         var cartModel = AppCubit.get(context).cartModel;
+        print('cartModel?.extra?.total : ${cartModel?.extra?.total}');
         return ScreenUtilInit(
           builder: (ctx, _) => Scaffold(
             backgroundColor: greyExtraLightColor,
@@ -143,7 +134,8 @@ class _LabReservationOverviewScreenState
               appBarColor: greyExtraLightColor,
             ),
             body: ConditionalBuilder(
-              condition: state is! AppGetCartLoadingState,
+              condition: state is! AppGetCartLoadingState ||
+                  state is AppGetInvoicesLoadingState,
               builder: (context) => Padding(
                 padding: const EdgeInsets.only(
                     right: 20.0, left: 20.0, bottom: 20.0),
@@ -165,6 +157,7 @@ class _LabReservationOverviewScreenState
                         if (widget.testsDataModel != null ||
                             widget.offersDataModel != null)
                           Container(
+                            height: 100,
                             decoration: BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadius.circular(radius),
@@ -613,7 +606,33 @@ class _LabReservationOverviewScreenState
                                           ],
                                         ),
                                         verticalMicroSpace,
-                                        if (isInvoiceDone)
+                                        if (isInvoiceDone == true)
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                LocaleKeys.txtDiscount.tr(),
+                                                style: titleSmallStyle.copyWith(
+                                                    color: greyDarkColor,
+                                                    fontWeight:
+                                                    FontWeight.normal),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        if (isInvoiceDone == true)
+                                          verticalMicroSpace,
+                                        if (isInvoiceDone == true)
                                           Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
@@ -637,35 +656,10 @@ class _LabReservationOverviewScreenState
                                               ),
                                             ],
                                           ),
-                                        if (isInvoiceDone) verticalMicroSpace,
-                                        if (isInvoiceDone)
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                LocaleKeys.txtDiscount.tr(),
-                                                style: titleSmallStyle.copyWith(
-                                                    color: greyDarkColor,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                              const Spacer(),
-                                              Text(
-                                                '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
-                                                textAlign: TextAlign.start,
-                                                style: titleSmallStyle,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
                                         verticalMicroSpace,
                                         const MySeparator(),
                                         verticalMicroSpace,
-                                        if (isInvoiceDone)
+                                        if (isInvoiceDone == true)
                                           Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
@@ -795,6 +789,30 @@ class _LabReservationOverviewScreenState
                                             ),
                                           ],
                                         ),
+                                        if (isInvoiceDone)
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                LocaleKeys.txtDiscount.tr(),
+                                                style: titleSmallStyle.copyWith(
+                                                    color: greyDarkColor,
+                                                    fontWeight:
+                                                    FontWeight.normal),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                '${AppCubit.get(context).invoiceModel?.data?.discount}',
+                                                textAlign: TextAlign.start,
+                                                style: titleSmallStyle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
                                         verticalMicroSpace,
                                         Row(
                                           crossAxisAlignment:
@@ -819,30 +837,6 @@ class _LabReservationOverviewScreenState
                                             ),
                                           ],
                                         ),
-                                        if (isInvoiceDone)
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                LocaleKeys.txtDiscount.tr(),
-                                                style: titleSmallStyle.copyWith(
-                                                    color: greyDarkColor,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                              const Spacer(),
-                                              Text(
-                                                '${AppCubit.get(context).invoiceModel?.data?.discount ?? 0}',
-                                                textAlign: TextAlign.start,
-                                                style: titleSmallStyle,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
                                         verticalMicroSpace,
                                         const MySeparator(),
                                         verticalMicroSpace,
@@ -859,7 +853,7 @@ class _LabReservationOverviewScreenState
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             const Spacer(),
-                                            if (isInvoiceDone)
+                                            if (isInvoiceDone == true)
                                               Text(
                                                 '${AppCubit.get(context).invoiceModel?.data?.total} ${LocaleKeys.salary.tr()}',
                                                 textAlign: TextAlign.start,
@@ -867,7 +861,7 @@ class _LabReservationOverviewScreenState
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                            if (!isInvoiceDone)
+                                            if (isInvoiceDone == false)
                                               Text(
                                                 '${cartModel?.extra?.total} ${LocaleKeys.salary.tr()}',
                                                 textAlign: TextAlign.start,

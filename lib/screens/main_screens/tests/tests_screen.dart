@@ -11,7 +11,6 @@ import 'package:dar_elteb/screens/main_screens/widgets_components/widgets_compon
 import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:dar_elteb/shared/constants/general_constants.dart';
-import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 
 class TestsScreen extends StatefulWidget {
@@ -265,7 +264,7 @@ class _TestsScreenState extends State<TestsScreen> {
                                       ),
                                     ),
                                     separatorBuilder: (context, index) =>
-                                        horizontalMiniSpace,
+                                        verticalMiniSpace,
                                     itemCount: AppCubit.get(context)
                                         .offersModel!
                                         .data!

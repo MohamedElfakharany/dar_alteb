@@ -89,7 +89,7 @@ class _TechRequestsScreenState extends State<TechRequestsScreen> {
                                     ),
                                     horizontalMiniSpace,
                                     Text(
-                                      LocaleKeys.BtnAtLab.tr(),
+                                      LocaleKeys.BtnAtHome.tr(),
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontSize: 14,
@@ -129,7 +129,7 @@ class _TechRequestsScreenState extends State<TechRequestsScreen> {
                                     ),
                                     horizontalMiniSpace,
                                     Text(
-                                      LocaleKeys.BtnAtHome.tr(),
+                                      LocaleKeys.txtHomeVisitAppBar.tr(),
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontSize: 14,

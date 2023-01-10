@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dar_elteb/models/patient_models/profile_models/notifications_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class AppTechCubit extends Cubit<AppTechStates> {
   List<TechReservationsDataModel>? techReservationsCanceledModel = [];
   List<TechReservationsDataModel>? techReservationsFinishedModel = [];
   TechUserRequestModel? techUserRequestModel;
+  NotificationsModel? notificationsModel;
 
   double mLatitude = 0;
   double mLongitude = 0;
@@ -53,6 +55,11 @@ class AppTechCubit extends Cubit<AppTechStates> {
   geo.Placemark? userAddress;
   String? addressLocation;
   Location location = Location();
+
+  String? notification;
+  bool? showBadgeNotification;
+  List<NotificationsDataModel>? notificationUnseen = [];
+  List<int> notificationUnseenCount = [];
 
   Future _getLocation({double? lat, double? long}) async {
     LocationData pos = await location.getLocation();
@@ -131,10 +138,70 @@ class AppTechCubit extends Cubit<AppTechStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
+      // print('responseJson : $responseJson');
       userResourceModel = UserResourceModel.fromJson(responseJson);
       emit(AppTechGetProfileSuccessState(userResourceModel!));
     } catch (error) {
       emit(AppTechGetProfileErrorState(error.toString()));
+    }
+  }
+
+  Future getNotifications() async {
+    try {
+      emit(AppGetNotificationsLoadingState());
+      Dio dio = Dio();
+      var response = await dio.get(
+        getNotificationsURL,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: {
+            'Accept': 'application/json',
+            'Accept-Language': sharedLanguage,
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      notificationsModel = NotificationsModel.fromJson(responseJson);
+      notificationUnseen = notificationsModel?.data;
+      for (var i = 0; i < notificationUnseen!.length; i++) {
+        if (notificationUnseen?[i].isRead.toString() == '0') {
+          notificationUnseenCount.add(notificationUnseen?[i].isRead);
+        }
+      }
+      if (kDebugMode) {
+        // print('notificationUnseenCount : $notificationUnseenCount');
+        // print('notificationJson : $responseJson');
+      }
+
+      if (notificationUnseenCount != 0) {
+        if (notificationUnseenCount.length > 9) {
+          notification = '+9';
+          showBadgeNotification = true;
+        } else if (notificationUnseenCount.length < 9) {
+          if (notificationUnseenCount.length > 0) {
+            notification = notificationUnseenCount.length.toString();
+            showBadgeNotification = true;
+          } else {
+            notification = '';
+            showBadgeNotification = false;
+          }
+        }
+        notificationUnseenCount = [];
+      } else {
+        notification = '';
+        showBadgeNotification = false;
+      }
+      emit(AppGetNotificationsSuccessState(notificationsModel!));
+    } catch (error) {
+      if (kDebugMode) {
+        // print(error);
+      }
+      emit(AppGetNotificationsErrorState(error.toString()));
     }
   }
 
@@ -243,6 +310,7 @@ class AppTechCubit extends Cubit<AppTechStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
+      // print('techRequestsModel : $responseJson');
       techRequestsModel = TechRequestsModel.fromJson(responseJson);
       emit(AppGetTechRequestsSuccessState(techRequestsModel!));
     } catch (error) {
@@ -271,10 +339,12 @@ class AppTechCubit extends Cubit<AppTechStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      print(responseJson);
+      // print('userRequestURL $userRequestURL');
+      // print('techUserRequestModel : $responseJson');
       techUserRequestModel = TechUserRequestModel.fromJson(responseJson);
       emit(AppGetTechUserRequestSuccessState(techUserRequestModel!));
     } catch (error) {
+      // print(error.toString());
       emit(AppGetTechUserRequestErrorState(error.toString()));
     }
   }
@@ -325,7 +395,7 @@ class AppTechCubit extends Cubit<AppTechStates> {
           techReservationsCanceledModel?.add(techReservationsModel!.data![i]);
         }
       }
-      print('AppGetTechReservationsSuccessState : $responseJson');
+      // print('AppGetTechReservationsSuccessState : $responseJson');
       emit(AppGetTechReservationsSuccessState(techReservationsModel!));
     } catch (error) {
       emit(AppGetTechReservationsErrorState(error.toString()));
@@ -526,7 +596,7 @@ class AppTechCubit extends Cubit<AppTechStates> {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e.toString());
+        // print(e.toString());
       }
     }
   }

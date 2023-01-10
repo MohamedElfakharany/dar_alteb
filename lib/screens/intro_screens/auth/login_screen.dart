@@ -72,12 +72,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 verified1: state.userResourceModel.data?.isVerified,
                 type1: state.userResourceModel.data?.type,
               );
+              String mobileText = removeZeroMobile(number: mobileController.text);
               await Navigator.push(
                 context,
                 FadeRoute(
                   page: VerificationScreen(
                     phoneCode: nationalCodeController.text,
-                    mobileNumber: mobileController.text.toString(),
+                    mobileNumber: mobileText,
                   ),
                 ),
               );
@@ -270,9 +271,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         title: LocaleKeys.BtnSignIn.tr(),
                         onPress: () {
                           if (formKey.currentState!.validate()) {
+                            String mobileText = removeZeroMobile(number: mobileController.text);
                             isVisitor = false;
                             cubit.login(
-                              mobile: mobileController.text,
+                              mobile: mobileText,
                               password: passwordController.text,
                               phoneCode: nationalCodeController.text,
                               deviceTokenLogin: deviceToken!,

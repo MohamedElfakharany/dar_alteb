@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -83,8 +84,8 @@ class TechGeneralHomeLayoutAppBar extends StatelessWidget
                 ],
               ),
               actions: [
-                IconButton(
-                  onPressed: () {
+                InkWell(
+                  onTap: () {
                     Navigator.push(
                       context,
                       FadeRoute(
@@ -92,12 +93,25 @@ class TechGeneralHomeLayoutAppBar extends StatelessWidget
                       ),
                     );
                   },
-                  icon: const ImageIcon(
-                    AssetImage('assets/images/notification.png'),
-                    color: mainColor,
+                  child: Badge(
+                    position: BadgePosition.topEnd(top: 0),
+                    alignment: AlignmentDirectional.centerEnd,
+                    animationType: BadgeAnimationType.slide,
+                    badgeContent: Text(
+                      AppTechCubit.get(context).notification ?? '',
+                      style: titleSmallStyle2.copyWith(color: whiteColor),
+                    ),
+                    showBadge:
+                    AppTechCubit.get(context).showBadgeNotification ?? false,
+                    child: const ImageIcon(
+                      AssetImage(
+                        'assets/images/notification.png',
+                      ),
+                      color: mainLightColor,
+                    ),
                   ),
                 ),
-                horizontalMicroSpace
+                horizontalMediumSpace
               ],
             ),
             Padding(
@@ -261,18 +275,17 @@ class TechHomeRequestsCart extends StatelessWidget {
 
 class TechHomeReservationsCart extends StatelessWidget {
   TechHomeReservationsCart(
-      {Key? key, required this.index, this.techReservationsDataModel})
+      {Key? key, required this.index, required this.techReservationsDataModel})
       : super(key: key);
   final int index;
-  List<TechReservationsDataModel>? techReservationsDataModel;
+  final TechReservationsDataModel techReservationsDataModel;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppTechCubit, AppTechStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var techReservations = techReservationsDataModel?[index] ??
-            techReservationsDataModel!.first;
+        var techReservations = techReservationsDataModel;
         Color stateColor;
         if (techReservations.statusEn == 'Pending') {
           stateColor = pendingColor;
@@ -287,9 +300,9 @@ class TechHomeReservationsCart extends StatelessWidget {
         }
         String image;
         if (techReservations.tests != null) {
-          image = techReservations.tests?.first.image;
+          image = techReservations.patient?.profile ?? '';
         } else if (techReservations.offers != null) {
-          image = techReservations.offers?.first.image;
+          image = techReservations.patient?.profile ?? '';
         } else {
           image = imageTest;
         }
@@ -444,7 +457,7 @@ class ReservedAcceptedSubScreen extends StatelessWidget {
               child: TechHomeReservationsCart(
                 index: index,
                 techReservationsDataModel:
-                    AppTechCubit.get(context).techReservationsAcceptedModel!,
+                    AppTechCubit.get(context).techReservationsAcceptedModel![index],
               ),
             ),
             separatorBuilder: (context, index) => verticalMiniSpace,
@@ -482,7 +495,7 @@ class ReservedSamplingSubScreen extends StatelessWidget {
               child: TechHomeReservationsCart(
                 index: index,
                 techReservationsDataModel:
-                    AppTechCubit.get(context).techReservationsSamplingModel!,
+                    AppTechCubit.get(context).techReservationsSamplingModel![index],
               ),
             ),
             separatorBuilder: (context, index) => verticalMiniSpace,
@@ -520,7 +533,7 @@ class ReservedCanceledSubScreen extends StatelessWidget {
               child: TechHomeReservationsCart(
                 index: index,
                 techReservationsDataModel:
-                    AppTechCubit.get(context).techReservationsCanceledModel!,
+                    AppTechCubit.get(context).techReservationsCanceledModel![index],
               ),
             ),
             separatorBuilder: (context, index) => verticalMiniSpace,
@@ -558,7 +571,7 @@ class ReservedFinishingSubScreen extends StatelessWidget {
               child: TechHomeReservationsCart(
                 index: index,
                 techReservationsDataModel:
-                    AppTechCubit.get(context).techReservationsFinishedModel!,
+                    AppTechCubit.get(context).techReservationsFinishedModel![index],
               ),
             ),
             separatorBuilder: (context, index) => verticalMiniSpace,

@@ -1,6 +1,9 @@
 // ignore_for_file: must_be_immutable, unnecessary_import
 
+import 'dart:async';
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_elteb/screens/main_screens/reservations/details_screens/rate_screens/experience_rate_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +21,7 @@ import 'package:dar_elteb/shared/constants/general_constants.dart';
 import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:dar_elteb/translations/locale_keys.g.dart';
 
-class ReservationDetailsUpcomingScreen extends StatelessWidget {
+class ReservationDetailsUpcomingScreen extends StatefulWidget {
   ReservationDetailsUpcomingScreen(
       {Key? key,
       this.labReservationsModel,
@@ -28,6 +31,41 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
   LabReservationsModel? labReservationsModel;
   HomeReservationsModel? homeReservationsModel;
   final int topIndex;
+
+  @override
+  State<ReservationDetailsUpcomingScreen> createState() =>
+      _ReservationDetailsUpcomingScreenState();
+}
+
+class _ReservationDetailsUpcomingScreenState
+    extends State<ReservationDetailsUpcomingScreen> {
+  @override
+  void initState() {
+    bool fromHome;
+    if (widget.labReservationsModel?.data == null){
+      fromHome = true;
+    }else {
+      fromHome = false;
+    }
+    // print('fromHome : $fromHome');
+    Timer(const Duration(seconds: 2), () {
+      if (widget.labReservationsModel?.data?[widget.topIndex].statusEn ==
+              'Sampling' ||
+          widget.homeReservationsModel?.data?[widget.topIndex].statusEn ==
+              'Sampling') {
+        showCustomBottomSheet(
+          context,
+          bottomSheetContent: ExperienceRateScreen(
+            reservationId:
+                widget.homeReservationsModel?.data?[widget.topIndex].id ??
+                    widget.labReservationsModel?.data?[widget.topIndex].id,
+            fromHome: fromHome,
+          ),
+          bottomSheetHeight: 0.6,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +109,10 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        var labReservationsDataModel = labReservationsModel?.data?[topIndex];
-        var homeReservationsDataModel = homeReservationsModel?.data?[topIndex];
+        var labReservationsDataModel =
+            widget.labReservationsModel?.data?[widget.topIndex];
+        var homeReservationsDataModel =
+            widget.homeReservationsModel?.data?[widget.topIndex];
         Color stateColor;
         if (labReservationsDataModel?.statusEn == 'Pending' ||
             homeReservationsDataModel?.statusEn == 'Pending') {
@@ -133,7 +173,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            '# ${homeReservationsModel?.data?[topIndex].id ?? labReservationsDataModel?.id}',
+                            '# ${widget.homeReservationsModel?.data?[widget.topIndex].id ?? labReservationsDataModel?.id}',
                           ),
                           const Spacer(),
                           Container(
@@ -146,7 +186,8 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Center(
                               child: Text(
-                                homeReservationsModel?.data?[topIndex].status ??
+                                widget.homeReservationsModel
+                                        ?.data?[widget.topIndex].status ??
                                     labReservationsDataModel?.status,
                                 style: titleStyle.copyWith(
                                     fontSize: 15.0,
@@ -163,95 +204,122 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                   if (homeReservationsDataModel != null)
                     if (homeReservationsDataModel.tests!.isNotEmpty)
                       SizedBox(
-                        height: 120.0 * (homeReservationsDataModel.tests?.length ?? 0),
+                        height: 120.0 *
+                            (homeReservationsDataModel.tests?.length ?? 0),
                         child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
-                            title = homeReservationsDataModel.tests![index].title;
-                            price = homeReservationsDataModel.tests![index].price;
-                            image = homeReservationsDataModel.tests![index].image;
+                            title =
+                                homeReservationsDataModel.tests![index].title;
+                            price =
+                                homeReservationsDataModel.tests![index].price;
+                            image =
+                                homeReservationsDataModel.tests![index].image;
                             return ReservationInCartCard(
                               title: title,
                               image: image,
                               price: price,
                             );
                           },
-                          separatorBuilder: (context, index) => verticalMiniSpace,
+                          separatorBuilder: (context, index) =>
+                              verticalMiniSpace,
                           itemCount:
-                          ((homeReservationsDataModel.offers?.length ?? 0) +
-                              (homeReservationsDataModel.tests?.length ?? 0)),
+                              ((homeReservationsDataModel.offers?.length ?? 0) +
+                                  (homeReservationsDataModel.tests?.length ??
+                                      0)),
                         ),
                       ),
                   if (homeReservationsDataModel != null)
                     if (homeReservationsDataModel.offers!.isNotEmpty)
                       SizedBox(
-                        height: 120.0 * (homeReservationsDataModel.offers?.length ?? 0) ,
+                        height: 120.0 *
+                            (homeReservationsDataModel.offers?.length ?? 0),
                         child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
-                            title = homeReservationsDataModel.offers?[index].title ?? '';
-                            price = homeReservationsDataModel.offers?[index].price ?? '';
-                            image = homeReservationsDataModel.offers?[index].image ?? '';
+                            title = homeReservationsDataModel
+                                    .offers?[index].title ??
+                                '';
+                            price = homeReservationsDataModel
+                                    .offers?[index].price ??
+                                '';
+                            image = homeReservationsDataModel
+                                    .offers?[index].image ??
+                                '';
                             return ReservationInCartCard(
                               title: title,
                               image: image,
                               price: price,
                             );
                           },
-                          separatorBuilder: (context, index) => verticalMiniSpace,
+                          separatorBuilder: (context, index) =>
+                              verticalMiniSpace,
                           itemCount:
-                          ((homeReservationsDataModel.offers?.length ?? 0) +
-                              (homeReservationsDataModel.tests?.length ?? 0)),
+                              ((homeReservationsDataModel.offers?.length ?? 0) +
+                                  (homeReservationsDataModel.tests?.length ??
+                                      0)),
                         ),
                       ),
                   if (labReservationsDataModel != null)
                     if (labReservationsDataModel.tests!.isNotEmpty)
                       SizedBox(
-                      height: 120.0 * (labReservationsDataModel.tests?.length ?? 0),
-                      child: ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          title = labReservationsDataModel.tests![index].title;
-                          price = labReservationsDataModel.tests![index].price;
-                          image = labReservationsDataModel.tests![index].image;
-                          return ReservationInCartCard(
-                            title: title,
-                            image: image,
-                            price: price,
-                          );
-                        },
-                        separatorBuilder: (context, index) => verticalMiniSpace,
-                        itemCount:
-                            ((labReservationsDataModel.offers?.length ?? 0) +
-                                (labReservationsDataModel.tests?.length ?? 0)),
+                        height: 120.0 *
+                            (labReservationsDataModel.tests?.length ?? 0),
+                        child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            title =
+                                labReservationsDataModel.tests![index].title;
+                            price =
+                                labReservationsDataModel.tests![index].price;
+                            image =
+                                labReservationsDataModel.tests![index].image;
+                            return ReservationInCartCard(
+                              title: title,
+                              image: image,
+                              price: price,
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              verticalMiniSpace,
+                          itemCount:
+                              ((labReservationsDataModel.offers?.length ?? 0) +
+                                  (labReservationsDataModel.tests?.length ??
+                                      0)),
+                        ),
                       ),
-                    ),
                   if (labReservationsDataModel != null)
                     if (labReservationsDataModel.offers!.isNotEmpty)
                       SizedBox(
-                      height: 120.0 * (labReservationsDataModel.offers?.length ?? 0) ,
-                      child: ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          title = labReservationsDataModel.offers![index].title;
-                          price = labReservationsDataModel.offers![index].price;
-                          image = labReservationsDataModel.offers![index].image;
-                          return ReservationInCartCard(
-                            title: title,
-                            image: image,
-                            price: price,
-                          );
-                        },
-                        separatorBuilder: (context, index) => verticalMiniSpace,
-                        itemCount:
-                        ((labReservationsDataModel.offers?.length ?? 0) +
-                            (labReservationsDataModel.tests?.length ?? 0)),
+                        height: 120.0 *
+                            (labReservationsDataModel.offers?.length ?? 0),
+                        child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            title =
+                                labReservationsDataModel.offers![index].title;
+                            price =
+                                labReservationsDataModel.offers![index].price;
+                            image =
+                                labReservationsDataModel.offers![index].image;
+                            return ReservationInCartCard(
+                              title: title,
+                              image: image,
+                              price: price,
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              verticalMiniSpace,
+                          itemCount:
+                              ((labReservationsDataModel.offers?.length ?? 0) +
+                                  (labReservationsDataModel.tests?.length ??
+                                      0)),
+                        ),
                       ),
-                    ),
                   verticalMiniSpace,
                   Text(
                     LocaleKeys.txtReservationDetails.tr(),
@@ -326,7 +394,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.7,
                                     child: Text(
-                                      '${homeReservationsModel?.data?[topIndex].address?.address ?? labReservationsDataModel?.branch?.title ?? ''}  ${homeReservationsModel?.data?[topIndex].address?.specialMark ?? ''}',
+                                      '${widget.homeReservationsModel?.data?[widget.topIndex].address?.address ?? labReservationsDataModel?.branch?.title ?? ''}  ${widget.homeReservationsModel?.data?[widget.topIndex].address?.specialMark ?? ''}',
                                       textAlign: TextAlign.start,
                                       style: subTitleSmallStyle,
                                       maxLines: 1,
@@ -359,7 +427,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                                         color: greyLightColor),
                                   ),
                                   Text(
-                                    '${labReservationsDataModel?.date ?? homeReservationsModel?.data?[topIndex].date} - ${labReservationsDataModel?.time ?? homeReservationsModel?.data?[topIndex].time}',
+                                    '${labReservationsDataModel?.date ?? widget.homeReservationsModel?.data?[widget.topIndex].date} - ${labReservationsDataModel?.time ?? widget.homeReservationsModel?.data?[widget.topIndex].time}',
                                     textAlign: TextAlign.start,
                                     style: titleSmallStyle,
                                     maxLines: 1,
@@ -414,7 +482,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                                   ),
                                   const Spacer(),
                                   Text(
-                                    '${labReservationsDataModel?.price ?? homeReservationsModel?.data?[topIndex].price} ${LocaleKeys.salary.tr()}',
+                                    '${labReservationsDataModel?.price ?? widget.homeReservationsModel?.data?[widget.topIndex].price} ${LocaleKeys.salary.tr()}',
                                     textAlign: TextAlign.start,
                                     style: titleSmallStyle,
                                     maxLines: 1,
@@ -543,27 +611,29 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                                               .txtUnderstandContinue
                                               .tr(),
                                           onPress: () {
-                                            if (labReservationsModel == null) {
+                                            if (widget.labReservationsModel ==
+                                                null) {
                                               AppCubit.get(context)
                                                   .cancelHomeReservations(
-                                                      reservationId:
-                                                          homeReservationsModel
-                                                                  ?.data?[
-                                                                      topIndex]
-                                                                  .id ??
-                                                              labReservationsDataModel
-                                                                  ?.id);
-                                            } else if (homeReservationsModel ==
+                                                      reservationId: widget
+                                                              .homeReservationsModel
+                                                              ?.data?[widget
+                                                                  .topIndex]
+                                                              .id ??
+                                                          labReservationsDataModel
+                                                              ?.id);
+                                            } else if (widget
+                                                    .homeReservationsModel ==
                                                 null) {
                                               AppCubit.get(context)
                                                   .cancelLabReservations(
-                                                      reservationId:
-                                                          homeReservationsModel
-                                                                  ?.data?[
-                                                                      topIndex]
-                                                                  .id ??
-                                                              labReservationsDataModel
-                                                                  ?.id);
+                                                      reservationId: widget
+                                                              .homeReservationsModel
+                                                              ?.data?[widget
+                                                                  .topIndex]
+                                                              .id ??
+                                                          labReservationsDataModel
+                                                              ?.id);
                                             }
                                           },
                                         ),
@@ -605,7 +675,7 @@ class ReservationDetailsUpcomingScreen extends StatelessWidget {
                       MaterialButton(
                         onPressed: () async {
                           await FlutterPhoneDirectCaller.callNumber(
-                              '${homeReservationsModel?.extra?.phone ?? labReservationsModel?.extra?.phone}');
+                              '${widget.homeReservationsModel?.extra?.phone ?? widget.labReservationsModel?.extra?.phone}');
                         },
                         child: Container(
                           height: 50,

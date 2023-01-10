@@ -25,6 +25,7 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
     AppTechCubit.get(context).getRequests();
     AppTechCubit.get(context).getReservations();
     AppTechCubit.get(context).getUserRequest();
+    AppTechCubit.get(context).getNotifications();
   }
 
   @override
@@ -35,7 +36,8 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
         ..getProfile()
         ..getRequests()
         ..getReservations()
-        ..getUserRequest(),
+        ..getUserRequest()
+        ..getNotifications(),
       child: BlocConsumer<AppTechCubit, AppTechStates>(
         listener: (context, state) {
           if (state is AppAcceptRequestsSuccessState) {
@@ -63,14 +65,16 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
                     verticalSmallSpace,
                     Row(
                       children: [
-                        Text(LocaleKeys.txtTestCategories.tr(),
-                            style: titleStyle),
+                        Text(
+                          LocaleKeys.txtTestCategories.tr(),
+                          style: titleStyle,
+                        ),
                         const Spacer(),
                         TextButton(
                           onPressed: () {
                             setState(
                               () {
-                                  cubit.changeBottomScreen(1);
+                                cubit.changeBottomScreen(1);
                               },
                             );
                           },
@@ -83,18 +87,22 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
                     ),
                     verticalMiniSpace,
                     ConditionalBuilder(
-                      condition:
-                          cubit.techRequestsModel?.data?.isNotEmpty == true,
+                      condition: cubit.techUserRequestModel?.data?.length != [],
                       builder: (context) => SizedBox(
                         height: 265.0,
                         width: double.infinity,
                         child: ListView.separated(
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => TechHomeRequestsCart(index: index),
+                          itemBuilder: (context, index) =>
+                              TechHomeRequestsCart(index: index),
                           separatorBuilder: (context, index) =>
                               horizontalMiniSpace,
-                          itemCount: AppTechCubit.get(context).techRequestsModel?.data?.length ?? 0,
+                          itemCount: AppTechCubit.get(context)
+                                  .techRequestsModel
+                                  ?.data
+                                  ?.length ??
+                              0,
                         ),
                       ),
                       fallback: (context) => Center(
@@ -104,13 +112,15 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
                     verticalMediumSpace,
                     Row(
                       children: [
-                        Text(LocaleKeys.txtLastReservations.tr(),
-                            style: titleStyle),
+                        Text(
+                          LocaleKeys.txtLastReservations.tr(),
+                          style: titleStyle,
+                        ),
                         const Spacer(),
                         TextButton(
                           onPressed: () {
                             setState(() {
-                                cubit.changeBottomScreen(2);
+                              cubit.changeBottomScreen(2);
                             });
                           },
                           child: Text(
@@ -123,7 +133,7 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
                     verticalMiniSpace,
                     ConditionalBuilder(
                       condition:
-                          cubit.techReservationsModel?.data?.isEmpty == false,
+                          cubit.techReservationsModel?.data?.length != [],
                       builder: (context) => SizedBox(
                         height: 240.0,
                         width: double.infinity,
@@ -135,7 +145,7 @@ class _TechHomeScreenState extends State<TechHomeScreen> {
                             index: index,
                             techReservationsDataModel: AppTechCubit.get(context)
                                 .techReservationsModel!
-                                .data!,
+                                .data![index],
                           ),
                           separatorBuilder: (context, index) =>
                               horizontalMiniSpace,

@@ -148,7 +148,7 @@ class SyncfusionPatientLabReservationsDatePickerState
           month = '0$month';
         }
          selectedDate = '${data.year}/$month/$day';
-        print(selectedDate);
+        // print(selectedDate);
       }
     });
   }
@@ -183,9 +183,8 @@ class SyncfusionPatientLabReservationsDatePickerState
               builder: (context) => GeneralButton(
                 title: LocaleKeys.BtnSubmit.tr(),
                 onPress: () {
-                  print('date $selectedDate');
+                  // print('date $selectedDate');
                   AppCubit.get(context).getLabReservations(date: selectedDate);
-                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
               ),
@@ -229,7 +228,7 @@ class SyncfusionPatientHomeReservationsDatePickerState
           month = '0$month';
         }
          selectedDate = '${data.year}/$month/$day';
-        print(selectedDate);
+        // print(selectedDate);
       }
     });
   }
@@ -264,9 +263,8 @@ class SyncfusionPatientHomeReservationsDatePickerState
               builder: (context) => GeneralButton(
                 title: LocaleKeys.BtnSubmit.tr(),
                 onPress: () {
-                  print('date $selectedDate');
+                  // print('date $selectedDate');
                   AppCubit.get(context).getHomeReservations(date: selectedDate);
-                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
               ),
@@ -309,7 +307,7 @@ class SyncfusionPatientLabResultsDatePickerState
           month = '0$month';
         }
          selectedDate = '${data.year}/$month/$day';
-        print(selectedDate);
+        // print(selectedDate);
       }
     });
   }
@@ -344,9 +342,8 @@ class SyncfusionPatientLabResultsDatePickerState
               builder: (context) => GeneralButton(
                 title: LocaleKeys.BtnSubmit.tr(),
                 onPress: () {
-                  print('date $selectedDate');
+                  // print('date $selectedDate');
                   AppCubit.get(context).getLabResults(date: selectedDate);
-                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
               ),
@@ -390,7 +387,7 @@ class SyncfusionPatientHomeResultsDatePickerState
           month = '0$month';
         }
          selectedDate = '${data.year}/$month/$day';
-        print(selectedDate);
+        // print(selectedDate);
       }
     });
   }
@@ -425,9 +422,8 @@ class SyncfusionPatientHomeResultsDatePickerState
               builder: (context) => GeneralButton(
                 title: LocaleKeys.BtnSubmit.tr(),
                 onPress: () {
-                  print('date $selectedDate');
+                  // print('date $selectedDate');
                   AppCubit.get(context).getHomeResults(date: selectedDate);
-                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
               ),

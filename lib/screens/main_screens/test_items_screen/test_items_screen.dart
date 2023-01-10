@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_elteb/shared/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dar_elteb/cubit/cubit.dart';
@@ -47,7 +48,9 @@ class _TestItemsScreenState extends State<TestItemsScreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: greyExtraLightColor,
           appBar: GeneralAppBar(
+            appBarColor: greyExtraLightColor,
             title: AppCubit.get(context)
                     .categoriesModel
                     ?.data?[widget.categoryId - 1]

@@ -93,6 +93,18 @@ class AppCancelLabReservationErrorState extends AppStates{
   AppCancelLabReservationErrorState(this.error);
 }
 
+class AppRateTechnicalLoadingState extends AppStates{}
+
+class AppRateTechnicalSuccessState extends AppStates{
+  final SuccessModel successModel;
+  AppRateTechnicalSuccessState(this.successModel);
+}
+
+class AppRateTechnicalErrorState extends AppStates{
+  final String error;
+  AppRateTechnicalErrorState(this.error);
+}
+
 class AppCancelHomeReservationLoadingState extends AppStates{}
 
 class AppCancelHomeReservationSuccessState extends AppStates{

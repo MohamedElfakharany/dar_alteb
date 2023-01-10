@@ -33,7 +33,7 @@ class _ThankRatingScreenState extends State<ThankRatingScreen> {
               // color: blueColor,
             ),
             Text(
-              '${LocaleKeys.txtThankYouForRating.tr()} 😍',
+              LocaleKeys.txtThankYouForRating.tr(),
               style: titleSmallStyle.copyWith(
                 color: greyDarkColor,
                 fontWeight: FontWeight.normal,

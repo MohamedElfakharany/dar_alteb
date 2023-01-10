@@ -187,7 +187,7 @@ class TestDetailsScreen extends StatelessWidget {
                                   if (isVisitor ==
                                       false) {
                                     Navigator.push(
-                                        context, FadeRoute(page: CartScreen()));
+                                        context, FadeRoute(page: const CartScreen()));
                                   } else {
                                     showPopUp(
                                       context,
@@ -242,7 +242,6 @@ class TestDetailsScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        print(' AppCubit.get(context).generalModel?.data?.homeReservations : ${AppCubit.get(context).generalModel?.data?.homeReservations}');
         return Scaffold(
           backgroundColor: whiteColor,
           appBar: GeneralAppBar(title: LocaleKeys.txtTestDetails.tr()),
@@ -250,6 +249,7 @@ class TestDetailsScreen extends StatelessWidget {
             padding:
                 const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
             child: ListView(
+              physics: const BouncingScrollPhysics(),
               children: [
                 SizedBox(
                   height: 200,
@@ -299,7 +299,7 @@ class TestDetailsScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         LocaleKeys.Male.tr(),
-                                        style: TextStyle(color: whiteColor),
+                                        style: const TextStyle(color: whiteColor),
                                       ),
                                       horizontalMicroSpace,
                                       const Icon(
@@ -325,7 +325,7 @@ class TestDetailsScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         LocaleKeys.Female.tr(),
-                                        style: TextStyle(color: whiteColor),
+                                        style: const TextStyle(color: whiteColor),
                                       ),
                                       const Icon(
                                         Icons.female,
@@ -389,43 +389,46 @@ class TestDetailsScreen extends StatelessWidget {
                       )),
                     );
                   },
-                  child: Container(
-                    height: 110.0,
-                    width: 110.0,
-                    decoration: BoxDecoration(
-                      color: greyExtraLightColor,
-                      borderRadius: BorderRadius.circular(radius),
-                      border: Border.all(
-                        width: 1,
-                        color: greyDarkColor,
+                  child: Card(
+                    elevation: 2.0,
+                    child: Container(
+                      // height: 110.0,
+                      width: 110.0,
+                      decoration: BoxDecoration(
+                        color: greyExtraLightColor,
+                        borderRadius: BorderRadius.circular(radius),
+                        // border: Border.all(
+                        //   width: 1,
+                        //   color: greyDarkColor,
+                        // ),
                       ),
-                    ),
-                    alignment: AlignmentDirectional.center,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          appLogo,
-                          width: 80,
-                          height: 80,
-                        ),
-                        const Spacer(),
-                        Center(
-                          child: Text(
-                            LocaleKeys.txtAnalysisPreparations.tr(),
-                            style: titleSmallStyle,
-                            overflow: TextOverflow.ellipsis,
+                      alignment: AlignmentDirectional.center,
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            appLogo,
+                            width: 80,
+                            height: 80,
                           ),
-                        ),
-                        const Spacer(),
-                        const Icon(
-                          Icons.arrow_forward,
-                          color: mainColor,
-                        ),
-                      ],
+                          const Spacer(),
+                          Center(
+                            child: Text(
+                              LocaleKeys.txtAnalysisPreparations.tr(),
+                              style: titleSmallStyle,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const Spacer(),
+                          const Icon(
+                            Icons.arrow_forward,
+                            color: mainColor,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -619,6 +622,7 @@ class TestDetailsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    horizontalSmallSpace,
                     Expanded(
                       child: ConditionalBuilder(
                         condition: state is! AppAddToCartLoadingState,

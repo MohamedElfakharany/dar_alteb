@@ -72,7 +72,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
     return BlocConsumer<AppTechCubit, AppTechStates>(
       listener: (context, state) {
         if (state is AppGetTechReservationsSuccessState) {
-          if (state.techReservationsModel.status) {
+          if (state.techReservationsModel.status == true) {
             Navigator.pop(context);
           } else {
             Navigator.pop(context);
@@ -268,14 +268,14 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                               ),
                               verticalMiniSpace,
                               ConditionalBuilder(
-                                condition: AppTechCubit.get(context)
-                                    .techReservationsModel
-                                    ?.data
-                                    ?.isEmpty ==
-                                    false,
+                                condition: state
+                                is! AppGetTechReservationsLoadingState,
                                 builder: (context) => ConditionalBuilder(
-                                  condition: state
-                                  is! AppGetTechReservationsLoadingState,
+                                  condition: AppTechCubit.get(context)
+                                      .techReservationsModel
+                                      ?.data
+                                      ?.isEmpty ==
+                                      false,
                                   builder: (context) => Expanded(
                                     child: ListView.separated(
                                       physics: const BouncingScrollPhysics(),
@@ -288,7 +288,7 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                                           techReservationsDataModel:
                                           AppTechCubit.get(context)
                                               .techReservationsModel!
-                                              .data!,
+                                              .data![index],
                                         ),
                                       ),
                                       separatorBuilder: (context, index) =>
@@ -300,16 +300,17 @@ class _TechReservedScreenState extends State<TechReservedScreen> {
                                           0,
                                     ),
                                   ),
-                                  fallback: (context) => const Center(
-                                    child: CircularProgressIndicator.adaptive(),
+                                  fallback: (context) => Expanded(
+                                    child: Center(
+                                        child: ScreenHolder(
+                                          msg: LocaleKeys.txtReservations.tr(),
+                                        )),
                                   ),
                                 ),
-                                fallback: (context) => Expanded(
-                                  child: Center(
-                                      child: ScreenHolder(
-                                        msg: LocaleKeys.txtReservations.tr(),
-                                      )),
+                                fallback: (context) => const Center(
+                                  child: CircularProgressIndicator.adaptive(),
                                 ),
+
                               ),
                             ],
                           ),

@@ -37,12 +37,13 @@ class _ChangeMobileScreenState extends State<ChangeMobileScreen> {
       listener: (context, state) async {
         if (state is AppCreateTokenSuccessState) {
           if (state.createTokenModel.status == true) {
+            String mobileText = removeZeroMobile(number: mobileController.text);
             Navigator.push(
               context,
               FadeRoute(
                 page: VerificationChangeMobileScreen(
                   phoneCode: nationalCodeController.text,
-                  mobileNumber: mobileController.text.toString(),
+                  mobileNumber: mobileText,
                 ),
               ),
             );
@@ -116,11 +117,12 @@ class _ChangeMobileScreenState extends State<ChangeMobileScreen> {
                     title: LocaleKeys.BtnContinue.tr(),
                     onPress: () {
                       if (formKey.currentState!.validate()) {
+                        String mobileText = removeZeroMobile(number: mobileController.text);
                         Navigator.push(
                           context,
                           FadeRoute(
                             page: VerificationChangeMobileScreen(
-                              mobileNumber: mobileController.text,
+                              mobileNumber: mobileText,
                               phoneCode: nationalCodeController.text,
                             ),
                           ),

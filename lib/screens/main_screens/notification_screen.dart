@@ -30,21 +30,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is AppSeenNotificationsSuccessState) {
-          if (state.successModel.status) {
-            showToast(
-                msg: state.successModel.message, state: ToastState.success);
-          } else {
-            showToast(msg: state.successModel.message, state: ToastState.error);
-          }
+          // if (state.successModel.status) {
+          //   showToast(
+          //       msg: state.successModel.message, state: ToastState.success);
+          // } else {
+          //   showToast(msg: state.successModel.message, state: ToastState.error);
+          // }
           Navigator.pop(context);
         }
         if (state is AppDeleteNotificationsSuccessState) {
-          if (state.successModel.status) {
-            showToast(
-                msg: state.successModel.message, state: ToastState.success);
-          } else {
-            showToast(msg: state.successModel.message, state: ToastState.error);
-          }
+          // if (state.successModel.status) {
+          //   showToast(
+          //       msg: state.successModel.message, state: ToastState.success);
+          // } else {
+          //   showToast(msg: state.successModel.message, state: ToastState.error);
+          // }
         }
       },
       builder: (context, state) {

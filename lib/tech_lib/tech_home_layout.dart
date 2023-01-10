@@ -1,3 +1,4 @@
+import 'package:dar_elteb/shared/constants/general_constants.dart';
 import 'package:dar_elteb/shared/network/local/cache_helper.dart';
 import 'package:dar_elteb/shared/network/local/const_shared.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,6 +29,8 @@ class TechHomeLayoutScreen extends StatelessWidget {
             selectedItemColor: mainColor,
             unselectedItemColor: greyLightColor,
             currentIndex: cubit.currentIndex,
+            unselectedLabelStyle: subTitleSmallStyle2,
+            selectedLabelStyle: titleSmallStyle2.copyWith(color: mainColor),
             items: [
               BottomNavigationBarItem(
                 icon: const ImageIcon(AssetImage('assets/images/homeUnselected.png'),),

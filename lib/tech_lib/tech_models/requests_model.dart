@@ -1,305 +1,299 @@
-// To parse this JSON data, do
-//
-//     final techRequestsModel = techRequestsModelFromJson(jsondynamic);
-
-import 'dart:convert';
-
-TechRequestsModel techRequestsModelFromJson(dynamic str) => TechRequestsModel.fromJson(json.decode(str));
-
 class TechRequestsModel {
-  TechRequestsModel({
-    this.status,
-    this.message,
-    this.data,
-    this.extra,
-    this.errors,
-  });
-
-  dynamic status;
-  dynamic message;
-  List<TechRequestsDataModel>? data;
+  bool? status;
+  String? message;
+  List<Data>? data;
   Extra? extra;
-  Errors? errors;
 
-  factory TechRequestsModel.fromJson(Map<dynamic, dynamic> json) => TechRequestsModel(
-    status: json["status"],
-    message: json["message"],
-    data: List<TechRequestsDataModel>.from(json["data"].map((x) => TechRequestsDataModel.fromJson(x))),
-    extra: Extra.fromJson(json["extra"]),
-    errors: Errors.fromJson(json["errors"]),
-  );
+  TechRequestsModel({this.status, this.message, this.data, this.extra});
+
+  TechRequestsModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+    extra = json['extra'] != null ? new Extra.fromJson(json['extra']) : null;
+  }
 }
 
-class TechRequestsDataModel {
-  TechRequestsDataModel({
-    this.id,
-    this.patient,
-    this.technical,
-    this.date,
-    this.time,
-    this.family,
-    this.address,
-    this.branch,
-    this.coupon,
-    this.price,
-    this.tax,
-    this.discount,
-    this.total,
-    this.status,
-    this.statusEn,
-    this.rate,
-    this.rateMessage,
-    this.createdAt,
-    this.tests,
-    this.offers,
-  });
-
-  dynamic id;
-  TechRequestsPatientModel? patient;
-  List<dynamic>? technical;
-  dynamic date;
-  dynamic time;
-  dynamic family;
-  TechRequestsAddressModel? address;
-  TechRequestsBranchModel? branch;
-  List<dynamic>? coupon;
-  dynamic price;
-  dynamic tax;
-  dynamic discount;
-  dynamic total;
-  dynamic status;
-  dynamic statusEn;
-  dynamic rate;
-  dynamic rateMessage;
+class Data {
+  int? id;
+  Patient? patient;
+  Patient? technical;
+  String? date;
+  String? time;
+  Family? family;
+  Address? address;
+  Relation? branch;
+  Coupon? coupon;
+  String? price;
+  String? tax;
+  String? discount;
+  String? total;
+  String? status;
+  String? statusEn;
+  String? rate;
+  String? rateMessage;
   CreatedAt? createdAt;
-  List<Offer>? tests;
-  List<Offer>? offers;
+  List<Tests>? tests;
+  List<Offers>? offers;
 
-  factory TechRequestsDataModel.fromJson(Map<dynamic, dynamic> json) => TechRequestsDataModel(
-    id: json["id"],
-    patient: TechRequestsPatientModel.fromJson(json["patient"]),
-    technical: List<dynamic>.from(json["technical"].map((x) => x)),
-    date: json["date"],
-    time: json["time"],
-    family: json["family"],
-    address: TechRequestsAddressModel.fromJson(json["address"]),
-    branch: TechRequestsBranchModel.fromJson(json["branch"]),
-    coupon: List<dynamic>.from(json["coupon"].map((x) => x)),
-    price: json["price"],
-    tax: json["tax"],
-    discount: json["discount"],
-    total: json["total"],
-    status: json["status"],
-    statusEn: json["statusEn"],
-    rate: json["rate"],
-    rateMessage: json["rateMessage"],
-    createdAt: CreatedAt.fromJson(json["created_at"]),
-    //json["category"] == null ? null : json["category"],
-    tests: json["tests"] == null ? null : List<Offer>.from(json["tests"].map((x) => Offer.fromJson(x))),
-    offers:  json["offers"] == null ? null : List<Offer>.from(json["offers"].map((x) => Offer.fromJson(x))),
-  );
+  Data(
+      {this.id,
+        this.patient,
+        this.technical,
+        this.date,
+        this.time,
+        this.family,
+        this.address,
+        this.branch,
+        this.coupon,
+        this.price,
+        this.tax,
+        this.discount,
+        this.total,
+        this.status,
+        this.statusEn,
+        this.rate,
+        this.rateMessage,
+        this.createdAt,
+        this.tests,
+        this.offers});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    patient =
+    json['patient'] != null ? new Patient.fromJson(json['patient']) : null;
+    technical = json['technical'] != null
+        ? new Patient.fromJson(json['technical'])
+        : null;
+    date = json['date'];
+    time = json['time'];
+    family =
+    json['family'] != null ? new Family.fromJson(json['family']) : null;
+    address =
+    json['address'] != null ? new Address.fromJson(json['address']) : null;
+    branch =
+    json['branch'] != null ? new Relation.fromJson(json['branch']) : null;
+    coupon =
+    json['coupon'] != null ? new Coupon.fromJson(json['coupon']) : null;
+    price = json['price'];
+    tax = json['tax'];
+    discount = json['discount'];
+    total = json['total'];
+    status = json['status'];
+    statusEn = json['statusEn'];
+    rate = json['rate'];
+    rateMessage = json['rateMessage'];
+    createdAt = json['created_at'] != null
+        ? new CreatedAt.fromJson(json['created_at'])
+        : null;
+    if (json['tests'] != null) {
+      tests = <Tests>[];
+      json['tests'].forEach((v) {
+        tests!.add(new Tests.fromJson(v));
+      });
+    }
+    if (json['offers'] != null) {
+      offers = <Offers>[];
+      json['offers'].forEach((v) {
+        offers!.add(new Offers.fromJson(v));
+      });
+    }
+  }
 }
 
-class TechRequestsAddressModel {
-  TechRequestsAddressModel({
-    this.id,
-    this.latitude,
-    this.longitude,
-    this.address,
-    this.specialMark,
-    this.floorNumber,
-    this.buildingNumber,
-  });
+class Patient {
+  String? id;
+  String? name;
+  String? profile;
+  String? phoneCode;
+  String? phone;
 
-  dynamic id;
-  dynamic latitude;
-  dynamic longitude;
-  dynamic address;
-  dynamic specialMark;
-  dynamic floorNumber;
-  dynamic buildingNumber;
+  Patient({this.id, this.name, this.profile, this.phoneCode, this.phone});
 
-  factory TechRequestsAddressModel.fromJson(Map<dynamic, dynamic> json) => TechRequestsAddressModel(
-    id: json["id"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    address: json["address"],
-    specialMark: json["special_mark"],
-    floorNumber: json["floor_number"],
-    buildingNumber: json["building_number"],
-  );
-
-  Map<dynamic, dynamic> toJson() => {
-    "id": id,
-    "latitude": latitude,
-    "longitude": longitude,
-    "address": address,
-    "special_mark": specialMark,
-    "floor_number": floorNumber,
-    "building_number": buildingNumber,
-  };
+  Patient.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    profile = json['profile'];
+    phoneCode = json['phoneCode'];
+    phone = json['phone'];
+  }
 }
 
-class TechRequestsBranchModel {
-  TechRequestsBranchModel({
-    this.id,
-    this.title,
-  });
+class Family {
+  String? id;
+  Relation? relation;
+  String? name;
+  String? phoneCode;
+  String? phone;
+  String? birthday;
+  String? gender;
+  String? profile;
 
-  dynamic id;
-  dynamic title;
+  Family(
+      {this.id,
+        this.relation,
+        this.name,
+        this.phoneCode,
+        this.phone,
+        this.birthday,
+        this.gender,
+        this.profile});
 
-  factory TechRequestsBranchModel.fromJson(Map<dynamic, dynamic> json) => TechRequestsBranchModel(
-    id: json["id"],
-    title: json["title"],
-  );
+  Family.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    relation = json['relation'] != null
+        ? new Relation.fromJson(json['relation'])
+        : null;
+    name = json['name'];
+    phoneCode = json['phoneCode'];
+    phone = json['phone'];
+    birthday = json['birthday'];
+    gender = json['gender'];
+    profile = json['profile'];
+  }
+}
 
-  Map<dynamic, dynamic> toJson() => {
-    "id": id,
-    "title": title,
-  };
+class Relation {
+  String? id;
+  String? title;
+
+  Relation({this.id, this.title});
+
+  Relation.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+  }
+}
+
+class Address {
+  String? id;
+  String? latitude;
+  String? longitude;
+  String? address;
+  String? specialMark;
+  String? floorNumber;
+  String? buildingNumber;
+
+  Address(
+      {this.id,
+        this.latitude,
+        this.longitude,
+        this.address,
+        this.specialMark,
+        this.floorNumber,
+        this.buildingNumber});
+
+  Address.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    address = json['address'];
+    specialMark = json['special_mark'];
+    floorNumber = json['floor_number'];
+    buildingNumber = json['building_number'];
+  }
+}
+
+class Coupon {
+  String? id;
+  String? code;
+
+  Coupon({this.id, this.code});
+
+  Coupon.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    code = json['code'];
+  }
 }
 
 class CreatedAt {
-  CreatedAt({
-    this.date,
-    this.time,
-  });
+  String? date;
+  String? time;
 
-  dynamic date;
-  dynamic time;
+  CreatedAt({this.date, this.time});
 
-  factory CreatedAt.fromJson(Map<dynamic, dynamic> json) => CreatedAt(
-    date: json["date"],
-    time: json["time"],
-  );
-
-  Map<dynamic, dynamic> toJson() => {
-    "date": date,
-    "time": time,
-  };
+  CreatedAt.fromJson(Map<String, dynamic> json) {
+    date = json['date'];
+    time = json['time'];
+  }
 }
 
-class FamilyClass {
-  FamilyClass({
-    this.id,
-    this.relation,
-    this.name,
-    this.phoneCode,
-    this.phone,
-    this.birthday,
-    this.gender,
-    this.profile,
-  });
+class Tests {
+  String? id;
+  String? title;
+  String? category;
+  int? price;
+  String? image;
+  String? isResult;
 
-  dynamic id;
-  TechRequestsBranchModel? relation;
-  dynamic name;
-  dynamic phoneCode;
-  dynamic phone;
-  dynamic birthday;
-  dynamic gender;
-  dynamic profile;
+  Tests(
+      {this.id,
+        this.title,
+        this.category,
+        this.price,
+        this.image,
+        this.isResult});
 
-  factory FamilyClass.fromJson(Map<dynamic, dynamic> json) => FamilyClass(
-    id: json["id"],
-    relation: TechRequestsBranchModel.fromJson(json["relation"]),
-    name: json["name"],
-    phoneCode: json["phoneCode"],
-    phone: json["phone"],
-    birthday: json["birthday"],
-    gender: json["gender"],
-    profile: json["profile"],
-  );
+  Tests.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    category = json['category'];
+    price = json['price'];
+    image = json['image'];
+    isResult = json['isResult'];
+  }
 }
 
-class Offer {
-  Offer({
-    this.id,
-    this.title,
-    this.price,
-    this.image,
-    this.category,
-  });
+class Offers {
+  String? id;
+  String? title;
+  int? price;
+  String? image;
+  String? isResult;
 
-  dynamic id;
-  dynamic title;
-  dynamic price;
-  dynamic image;
-  dynamic category;
+  Offers({this.id, this.title, this.price, this.image, this.isResult});
 
-  factory Offer.fromJson(Map<dynamic, dynamic> json) => Offer(
-    id: json["id"],
-    title: json["title"],
-    price: json["price"],
-    image: json["image"],
-    category: json["category"] == null ? null : json["category"],
-  );
-}
-
-class TechRequestsPatientModel {
-  TechRequestsPatientModel({
-    this.id,
-    this.name,
-    this.profile,
-    this.phoneCode,
-    this.phone,
-  });
-
-  dynamic id;
-  dynamic name;
-  dynamic profile;
-  dynamic phoneCode;
-  dynamic phone;
-
-  factory TechRequestsPatientModel.fromJson(Map<dynamic, dynamic> json) => TechRequestsPatientModel(
-    id: json["id"],
-    name: json["name"],
-    profile: json["profile"],
-    phoneCode: json["phoneCode"],
-    phone: json["phone"],
-  );
-}
-
-class Errors {
-  Errors();
-
-  factory Errors.fromJson(Map<dynamic, dynamic> json) => Errors(
-  );
+  Offers.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    price = json['price'];
+    image = json['image'];
+    isResult = json['isResult'];
+  }
 }
 
 class Extra {
-  Extra({
-    this.pagination,
-  });
-
   Pagination? pagination;
 
-  factory Extra.fromJson(Map<dynamic, dynamic> json) => Extra(
-    pagination: Pagination.fromJson(json["pagination"]),
-  );
+  Extra({this.pagination});
+
+  Extra.fromJson(Map<String, dynamic> json) {
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
+  }
 }
 
 class Pagination {
-  Pagination({
-    this.total,
-    this.count,
-    this.perPage,
-    this.currentPage,
-    this.lastPage,
-  });
+  int? total;
+  int? count;
+  int? perPage;
+  int? currentPage;
+  int? lastPage;
 
-  dynamic total;
-  dynamic count;
-  dynamic perPage;
-  dynamic currentPage;
-  dynamic lastPage;
+  Pagination(
+      {this.total, this.count, this.perPage, this.currentPage, this.lastPage});
 
-  factory Pagination.fromJson(Map<dynamic, dynamic> json) => Pagination(
-    total: json["total"],
-    count: json["count"],
-    perPage: json["perPage"],
-    currentPage: json["currentPage"],
-    lastPage: json["lastPage"],
-  );
+  Pagination.fromJson(Map<String, dynamic> json) {
+    total = json['total'];
+    count = json['count'];
+    perPage = json['perPage'];
+    currentPage = json['currentPage'];
+    lastPage = json['lastPage'];
+  }
 }

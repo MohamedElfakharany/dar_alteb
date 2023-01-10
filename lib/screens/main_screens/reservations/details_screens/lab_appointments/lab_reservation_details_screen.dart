@@ -263,7 +263,7 @@ class _LabReservationDetailsScreenState
                       ),
                       const Spacer(),
                       ConditionalBuilder(
-                        condition: state is! AppGetCartLoadingState,
+                        condition: state is! AppGetCartLoadingState || state is! AppGetInvoicesLoadingState,
                         builder: (context) => InkWell(
                           onTap: () {
                             if (widget.testsDataModel != null ||
@@ -294,6 +294,7 @@ class _LabReservationDetailsScreenState
                             } else {
                               if (widget.testsDataModel == null &&
                                   widget.offersDataModel == null) {
+                                AppCubit.get(context).getInvoices().then((value){
                                 Navigator.push(
                                   context,
                                   FadeRoute(
@@ -312,6 +313,7 @@ class _LabReservationDetailsScreenState
                                     ),
                                   ),
                                 );
+                                });
                               }
                             }
                           },

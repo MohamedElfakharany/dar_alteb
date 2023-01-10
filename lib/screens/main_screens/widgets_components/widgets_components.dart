@@ -399,128 +399,117 @@ class OffersCard extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: 235,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 165,
-                width: double.infinity,
-                child: Stack(
-                  alignment: AlignmentDirectional.topStart,
-                  children: [
-                    CachedNetworkImageNormal(
-                      imageUrl: offersDataModel.image,
-                      height: 165,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: redColor,
-                              borderRadius: BorderRadius.circular(radius),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '%',
-                                style: TextStyle(color: whiteColor),
-                              ),
-                            ),
-                          ),
-                          const Spacer(),
-                          if (offersDataModel.gender == 'Male')
-                            Container(
-                              height: 30,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                color: mainLightColor,
-                                borderRadius: BorderRadius.circular(radius),
-                              ),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      LocaleKeys.Male.tr(),
-                                      style: TextStyle(color: whiteColor),
-                                    ),
-                                    horizontalMicroSpace,
-                                    const Icon(
-                                      Icons.male,
-                                      color: whiteColor,
-                                    )
-                                  ],
+        return Card(
+          elevation: 2.0,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            // height: 235,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 165,
+                  width: double.infinity,
+                  child: Stack(
+                    alignment: AlignmentDirectional.topStart,
+                    children: [
+                      CachedNetworkImageNormal(
+                        imageUrl: offersDataModel.image,
+                        height: 165,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            if (offersDataModel.gender == 'Male')
+                              Container(
+                                height: 30,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: mainLightColor,
+                                  borderRadius: BorderRadius.circular(radius),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        LocaleKeys.Male.tr(),
+                                        style: TextStyle(color: whiteColor),
+                                      ),
+                                      horizontalMicroSpace,
+                                      const Icon(
+                                        Icons.male,
+                                        color: whiteColor,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            else if (offersDataModel.gender == 'Female')
+                              Container(
+                                height: 30,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: pinkColor,
+                                  borderRadius: BorderRadius.circular(radius),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        LocaleKeys.Female.tr(),
+                                        style: TextStyle(color: whiteColor),
+                                      ),
+                                      const Icon(
+                                        Icons.female,
+                                        color: whiteColor,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            )
-                          else if (offersDataModel.gender == 'Female')
-                            Container(
-                              height: 30,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                color: pinkColor,
-                                borderRadius: BorderRadius.circular(radius),
-                              ),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      LocaleKeys.Female.tr(),
-                                      style: TextStyle(color: whiteColor),
-                                    ),
-                                    const Icon(
-                                      Icons.female,
-                                      color: whiteColor,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                child: Text(
-                  offersDataModel.title,
-                  style: titleSmallStyle2,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  child: Text(
+                    offersDataModel.title,
+                    style: titleSmallStyle2,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  children: [
-                    Text(
-                      '${offersDataModel.discount} ${LocaleKeys.salary.tr()}',
-                      style: titleSmallStyle2,
-                    ),
-                    horizontalMiniSpace,
-                    Text(
-                      '${offersDataModel.price} ${LocaleKeys.salary.tr()}',
-                      style: subTitleSmallStyle2.copyWith(
-                        decoration: TextDecoration.lineThrough,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${offersDataModel.discount} ${LocaleKeys.salary.tr()}',
+                        style: titleSmallStyle,
                       ),
-                    ),
-                  ],
+                      horizontalMiniSpace,
+                      Text(
+                        '${offersDataModel.price} ${LocaleKeys.salary.tr()}',
+                        style: subTitleSmallStyle.copyWith(
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -540,37 +529,36 @@ class CategoriesCard extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Container(
-          height: 110.0,
-          width: 110.0,
-          decoration: BoxDecoration(
-            color: whiteColor,
-            borderRadius: BorderRadius.circular(radius),
-            border: Border.all(
-              width: 1,
-              color: greyDarkColor,
+        return Card(
+          elevation: 2.0,
+          child: Container(
+            // height: 110.0,
+            width: 110.0,
+            decoration: BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(radius),
             ),
-          ),
-          alignment: AlignmentDirectional.center,
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              verticalMiniSpace,
-              CachedNetworkImageNormal(
-                imageUrl: categoriesDataModel.icon,
-                width: 65,
-                height: 65,
-              ),
-              verticalMicroSpace,
-              Text(
-                categoriesDataModel.title,
-                textAlign: TextAlign.center,
-                style: subTitleSmallStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+            alignment: AlignmentDirectional.center,
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                verticalMiniSpace,
+                CachedNetworkImageNormal(
+                  imageUrl: categoriesDataModel.icon,
+                  width: 65,
+                  height: 65,
+                ),
+                verticalMicroSpace,
+                Text(
+                  categoriesDataModel.title,
+                  textAlign: TextAlign.center,
+                  style: subTitleSmallStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -594,187 +582,190 @@ class TestItemCard extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Container(
-          height: 110.0,
-          width: 110.0,
-          decoration: BoxDecoration(
-            color: whiteColor,
-            borderRadius: BorderRadius.circular(radius),
-            border: Border.all(
-              width: 1,
-              color: greyDarkColor,
+        return Card(
+          elevation: 2.0,
+          child: Container(
+            height: 110.0,
+            width: 110.0,
+            decoration: BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(radius),
+              // border: Border.all(
+              //   width: 1,
+              //   color: greyDarkColor,
+              // ),
             ),
-          ),
-          alignment: AlignmentDirectional.center,
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-          child: Stack(
-            alignment: AlignmentDirectional.topEnd,
-            children: [
-              Row(
-                children: [
-                  horizontalMicroSpace,
-                  CachedNetworkImageNormal(
-                    imageUrl:
-                        AppCubit.get(context).testsModel?.data?[index].image ??
-                            '',
-                    width: 80,
-                    height: 80,
-                  ),
-                  horizontalSmallSpace,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppCubit.get(context)
-                                  .testsModel
-                                  ?.data?[index]
-                                  .title ??
+            alignment: AlignmentDirectional.center,
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+            child: Stack(
+              alignment: AlignmentDirectional.topEnd,
+              children: [
+                Row(
+                  children: [
+                    horizontalMicroSpace,
+                    CachedNetworkImageNormal(
+                      imageUrl:
+                          AppCubit.get(context).testsModel?.data?[index].image ??
                               '',
-                          style: titleStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          AppCubit.get(context)
-                                  .testsModel
-                                  ?.data?[index]
-                                  .description ??
-                              '',
-                          style: subTitleSmallStyle2,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${AppCubit.get(context).testsModel?.data?[index].price} ${LocaleKeys.salary.tr()}',
-                              style: titleSmallStyle,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ],
+                      width: 80,
+                      height: 80,
                     ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: MaterialButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              FadeRoute(
-                                page: TestDetailsScreen(
-                                    testsDataModel: AppCubit.get(context)
-                                        .testsModel!
-                                        .data?[index]),
-                              ),
-                            );
-                          },
-                          color: mainColor,
-                          child: Text(
-                            LocaleKeys.txtDetails.tr(),
-                            style: titleSmallStyle.copyWith(color: whiteColor),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      height: 30,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
+                    horizontalSmallSpace,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          horizontalMicroSpace,
-                          if (AppCubit.get(context)
-                                  .testsModel
-                                  ?.data?[index]
-                                  .gender ==
-                              'Male')
-                            const Center(
-                              child: CircleAvatar(
-                                radius: 15,
-                                backgroundColor: mainLightColor,
-                                child: Icon(
-                                  Icons.male,
-                                  size: 25,
-                                  color: whiteColor,
-                                ),
+                          Text(
+                            AppCubit.get(context)
+                                    .testsModel
+                                    ?.data?[index]
+                                    .title ??
+                                '',
+                            style: titleStyle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            AppCubit.get(context)
+                                    .testsModel
+                                    ?.data?[index]
+                                    .description ??
+                                '',
+                            style: subTitleSmallStyle2,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '${AppCubit.get(context).testsModel?.data?[index].price} ${LocaleKeys.salary.tr()}',
+                                style: titleSmallStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          if (AppCubit.get(context)
-                                  .testsModel
-                                  ?.data?[index]
-                                  .gender ==
-                              'Female')
-                            const Center(
-                              child: CircleAvatar(
-                                radius: 15,
-                                backgroundColor: pinkColor,
-                                child: Icon(
-                                  Icons.female,
-                                  size: 25,
-                                  color: whiteColor,
-                                ),
-                              ),
-                            ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        print("isVisitor : ${isVisitor}");
-                        if (isVisitor == true) {
-                          showPopUp(
-                            context,
-                            const VisitorHoldingPopUp(),
-                          );
-                        } else if (isVisitor == false) {
-                          AppCubit.get(context).addToCart(
-                              testId: AppCubit.get(context)
-                                  .testsModel
-                                  ?.data?[index]
-                                  .id);
-                        }else {
-                          showPopUp(
-                            context,
-                            const VisitorHoldingPopUp(),
-                          );
-                        }
-                      },
-                      child: const CircleAvatar(
-                        radius: 15,
-                        backgroundColor: greyLightColor,
-                        child: Icon(
-                          Icons.add,
-                          color: whiteColor,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: MaterialButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                FadeRoute(
+                                  page: TestDetailsScreen(
+                                      testsDataModel: AppCubit.get(context)
+                                          .testsModel!
+                                          .data?[index]),
+                                ),
+                              );
+                            },
+                            color: mainColor,
+                            child: Text(
+                              LocaleKeys.txtDetails.tr(),
+                              style: titleSmallStyle.copyWith(color: whiteColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                        height: 30,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            horizontalMicroSpace,
+                            if (AppCubit.get(context)
+                                    .testsModel
+                                    ?.data?[index]
+                                    .gender ==
+                                'Male')
+                              const Center(
+                                child: CircleAvatar(
+                                  radius: 15,
+                                  backgroundColor: mainLightColor,
+                                  child: Icon(
+                                    Icons.male,
+                                    size: 25,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ),
+                            if (AppCubit.get(context)
+                                    .testsModel
+                                    ?.data?[index]
+                                    .gender ==
+                                'Female')
+                              const Center(
+                                child: CircleAvatar(
+                                  radius: 15,
+                                  backgroundColor: pinkColor,
+                                  child: Icon(
+                                    Icons.female,
+                                    size: 25,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          print("isVisitor : ${isVisitor}");
+                          if (isVisitor == true) {
+                            showPopUp(
+                              context,
+                              const VisitorHoldingPopUp(),
+                            );
+                          } else if (isVisitor == false) {
+                            AppCubit.get(context).addToCart(
+                                testId: AppCubit.get(context)
+                                    .testsModel
+                                    ?.data?[index]
+                                    .id);
+                          }else {
+                            showPopUp(
+                              context,
+                              const VisitorHoldingPopUp(),
+                            );
+                          }
+                        },
+                        child: const CircleAvatar(
+                          radius: 15,
+                          backgroundColor: greyLightColor,
+                          child: Icon(
+                            Icons.add,
+                            color: whiteColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         );
       },
@@ -850,74 +841,77 @@ class _NotificationsCardState extends State<NotificationsCard> {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Container(
-          width: double.infinity,
-          // height: 100.0,
-          decoration: BoxDecoration(
-            color: containerColor,
-            borderRadius: BorderRadius.circular(
-              radius,
+        return Card(
+          elevation: 2.0,
+          child: Container(
+            width: double.infinity,
+            // height: 100.0,
+            decoration: BoxDecoration(
+              color: containerColor,
+              borderRadius: BorderRadius.circular(
+                radius,
+              ),
+              // border: Border.all(
+              //   width: 1,
+              //   color: greyLightColor,
+              // ),
             ),
-            border: Border.all(
-              width: 1,
-              color: greyLightColor,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    color: mainLightColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(
-                      radius,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40.0,
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      color: mainLightColor.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(
+                        radius,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.notifications_rounded,
+                      size: 35.0,
+                      color: mainColor,
                     ),
                   ),
-                  child: const Icon(
-                    Icons.notifications_rounded,
-                    size: 35.0,
-                    color: mainColor,
-                  ),
-                ),
-                horizontalSmallSpace,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.notificationsDataModel.body,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${widget.notificationsDataModel.date?.date} - ${widget.notificationsDataModel.date?.time}',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: subTitleSmallStyle,
-                          ),
-                          TextButton(
-                            child: Text(
-                              LocaleKeys.BtnDelete.tr(),
-                              style: titleSmallStyleRed,
+                  horizontalSmallSpace,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.notificationsDataModel.body,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${widget.notificationsDataModel.date?.date} - ${widget.notificationsDataModel.date?.time}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: subTitleSmallStyle,
                             ),
-                            onPressed: () {
-                              AppCubit.get(context).deleteNotifications(
-                                  notificationId:
-                                      '${widget.notificationsDataModel.id}');
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                            TextButton(
+                              child: Text(
+                                LocaleKeys.BtnDelete.tr(),
+                                style: titleSmallStyleRed,
+                              ),
+                              onPressed: () {
+                                AppCubit.get(context).deleteNotifications(
+                                    notificationId:
+                                        '${widget.notificationsDataModel.id}');
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

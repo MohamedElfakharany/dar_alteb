@@ -68,16 +68,19 @@ class _TechnicalSupportScreenState extends State<TechnicalSupportScreen> {
           ),
           body: Padding(
             padding:
-                const EdgeInsets.only(right: 20.0, bottom: 20.0, left: 20.0),
+                const EdgeInsets.only( bottom: 20.0),
             child: Column(
               children: [
-                GeneralButton(
-                  title:
-                      '${LocaleKeys.TxtReservationScreenTitle.tr()} ${LocaleKeys.txtNow.tr()}',
-                  onPress: () {
-                    Navigator.push(context,
-                        FadeRoute(page: const CreateTechSupportScreen()));
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: GeneralButton(
+                    title:
+                        '${LocaleKeys.TxtReservationScreenTitle.tr()} ${LocaleKeys.txtNow.tr()}',
+                    onPress: () {
+                      Navigator.push(context,
+                          FadeRoute(page: const CreateTechSupportScreen()));
+                    },
+                  ),
                 ),
                 verticalMediumSpace,
                 if (AppCubit.get(context).patientTechnicalSupportModel?.data != null)

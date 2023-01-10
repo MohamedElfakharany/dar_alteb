@@ -92,12 +92,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         if (state is AppRegisterSuccessState) {
           if (state.userResourceModel.status) {
             token = state.userResourceModel.extra!.token;
+            String mobileText = removeZeroMobile(number: mobileController.text);
             await Navigator.push(
               context,
               FadeRoute(
                 page: VerificationScreen(
                   phoneCode: nationalCodeController.text,
-                  mobileNumber: mobileController.text.toString(),
+                  mobileNumber: mobileText,
                 ),
               ),
             );
@@ -563,11 +564,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           title: LocaleKeys.BtnSignUp.tr(),
                           onPress: () {
                             if (formKey.currentState!.validate()) {
+                              String mobileText = removeZeroMobile(number: mobileController.text);
                               cubit.register(
                                 name: userNameController.text,
                                 nationalID: nationalIdController.text,
                                 password: passwordController.text,
-                                mobile: mobileController.text,
+                                mobile: mobileText,
                                 phoneCode: nationalCodeController.text,
                                 deviceTokenLogin: deviceToken!,
                               );

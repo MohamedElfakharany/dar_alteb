@@ -158,6 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Form(
                     key: formKey,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         DefaultFormField(
                           height: 90,
@@ -171,6 +172,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         verticalSmallSpace,
                         textLabel(
                           title: LocaleKeys.txtFieldIdNumber.tr(),
+
                         ),
                         verticalSmallSpace,
                         DefaultFormField(

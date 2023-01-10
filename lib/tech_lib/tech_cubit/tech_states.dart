@@ -1,5 +1,9 @@
 import 'package:dar_elteb/models/patient_models/auth_models/verify_model.dart';
 import 'package:dar_elteb/models/patient_models/auth_models/user_resource_model.dart';
+import 'package:dar_elteb/models/patient_models/profile_models/notifications_model.dart';
+import 'package:dar_elteb/tech_lib/tech_cubit/tech_cubit.dart';
+import 'package:dar_elteb/tech_lib/tech_cubit/tech_cubit.dart';
+import 'package:dar_elteb/tech_lib/tech_cubit/tech_cubit.dart';
 import 'package:dar_elteb/tech_lib/tech_models/requests_model.dart';
 import 'package:dar_elteb/tech_lib/tech_models/reservation_model.dart';
 import 'package:dar_elteb/tech_lib/tech_models/tech_tech_support_model.dart';
@@ -55,6 +59,19 @@ class AppTechLoginErrorState extends AppTechStates {
 
   AppTechLoginErrorState(this.error);
 }
+
+class AppGetNotificationsLoadingState extends AppTechStates{}
+
+class AppGetNotificationsSuccessState extends AppTechStates{
+  final NotificationsModel notificationsModel;
+  AppGetNotificationsSuccessState(this.notificationsModel);
+}
+
+class AppGetNotificationsErrorState extends AppTechStates{
+  final String error;
+  AppGetNotificationsErrorState(this.error);
+}
+
 
 class AppTechGetProfileLoadingState extends AppTechStates {}
 

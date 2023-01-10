@@ -43,13 +43,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
-        if (state is AppGetLabResultsSuccessState){
-          labSearchController.text = '';
-          homeSearchController.text = '';
+        if (state is AppGetLabResultsSuccessState) {
+          // labSearchController.text = '';
+          // homeSearchController.text = '';
         }
-        if (state is AppGetHomeResultsSuccessState){
-          labSearchController.text = '';
-          homeSearchController.text = '';
+        if (state is AppGetHomeResultsSuccessState) {
+          // labSearchController.text = '';
+          // homeSearchController.text = '';
         }
       },
       builder: (context, state) {
@@ -176,115 +176,97 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         children: [
                           // first tab bar view widget
                           ConditionalBuilder(
-                            condition: state is! AppGetLabResultsLoadingState ||
+                            condition: state is! AppGetLabResultsLoadingState &&
                                 state is! AppGetHomeResultsLoadingState,
                             builder: (context) => Column(
                               children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.filter_list,
-                                    color: mainColor,
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        content: SizedBox(
-                                          height: 125,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                alignment:
-                                                    AlignmentDirectional.center,
-                                                height: 60,
-                                                child: TextFormField(
-                                                  controller:
-                                                      labSearchController,
-                                                  keyboardType:
-                                                      TextInputType.text,
-                                                  decoration: InputDecoration(
-                                                    prefixIcon: const Icon(
-                                                        Icons.search),
-                                                    label: Text(LocaleKeys
-                                                        .TxtFieldSearch.tr()),
-                                                    hintStyle: const TextStyle(
-                                                        color: greyDarkColor,
-                                                        fontSize: 14),
-                                                    labelStyle: const TextStyle(
-                                                        color: greyDarkColor,
-                                                        fontSize: 14),
-                                                    fillColor: Colors.white,
-                                                    filled: true,
-                                                    errorStyle: const TextStyle(
-                                                        color: redColor),
-                                                    contentPadding:
-                                                        const EdgeInsetsDirectional
-                                                                .only(
-                                                            start: 20.0,
-                                                            end: 10.0,
-                                                            bottom: 0.0,
-                                                            top: 0.0),
-                                                    border:
-                                                        const OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        width: 1,
-                                                        color:
-                                                            greyExtraLightColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  onFieldSubmitted: (String v) {
-                                                    AppCubit.get(context)
-                                                        .getLabResults(
-                                                      search: v,
-                                                    )
-                                                        .then((value) {
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
-                                                  // onChanged: (String v){
-                                                  //   print(v);
-                                                  //   AppCubit.get(context).getLabResults(search: v,status: labStatusValue).then((value){
-                                                  //     Navigator.pop(context);
-                                                  //   });
-                                                  // },
-                                                  style: TextStyle(
-                                                    color: mainLightColor,
-                                                    fontSize: 18,
-                                                    fontFamily: fontFamily,
-                                                  ),
-                                                  maxLines: 1,
+                                verticalSmallSpace,
+                                SizedBox(
+                                  height: 60,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          alignment:
+                                              AlignmentDirectional.center,
+                                          height: 60,
+                                          child: TextFormField(
+                                            controller: labSearchController,
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                              prefixIcon:
+                                                  const Icon(Icons.search),
+                                              label: Text(LocaleKeys
+                                                  .TxtFieldSearch.tr()),
+                                              hintStyle: const TextStyle(
+                                                  color: greyDarkColor,
+                                                  fontSize: 14),
+                                              labelStyle: const TextStyle(
+                                                  color: greyDarkColor,
+                                                  fontSize: 14),
+                                              fillColor: Colors.white,
+                                              filled: true,
+                                              errorStyle: const TextStyle(
+                                                  color: redColor),
+                                              contentPadding:
+                                                  const EdgeInsetsDirectional
+                                                          .only(
+                                                      start: 20.0,
+                                                      end: 10.0,
+                                                      bottom: 0.0,
+                                                      top: 0.0),
+                                              border: const OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: greyExtraLightColor,
                                                 ),
                                               ),
-                                              verticalSmallSpace,
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: GeneralUnfilledButton(
-                                                  width: double.infinity,
-                                                  height: 40.0,
-                                                  title: LocaleKeys.txtTestDate
-                                                      .tr(),
-                                                  onPress: () {
-                                                    showCustomBottomSheet(
-                                                      context,
-                                                      bottomSheetContent:
-                                                          const SyncfusionPatientLabResultsDatePicker(),
-                                                      bottomSheetHeight: 0.65,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ],
+                                            ),
+                                            onFieldSubmitted: (String v) {
+                                              if (v.length >= 3) {
+                                                AppCubit.get(context)
+                                                    .getLabResults(
+                                                  search: v,
+                                                );
+                                              }
+                                            },
+                                            onChanged: (String v) {
+                                              print(v);
+                                              if (v.length >= 3) {
+                                                AppCubit.get(context)
+                                                    .getLabResults(search: v);
+                                              }
+                                            },
+                                            style: TextStyle(
+                                              color: mainLightColor,
+                                              fontSize: 18,
+                                              fontFamily: fontFamily,
+                                            ),
+                                            maxLines: 1,
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
+                                      horizontalSmallSpace,
+                                      GeneralUnfilledButton(
+                                        width: 65,
+                                        height: 50.0,
+                                        title: '',
+                                        image:
+                                            'assets/images/reservedSelected.png',
+                                        onPress: () {
+                                          showCustomBottomSheet(
+                                            context,
+                                            bottomSheetContent:
+                                                const SyncfusionPatientLabResultsDatePicker(),
+                                            bottomSheetHeight: 0.65,
+                                          );
+                                        },
+                                      ),
+                                      horizontalMicroSpace,
+                                    ],
+                                  ),
                                 ),
+                                verticalSmallSpace,
                                 ConditionalBuilder(
                                   condition: AppCubit.get(context)
                                           .labResultsModel
@@ -337,115 +319,97 @@ class _ResultsScreenState extends State<ResultsScreen> {
                           ),
                           // second tab bar view widget
                           ConditionalBuilder(
-                            condition: state is! AppGetLabResultsLoadingState ||
+                            condition: state is! AppGetLabResultsLoadingState &&
                                 state is! AppGetHomeResultsLoadingState,
                             builder: (context) => Column(
                               children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.filter_list,
-                                    color: mainColor,
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        content: SizedBox(
-                                          height: 125,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                alignment:
-                                                    AlignmentDirectional.center,
-                                                height: 60,
-                                                child: TextFormField(
-                                                  controller:
-                                                      homeSearchController,
-                                                  keyboardType:
-                                                      TextInputType.text,
-                                                  decoration: InputDecoration(
-                                                    prefixIcon: const Icon(
-                                                        Icons.search),
-                                                    label: Text(LocaleKeys
-                                                        .TxtFieldSearch.tr()),
-                                                    hintStyle: const TextStyle(
-                                                        color: greyDarkColor,
-                                                        fontSize: 14),
-                                                    labelStyle: const TextStyle(
-                                                        color: greyDarkColor,
-                                                        fontSize: 14),
-                                                    fillColor: Colors.white,
-                                                    filled: true,
-                                                    errorStyle: const TextStyle(
-                                                        color: redColor),
-                                                    contentPadding:
-                                                        const EdgeInsetsDirectional
-                                                                .only(
-                                                            start: 20.0,
-                                                            end: 10.0,
-                                                            bottom: 0.0,
-                                                            top: 0.0),
-                                                    border:
-                                                        const OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        width: 1,
-                                                        color:
-                                                            greyExtraLightColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  onFieldSubmitted: (String v) {
-                                                    AppCubit.get(context)
-                                                        .getHomeResults(
-                                                      search: v,
-                                                    )
-                                                        .then((value) {
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
-                                                  // onChanged: (String v){
-                                                  //   print(v);
-                                                  //   AppCubit.get(context).getLabResults(search: v,status: labStatusValue).then((value){
-                                                  //     Navigator.pop(context);
-                                                  //   });
-                                                  // },
-                                                  style: TextStyle(
-                                                    color: mainLightColor,
-                                                    fontSize: 18,
-                                                    fontFamily: fontFamily,
-                                                  ),
-                                                  maxLines: 1,
+                                verticalSmallSpace,
+                                SizedBox(
+                                  height: 60,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          alignment:
+                                              AlignmentDirectional.center,
+                                          height: 60,
+                                          child: TextFormField(
+                                            controller: homeSearchController,
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                              prefixIcon:
+                                                  const Icon(Icons.search),
+                                              label: Text(LocaleKeys
+                                                  .TxtFieldSearch.tr()),
+                                              hintStyle: const TextStyle(
+                                                  color: greyDarkColor,
+                                                  fontSize: 14),
+                                              labelStyle: const TextStyle(
+                                                  color: greyDarkColor,
+                                                  fontSize: 14),
+                                              fillColor: Colors.white,
+                                              filled: true,
+                                              errorStyle: const TextStyle(
+                                                  color: redColor),
+                                              contentPadding:
+                                                  const EdgeInsetsDirectional
+                                                          .only(
+                                                      start: 20.0,
+                                                      end: 10.0,
+                                                      bottom: 0.0,
+                                                      top: 0.0),
+                                              border: const OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: greyExtraLightColor,
                                                 ),
                                               ),
-                                              verticalSmallSpace,
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: GeneralUnfilledButton(
-                                                  width: double.infinity,
-                                                  height: 40.0,
-                                                  title: LocaleKeys.txtTestDate
-                                                      .tr(),
-                                                  onPress: () {
-                                                    showCustomBottomSheet(
-                                                      context,
-                                                      bottomSheetContent:
-                                                          const SyncfusionPatientHomeResultsDatePicker(),
-                                                      bottomSheetHeight: 0.65,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ],
+                                            ),
+                                            onFieldSubmitted: (String v) {
+                                              if (v.length >= 3) {
+                                                AppCubit.get(context)
+                                                    .getHomeResults(
+                                                  search: v,
+                                                );
+                                              }
+                                            },
+                                            onChanged: (String v) {
+                                              print(v);
+                                              if (v.length >= 3) {
+                                                AppCubit.get(context)
+                                                    .getHomeResults(search: v);
+                                              }
+                                            },
+                                            style: TextStyle(
+                                              color: mainLightColor,
+                                              fontSize: 18,
+                                              fontFamily: fontFamily,
+                                            ),
+                                            maxLines: 1,
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
+                                      horizontalSmallSpace,
+                                      GeneralUnfilledButton(
+                                        width: 65.0,
+                                        height: 50.0,
+                                        title: '',
+                                        image:
+                                            'assets/images/reservedSelected.png',
+                                        onPress: () {
+                                          showCustomBottomSheet(
+                                            context,
+                                            bottomSheetContent:
+                                                const SyncfusionPatientHomeResultsDatePicker(),
+                                            bottomSheetHeight: 0.65,
+                                          );
+                                        },
+                                      ),
+                                      horizontalMicroSpace,
+                                    ],
+                                  ),
                                 ),
+                                verticalSmallSpace,
                                 ConditionalBuilder(
                                   condition: AppCubit.get(context)
                                           .homeResultsModel

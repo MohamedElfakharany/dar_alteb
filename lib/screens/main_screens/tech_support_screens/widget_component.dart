@@ -24,8 +24,8 @@ class UserRequestsCart extends StatelessWidget {
         var techRequests =
             AppCubit.get(context).patientTechnicalSupportModel?.data;
         return Container(
-          height: 200.0,
-          width: MediaQuery.of(context).size.width * 0.7,
+          height: 240.0,
+          width: MediaQuery.of(context).size.width * 0.9,
           decoration: BoxDecoration(
             color: whiteColor,
             borderRadius: BorderRadius.circular(radius),
@@ -40,12 +40,7 @@ class UserRequestsCart extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text('#${techRequests?.id ?? 0}'),
-                  const Spacer(),
-                ],
-              ),
+              Text('#${techRequests?.id ?? 0}'),
               Text('${techRequests?.date?.date} - ${techRequests?.date?.time}'),
               myHorizontalDivider(),
               verticalMicroSpace,
@@ -63,7 +58,7 @@ class UserRequestsCart extends StatelessWidget {
                           Expanded(
                             child: Text(
                               '${techRequests?.address?.address}',
-                              maxLines: 1,
+                              maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),

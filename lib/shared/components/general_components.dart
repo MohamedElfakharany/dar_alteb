@@ -423,7 +423,8 @@ class GeneralHomeLayoutAppBar extends StatelessWidget with PreferredSizeWidget {
                     AppCubit.get(context).notification ?? '',
                     style: titleSmallStyle2.copyWith(color: whiteColor),
                   ),
-                  showBadge: AppCubit.get(context).showBadgeNotification ?? false,
+                  showBadge:
+                      AppCubit.get(context).showBadgeNotification ?? false,
                   child: const ImageIcon(
                     AssetImage(
                       'assets/images/notification.png',
@@ -713,10 +714,14 @@ class _GeneralNationalityCodeState extends State<GeneralNationalityCode> {
   }
 }
 
-Widget textLabel({required String title}) {
+Widget textLabel({
+  required String title,
+  TextAlign? textAlign = TextAlign.start,
+}) {
   return Text(
     title,
     style: titleSmallStyle.copyWith(fontWeight: FontWeight.normal),
+    textAlign: textAlign,
   );
 }
 
@@ -990,4 +995,17 @@ Widget doneKeyboard() {
     'done',
     style: titleSmallStyle,
   );
+}
+
+String removeZeroMobile({required String number}) {
+  if (number.startsWith('010') ||
+      number.startsWith('011') ||
+      number.startsWith('012') ||
+      number.startsWith('015')) {
+    String number2 = number.replaceFirst('0','');
+    print('number : $number2');
+    return number2;
+  } else {
+    return number;
+  }
 }

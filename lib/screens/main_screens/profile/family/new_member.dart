@@ -79,7 +79,6 @@ class _NewMemberScreenState extends State<NewMemberScreen> {
         }
       },
       builder: (context, state) {
-        nationalCodeController.text = '966';
         var memberImage = AppCubit.get(context).memberImage;
         return Scaffold(
           backgroundColor: greyExtraLightColor,
@@ -360,11 +359,12 @@ class _NewMemberScreenState extends State<NewMemberScreen> {
                           title: LocaleKeys.BtnSaveChanges.tr(),
                           onPress: () {
                             if (formKey.currentState!.validate()) {
+                              String mobileText = removeZeroMobile(number: mobileNumberController.text);
                               AppCubit.get(context).createMember(
                                 name: userNameController.text,
                                 gender: gender.name,
                                 birthday: birthdayController.text,
-                                phone: mobileNumberController.text,
+                                phone: mobileText,
                                 profile: memberImage == null
                                     ? ''
                                     : 'https://hq.orcav.com/assets/${Uri.file(memberImage.path).pathSegments.last}',

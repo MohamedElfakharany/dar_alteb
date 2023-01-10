@@ -36,16 +36,16 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>DarAltep want to accesses your camera</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>DarAltep want to accesses your Location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>DarAltep want to accesses your Location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>DarAltep want to accesses your Location</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>DarAltep want to accesses your Location</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>DarAltep want to accesses your photo library</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>DarAltep want to accesses your Microphone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>DarAltep want to accesses your photo library</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

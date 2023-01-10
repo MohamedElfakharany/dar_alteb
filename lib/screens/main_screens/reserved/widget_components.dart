@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_elteb/screens/main_screens/results/result_details.dart';
+import 'package:dar_elteb/shared/components/general_components.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,11 +47,13 @@ class ReservedCard extends StatelessWidget {
         if (labReservationsDataModel?.tests?.isEmpty ??
             homeReservationsDataModel!.tests!.isEmpty) {
           title = labReservationsDataModel?.titles ??
-              homeReservationsDataModel!.titles ?? [];
+              homeReservationsDataModel!.titles ??
+              [];
         } else if (labReservationsDataModel?.offers?.isEmpty ??
             homeReservationsDataModel!.offers!.isEmpty) {
           title = labReservationsDataModel?.titles ??
-              homeReservationsDataModel!.titles ?? [];
+              homeReservationsDataModel!.titles ??
+              [];
         } else {
           title = [];
         }
@@ -114,16 +118,22 @@ class ReservedCard extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 30.0 * (labReservationsDataModel?.titles?.length ?? homeReservationsDataModel?.titles?.length ?? 0),
+                      height: 30.0 *
+                          (labReservationsDataModel?.titles?.length ??
+                              homeReservationsDataModel?.titles?.length ??
+                              0),
                       child: ListView.separated(
-                        itemBuilder: (context,index) => Text(
+                        itemBuilder: (context, index) => Text(
                           title[index],
                           style: titleSmallStyle.copyWith(color: mainColor),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        separatorBuilder:  (context, index) =>verticalMicroSpace,
-                        itemCount: labReservationsDataModel?.titles?.length ?? homeReservationsDataModel?.titles?.length ?? 0,
+                        separatorBuilder: (context, index) =>
+                            verticalMicroSpace,
+                        itemCount: labReservationsDataModel?.titles?.length ??
+                            homeReservationsDataModel?.titles?.length ??
+                            0,
                       ),
                     ),
                     Text(
@@ -132,22 +142,61 @@ class ReservedCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Container(
-                      height: 36,
-                      width: 130,
-                      decoration: BoxDecoration(
-                        color: stateColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Center(
-                          child: Text(
-                        labReservationsDataModel?.status ?? homeReservationsDataModel?.status,
-                        style: titleStyle.copyWith(
-                            fontSize: 15.0,
-                            color: stateColor,
-                            fontWeight: FontWeight.normal),
-                      )),
+                    verticalMiniSpace,
+                    Row(
+                      children: [
+                        Container(
+                          height: 36,
+                          width: 130,
+                          decoration: BoxDecoration(
+                            color: stateColor.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(radius),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Center(
+                              child: Text(
+                            labReservationsDataModel?.status ??
+                                homeReservationsDataModel?.status,
+                            style: titleStyle.copyWith(
+                                fontSize: 15.0,
+                                color: stateColor,
+                                fontWeight: FontWeight.normal),
+                          )),
+                        ),
+                        if (labReservationsDataModel?.statusEn == 'Finished' ||
+                            homeReservationsDataModel?.statusEn == 'Finished')
+                          const Spacer(),
+                        if (labReservationsDataModel?.statusEn == 'Finished' ||
+                            homeReservationsDataModel?.statusEn == 'Finished')
+                          InkWell(
+                            onTap: (){
+                              if (labReservationsDataModel?.id != null){
+                                Navigator.push(context,FadeRoute(page: ResultDetailsScreen(labId: labReservationsDataModel?.id)));
+                              }
+                              if (homeReservationsDataModel?.id != null){
+                              Navigator.push(context,FadeRoute(page: ResultDetailsScreen(homeId: homeReservationsDataModel?.id,)));
+                              }
+                            },
+                            child: Container(
+                              height: 36,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                color: mainColor.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(radius),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Center(
+                                  child: Text(
+                                LocaleKeys.BtnResult.tr(),
+                                style: titleStyle.copyWith(
+                                    fontSize: 15.0,
+                                    color: mainColor,
+                                    fontWeight: FontWeight.normal),
+                              )),
+                            ),
+                          ),
+                      ],
                     ),
                   ],
                 ),

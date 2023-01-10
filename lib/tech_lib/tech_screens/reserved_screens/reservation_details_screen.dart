@@ -45,9 +45,17 @@ class _TechReservationsDetailsScreenState
     return BlocConsumer<AppTechCubit, AppTechStates>(
       listener: (context, state) {
         if (state is AppSamplingRequestsLoadingState) {
+
           isFinished = true;
         }
         if (state is AppSamplingRequestsSuccessState) {
+          if (state.successModel.status){
+          showToast(msg: state.successModel.message, state: ToastState.success);
+          Navigator.pop(context);
+          } else {
+            showToast(msg: state.successModel.message, state: ToastState.error);
+            Navigator.pop(context);
+          }
           if (state.successModel.status) {
             setState(() {
               isFinished = false;
@@ -149,129 +157,66 @@ class _TechReservationsDetailsScreenState
                         child: ListView.separated(
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => SwipeActionCell(
-                            // key: ValueKey(AppCubit.get(context)
-                            //     .medicalInquiriesModel!
-                            //     .data![index]),
-                            key: const ValueKey(1),
-                            trailingActions: [
-                              SwipeAction(
-                                nestedAction: SwipeNestedAction(
-                                  /// customize your nested action content
-                                  content: ConditionalBuilder(
-                                    condition: true,
-                                    builder: (context) => Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.red,
-                                      ),
-                                      width: 130,
-                                      height: 60,
-                                      child: OverflowBox(
-                                        maxWidth: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.delete,
-                                              color: Colors.white,
-                                            ),
-                                            Text(LocaleKeys.BtnDelete.tr(),
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 20)),
-                                          ],
-                                        ),
+                          itemBuilder: (context, index) => Container(
+                            height: 110.0,
+                            width: 110.0,
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              borderRadius: BorderRadius.circular(radius),
+                              border: Border.all(
+                                width: 1,
+                                color: greyLightColor,
+                              ),
+                            ),
+                            alignment: AlignmentDirectional.center,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 4),
+                            child: Stack(
+                              alignment: AlignmentDirectional.topEnd,
+                              children: [
+                                Row(
+                                  children: [
+                                    horizontalMicroSpace,
+                                    CachedNetworkImageNormal(
+                                      imageUrl:
+                                          '${techReservations?.tests?[index].image ?? techReservations?.offers?[index].image}',
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                    horizontalSmallSpace,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${techReservations?.tests?[index].title ?? techReservations?.offers?[index].title}',
+                                            style: titleSmallStyle,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            techReservations
+                                                    ?.tests?[index].category ??
+                                                '',
+                                            style: subTitleSmallStyle2,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            '${techReservations?.tests?[index].price ?? techReservations?.offers?[index].price} ${LocaleKeys.salary.tr()}',
+                                            style: titleSmallStyle2,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    fallback: (context) => const Center(
-                                        child: CircularProgressIndicator.adaptive()),
-                                  ),
+                                  ],
                                 ),
-
-                                /// you should set the default  bg color to transparent
-                                color: Colors.transparent,
-
-                                /// set content instead of title of icon
-                                content:
-                                    _getIconButton(Colors.red, Icons.delete),
-                                onTap: (handler) async {
-                                  // AppCubit.get(context).deleteInquiry(
-                                  //   inquiryId: AppCubit.get(context)
-                                  //       .medicalInquiriesModel!
-                                  //       .data![index]
-                                  //       .id,
-                                  // );
-                                },
-                              ),
-                            ],
-                            child: Container(
-                              height: 110.0,
-                              width: 110.0,
-                              decoration: BoxDecoration(
-                                color: whiteColor,
-                                borderRadius: BorderRadius.circular(radius),
-                                border: Border.all(
-                                  width: 1,
-                                  color: greyLightColor,
-                                ),
-                              ),
-                              alignment: AlignmentDirectional.center,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 4),
-                              child: Stack(
-                                alignment: AlignmentDirectional.topEnd,
-                                children: [
-                                  Row(
-                                    children: [
-                                      horizontalMicroSpace,
-                                      CachedNetworkImageNormal(
-                                        imageUrl: techReservations
-                                                ?.tests?[index].image ??
-                                            techReservations
-                                                ?.offers?[index].image,
-                                        width: 80,
-                                        height: 80,
-                                      ),
-                                      horizontalSmallSpace,
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              techReservations
-                                                      ?.tests?[index].title ??
-                                                  techReservations
-                                                      ?.offers?[index].title,
-                                              style: titleSmallStyle,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              techReservations?.tests?[index]
-                                                      .category ??
-                                                  '',
-                                              style: subTitleSmallStyle2,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              '${techReservations?.tests?[index].price ?? techReservations?.offers?[index].price} ${LocaleKeys.salary.tr()}',
-                                              style: titleSmallStyle2,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                              ],
                             ),
                           ),
                           separatorBuilder: (context, index) =>
@@ -286,7 +231,7 @@ class _TechReservationsDetailsScreenState
                       ),
                       verticalMiniSpace,
                       Container(
-                        height: 236.0,
+                        height: 250.0,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: whiteColor,
@@ -319,12 +264,14 @@ class _TechReservationsDetailsScreenState
                                         style: titleStyle.copyWith(
                                             color: greyLightColor),
                                       ),
-                                      Text(
-                                        techReservations?.patient?.name,
-                                        textAlign: TextAlign.start,
-                                        style: titleSmallStyle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                      Expanded(
+                                        child: Text(
+                                          '${techReservations?.patient?.name}',
+                                          textAlign: TextAlign.start,
+                                          style: titleSmallStyle,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -418,12 +365,14 @@ class _TechReservationsDetailsScreenState
                                         style: titleStyle.copyWith(
                                             color: greyLightColor),
                                       ),
-                                      Text(
-                                        '${techReservations?.createdAt?.date} - ${techReservations?.createdAt?.time}',
-                                        textAlign: TextAlign.start,
-                                        style: titleSmallStyle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                      Expanded(
+                                        child: Text(
+                                          '${techReservations?.createdAt?.date} - ${techReservations?.createdAt?.time}',
+                                          textAlign: TextAlign.start,
+                                          style: titleSmallStyle,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -435,7 +384,7 @@ class _TechReservationsDetailsScreenState
                       ),
                       verticalMiniSpace,
                       Container(
-                        height: 250.0,
+                        // height: 250.0,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: whiteColor,
@@ -582,54 +531,40 @@ class _TechReservationsDetailsScreenState
                 padding: const EdgeInsets.only(
                     bottom: 40.0, left: 20.0, right: 20.0, top: 20.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     if (techReservations?.statusEn == 'Accepted')
                       Expanded(
-                        child: SwipeableButtonView(
-                          buttonColor: swipeColor,
-                          buttonText: swipeText,
-                          buttontextstyle: titleSmallStyle,
-                          buttonWidget: const Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: whiteColor,
+                        child: ConditionalBuilder(
+                          condition:
+                              state is! AppSamplingRequestsLoadingState,
+                          builder: (context) => GeneralButton(
+                            title: LocaleKeys.BtnSwapToSample.tr(),
+                            onPress: () {
+                              AppTechCubit.get(context)
+                                  .sampling(requestId: techReservations?.id);
+                            },
                           ),
-                          activeColor: swipeColor.withOpacity(0.2),
-                          isFinished: isFinished,
-                          onWaitingProcess: () {
-                            if (kDebugMode) {
-                              print('onWaitingProcess');
-                            }
-                            AppTechCubit.get(context)
-                                .sampling(requestId: techReservations?.id);
-                            // Future.delayed(const Duration(seconds: 1), () {
-                            //   setState(() {
-                            //     isFinished = true;
-                            //   });
-                            // });
-                          },
-                          onFinish: () {
-                            // if (kDebugMode) {
-                            //   print('onFinish');
-                            // }
-                            // setState(() {
-                            //   isFinished = false;
-                            // });
-                          },
+                          fallback: (context) =>
+                              const CircularProgressIndicator.adaptive(),
                         ),
                       ),
                     horizontalSmallSpace,
-                    CircleAvatar(
-                      backgroundColor: greenColor,
-                      radius: 30,
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.call,
-                          color: whiteColor,
+                    Center(
+                      child: CircleAvatar(
+                        backgroundColor: greenColor,
+                        radius: 30,
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.call,
+                            color: whiteColor,
+                          ),
+                          onPressed: () async {
+                            await FlutterPhoneDirectCaller.callNumber(
+                                '${techReservations?.patient?.phoneCode}${techReservations?.patient?.phone}');
+                          },
                         ),
-                        onPressed: () async {
-                          await FlutterPhoneDirectCaller.callNumber(
-                              '${techReservations?.patient?.phoneCode}${techReservations?.patient?.phone}');
-                        },
                       ),
                     ),
                   ],

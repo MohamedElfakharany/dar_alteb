@@ -22,17 +22,25 @@ class FamiliesMemberCard extends StatelessWidget {
       : super(key: key);
   FamiliesDataModel familiesDataModel;
 
+  String titleGender = '';
+
   @override
   Widget build(BuildContext context) {
+    if (familiesDataModel.gender == 'Female') {
+      titleGender = LocaleKeys.Female.tr();
+    } else {
+      titleGender = LocaleKeys.Male.tr();
+    }
     return Container(
       width: double.infinity,
-      height: 147,
+      // height: 147,
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(radius),
         border: Border.all(width: 1, color: greyDarkColor),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Padding(
@@ -68,78 +76,81 @@ class FamiliesMemberCard extends StatelessWidget {
                       height: 50,
                     ),
                   ),
+                  verticalMicroSpace,
                   Text(
                     familiesDataModel.name,
                     style: titleStyle.copyWith(
                       fontWeight: FontWeight.w500,
+                      color: mainColor
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  verticalMicroSpace,
                   Row(
                     children: [
-                      const Icon(
-                        Icons.monitor_heart_outlined,
-                        color: mainColor,
-                      ),
-                      horizontalMicroSpace,
+
+                        Image.asset('assets/images/family.jpg',width: 30,height: 30,),
+
+                      horizontalSmallSpace,
                       Text(
-                        familiesDataModel.relation!.title,
-                        // '',
+                        familiesDataModel.relation?.title ?? '',
                         style:
-                            subTitleSmallStyle.copyWith(color: mainLightColor),
+                            titleSmallStyle.copyWith(),
+                      ),
+                      horizontalLargeSpace,
+                      horizontalLargeSpace,
+                      Text(
+                        titleGender,
+                        style: subTitleSmallStyle,
                       ),
                     ],
-                  ),
-                  Text(
-                    familiesDataModel.gender,
-                    style: subTitleSmallStyle,
                   ),
                 ],
               ),
             ),
           ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      FadeRoute(
-                        page: EditMemberScreen(
-                            familiesDataModel: familiesDataModel),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    height: 35,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: mainColor,
-                      borderRadius: BorderRadius.circular(radius),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.edit,
-                          color: whiteColor,
-                        ),
-                        horizontalMicroSpace,
-                        Text(
-                          LocaleKeys.txtEdit.tr(),
-                          style:
-                              subTitleSmallStyle2.copyWith(color: whiteColor),
-                        ),
-                      ],
-                    ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  FadeRoute(
+                    page:
+                        EditMemberScreen(familiesDataModel: familiesDataModel),
                   ),
+                );
+              },
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: mainColor,
+                  borderRadius: BorderRadius.circular(radius),
                 ),
-              )
-            ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.edit,
+                      color: whiteColor,
+                    ),
+                    horizontalMicroSpace,
+                    // Text(
+                    //   LocaleKeys.txtEdit.tr(),
+                    //   style:
+                    //       subTitleSmallStyle2.copyWith(color: whiteColor),
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [],
           ),
         ],
       ),
@@ -251,8 +262,10 @@ class AddressCard extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         Widget isSelectedAddress;
-        if (AppCubit.get(context).addressModel?.data?[index].isSelected == '1') {
-          AppCubit.get(context).selectedAddress = AppCubit.get(context).addressModel?.data?[index].title;
+        if (AppCubit.get(context).addressModel?.data?[index].isSelected ==
+            '1') {
+          AppCubit.get(context).selectedAddress =
+              AppCubit.get(context).addressModel?.data?[index].title;
           isSelectedAddress = SvgPicture.asset(
             'assets/images/checkTrue.svg',
             width: 20,
@@ -273,8 +286,8 @@ class AddressCard extends StatelessWidget {
             border: Border.all(width: 1, color: greyDarkColor),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 15.0, vertical: 10.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -283,14 +296,12 @@ class AddressCard extends StatelessWidget {
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start ,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         '${addressDataModel.title}',
                         style: titleSmallStyle.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: mainColor
-                        ),
+                            fontWeight: FontWeight.w500, color: mainColor),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -303,14 +314,14 @@ class AddressCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (addressDataModel.specialMark != '')
-                      Text(
-                        '${addressDataModel.specialMark}',
-                        style: titleSmallStyle.copyWith(
-                          fontWeight: FontWeight.w500,
+                        Text(
+                          '${addressDataModel.specialMark}',
+                          style: titleSmallStyle.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
                     ],
                   ),
                 ),

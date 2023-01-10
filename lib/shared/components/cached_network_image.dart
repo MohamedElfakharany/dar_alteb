@@ -33,7 +33,7 @@ class CachedNetworkImageCircular extends StatelessWidget {
         minRadius: minRadius,
         maxRadius: maxRadius,
         backgroundColor: whiteColor,
-        backgroundImage: const AssetImage('assets/loading.gif'),
+        backgroundImage: const AssetImage('assets/images/loading.gif'),
       ),
       errorWidget: (context, url, error) => Container(
         width: media.width * 0.3,

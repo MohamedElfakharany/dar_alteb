@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -242,48 +241,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                 (e) => Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5.0),
-                                  child: Container(
-                                    height: 150.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(radius),
-                                      color: whiteColor,
-                                      border: Border.all(color: greyLightColor),
-                                      image: DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                            e.image,
-                                          ),
-                                          fit: BoxFit.cover),
-                                    ),
+                                  child: Card(
                                     child: Container(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          start: 15.0, end: 15.0),
-                                      // decoration: BoxDecoration(
-                                      //   color: greyExtraLightColor.withOpacity(0.7),
-                                      // ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          verticalMiniSpace,
-                                          Text(
-                                            e.title ?? '',
-                                            style: titleSmallStyleRed.copyWith(
-                                                fontSize: 20),
-                                          ),
-                                          verticalMiniSpace,
-                                          SizedBox(
-                                            width: double.infinity,
-                                            child: Text(
-                                              e.text ?? '',
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: titleSmallStyle,
+                                      height: 150.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(radius),
+                                        color: whiteColor,
+                                        // border: Border.all(color: greyLightColor),
+                                        image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                              e.image,
                                             ),
-                                          ),
-                                        ],
+                                            fit: BoxFit.cover),
+                                      ),
+                                      child: Container(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                start: 15.0, end: 15.0),
+                                        // decoration: BoxDecoration(
+                                        //   color: greyExtraLightColor.withOpacity(0.7),
+                                        // ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            verticalMiniSpace,
+                                            Text(
+                                              e.title ?? '',
+                                              style: titleSmallStyleRed
+                                                  .copyWith(fontSize: 20),
+                                            ),
+                                            verticalMiniSpace,
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                e.text ?? '',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: titleSmallStyle,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -334,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ConditionalBuilder(
                         condition: cubit.testsModel?.data?.isNotEmpty != false,
                         builder: (context) => SizedBox(
-                          height: 110.0,
+                          height: 111.0,
                           width: double.infinity,
                           child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
@@ -377,83 +379,86 @@ class _HomeScreenState extends State<HomeScreen> {
                               ?.data
                               ?.technicalReservations ==
                           1)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(radius),
-                            color: whiteColor,
-                            border: Border.all(color: greyLightColor),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    verticalMicroSpace,
-                                    Text(
-                                      LocaleKeys.txtHomeReservation.tr(),
-                                      style: titleSmallStyle.copyWith(
-                                          color: mainColor, fontSize: 20),
-                                    ),
-                                    verticalMicroSpace,
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Text(
-                                        LocaleKeys.onboardingBody.tr(),
-                                        textAlign: TextAlign.start,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: titleSmallStyle2,
+                        Card(
+                          elevation: 2.0,
+                          child: Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(radius),
+                              color: whiteColor,
+                              // border: Border.all(color: greyLightColor),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      verticalMicroSpace,
+                                      Text(
+                                        LocaleKeys.txtHomeReservation.tr(),
+                                        style: titleSmallStyle.copyWith(
+                                            color: mainColor, fontSize: 20),
                                       ),
-                                    ),
-                                    verticalMicroSpace,
-                                    GeneralButton(
-                                      title:
-                                          '${LocaleKeys.TxtReservationScreenTitle.tr()} ${LocaleKeys.txtNow.tr()}',
-                                      fontSize: 15,
-                                      onPress: () {
-                                        if (isVisitor ==
-                                            true) {
-                                          showPopUp(
-                                            context,
-                                            const VisitorHoldingPopUp(),
-                                          );
-                                        } else if (isVisitor ==
-                                            false) {
-                                          Navigator.push(
-                                            context,
-                                            FadeRoute(
-                                              page:
-                                                  const CreateTechSupportScreen(),
-                                            ),
-                                          );
-                                        } else {
-                                          showPopUp(
-                                            context,
-                                            const VisitorHoldingPopUp(),
-                                          );
-                                        }
-                                      },
-                                      height: 40,
-                                    ),
-                                    verticalMicroSpace,
-                                    verticalMicroSpace,
-                                  ],
+                                      verticalMicroSpace,
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Text(
+                                          LocaleKeys.onboardingBody.tr(),
+                                          textAlign: TextAlign.start,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: titleSmallStyle2,
+                                        ),
+                                      ),
+                                      verticalMicroSpace,
+                                      GeneralButton(
+                                        title:
+                                            '${LocaleKeys.TxtReservationScreenTitle.tr()} ${LocaleKeys.txtNow.tr()}',
+                                        fontSize: 15,
+                                        onPress: () {
+                                          if (isVisitor == true) {
+                                            showPopUp(
+                                              context,
+                                              const VisitorHoldingPopUp(),
+                                            );
+                                          } else if (isVisitor == false) {
+                                            Navigator.push(
+                                              context,
+                                              FadeRoute(
+                                                page:
+                                                    const CreateTechSupportScreen(),
+                                              ),
+                                            );
+                                          } else {
+                                            showPopUp(
+                                              context,
+                                              const VisitorHoldingPopUp(),
+                                            );
+                                          }
+                                        },
+                                        height: 40,
+                                      ),
+                                      verticalMicroSpace,
+                                      verticalMicroSpace,
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                  child: Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  top: 10.0,
-                                  start: 10.0,
-                                  bottom: 10.0,
-                                ),
-                                child: Image.asset(
-                                    'assets/images/homeImageReserv.png'),
-                              )),
-                            ],
+                                Expanded(
+                                    child: Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    top: 10.0,
+                                    start: 10.0,
+                                    bottom: 10.0,
+                                  ),
+                                  child: Image.asset(
+                                      'assets/images/homeImageReserv.png'),
+                                )),
+                              ],
+                            ),
                           ),
                         ),
                       Row(

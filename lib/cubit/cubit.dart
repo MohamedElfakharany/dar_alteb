@@ -192,8 +192,8 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       if (kDebugMode) {
-        print('responseJson : $responseJson');
-        print('formData : $formData');
+        // print('responseJson : $responseJson');
+        // print('formData : $formData');
       }
       userResourceModel = UserResourceModel.fromJson(responseJson);
       emit(AppRegisterSuccessState(userResourceModel!));
@@ -237,8 +237,8 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       if (kDebugMode) {
-        print('formData : ${formData.entries}');
-        print('responseJson : $responseJson');
+        // print('formData : ${formData.entries}');
+        // print('responseJson : $responseJson');
       }
       userResourceModel = UserResourceModel.fromJson(responseJson);
       emit(AppLoginSuccessState(userResourceModel!));
@@ -430,7 +430,7 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      print('get cart : $responseJson');
+      // print('get cart : $responseJson');
       cartModel = CartModel.fromJson(responseJson);
       if (cartModel != null) {
         if (cartModel!.data!.length > 9) {
@@ -539,7 +539,7 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       userResourceModel = UserResourceModel.fromJson(responseJson);
       if (kDebugMode) {
-        print('userResourceModel : ${userResourceModel?.data?.profile}');
+        // print('userResourceModel : ${userResourceModel?.data?.profile}');
       }
       emit(AppGetProfileSuccessState(userResourceModel!));
     } catch (error) {
@@ -578,8 +578,8 @@ class AppCubit extends Cubit<AppStates> {
         }
       }
       if (kDebugMode) {
-        print('notificationUnseenCount : $notificationUnseenCount');
-        print('notificationJson : $responseJson');
+        // print('notificationUnseenCount : $notificationUnseenCount');
+        // print('notificationJson : $responseJson');
       }
 
       if (notificationUnseenCount != 0) {
@@ -630,7 +630,6 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      print(responseJson);
       successModel = SuccessModel.fromJson(responseJson);
       notificationUnseenCount = [];
       emit(AppSeenNotificationsSuccessState(successModel!));
@@ -716,9 +715,6 @@ class AppCubit extends Cubit<AppStates> {
         familiesName.add(
             '${familiesNames?[i].name} ( ${familiesNames![i].relation!.title} )');
       }
-      if (kDebugMode) {
-        // print('familiesModel : ${familiesModel?.data?.first.profile}');
-      }
       emit(AppGetFamiliesSuccessState(familiesModel!));
     } catch (error) {
       if (kDebugMode) {
@@ -749,7 +745,7 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       bannerModel = BannerModel.fromJson(responseJson);
-      print('bannerModel : $responseJson');
+      // print('bannerModel : $responseJson');
       emit(AppGetBannerSuccessState(bannerModel!));
     } catch (error) {
       if (kDebugMode) {
@@ -780,7 +776,7 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       generalModel = GeneralModel.fromJson(responseJson);
       emit(AppGetGeneralSuccessState(generalModel!));
-      print(generalModel?.data?.homeReservations);
+      // print(generalModel?.data?.homeReservations);
     } catch (error) {
       if (kDebugMode) {
         // print(error);
@@ -969,6 +965,52 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppCancelLabReservationSuccessState(successModel!));
     } catch (error) {
       emit(AppCancelLabReservationErrorState(error.toString()));
+    }
+  }
+
+  Future rateTechnical({
+    required bool fromHome,
+    int? reservationId,
+    required int rate,
+    String? message,
+  }) async {
+    emit(AppRateTechnicalLoadingState());
+    var headers = {
+      'Accept': 'application/json',
+      'Accept-Language': sharedLanguage,
+      'Authorization': 'Bearer $token',
+    };
+    var formData = FormData.fromMap(
+      {
+        'rate': rate,
+        'message':message,
+      },
+    );
+    String url;
+    if (fromHome == true){
+      url = '$getHomeReservationsURL/$reservationId/rate';
+    }else {
+      url = '$getLabReservationsURL/$reservationId/rate';
+    }
+    try {
+      Dio dio = Dio();
+      var response = await dio.post(
+        url,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+        data: formData,
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      successModel = SuccessModel.fromJson(responseJson);
+      emit(AppRateTechnicalSuccessState(successModel!));
+    } catch (error) {
+      emit(AppRateTechnicalErrorState(error.toString()));
     }
   }
 
@@ -1177,10 +1219,13 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future editMember({
+    required int relationId,
     required String name,
     required String phone,
     required String phoneCode,
     required String profile,
+    required String birthday,
+    required String gender,
     required var memberId,
   }) async {
     emit(AppEditMemberLoadingState());
@@ -1191,9 +1236,12 @@ class AppCubit extends Cubit<AppStates> {
     };
     var formData = FormData.fromMap(
       {
+        'relationId': relationId,
         'name': name,
         'phone': phone,
         'phoneCode': phoneCode,
+        'birthday': birthday,
+        'gender': gender,
         if (editMemberImage != null)
           'profile': await MultipartFile.fromFile(
             editMemberImage!.path,
@@ -1291,8 +1339,8 @@ class AppCubit extends Cubit<AppStates> {
 
       successModel = SuccessModel.fromJson(responseJson);
       if (kDebugMode) {
-        print('responseJson : $responseJson');
-        print('formData : ${formData.entries}');
+        // print('responseJson : $responseJson');
+        // print('formData : ${formData.entries}');
       }
       getProfile();
       emit(AppChangeNumberSuccessState(successModel!));
@@ -1373,7 +1421,7 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      print(responseJson);
+      // print(responseJson);
       termsModel = TermsModel.fromJson(responseJson);
       emit(AppGetTermsSuccessState(termsModel!));
     } catch (error) {
@@ -1406,11 +1454,11 @@ class AppCubit extends Cubit<AppStates> {
         ),
         data: formData,
       );
-      print('createTokenModel : ${formData.entries}');
+      // print('createTokenModel : ${formData.entries}');
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      print('createTokenModel : $responseJson');
+      // print('createTokenModel : $responseJson');
       createTokenModel = CreateTokenModel.fromJson(responseJson);
       emit(AppCreateTokenSuccessState(createTokenModel!));
     } catch (error) {
@@ -1487,10 +1535,10 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       resetPasswordModel = ResetPasswordModel.fromJson(responseJson);
       if (kDebugMode) {
-        print('headers.entries : ${headers.entries}');
-        print('formData.entries : ${formData.entries}');
-        print('responseJson : $responseJson');
-        print('resetPasswordModel : ${resetPasswordModel!.data}');
+        // print('headers.entries : ${headers.entries}');
+        // print('formData.entries : ${formData.entries}');
+        // print('responseJson : $responseJson');
+        // print('resetPasswordModel : ${resetPasswordModel!.data}');
       }
       emit(AppResetPasswordSuccessState(resetPasswordModel!));
     } catch (error) {
@@ -1558,6 +1606,7 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       relationsModel = RelationsModel.fromJson(responseJson);
+      relationsName = [];
       relationsNames = relationsModel?.data;
       for (var i = 0; i < relationsNames!.length; i++) {
         relationsName.add(relationsNames?[i].title);
@@ -1810,7 +1859,7 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       successModel = SuccessModel.fromJson(responseJson);
-      print('response : $responseJson');
+      // print('response : $responseJson');
       emit(AppCheckCouponSuccessState(successModel!));
     } catch (error) {
       emit(AppCheckCouponErrorState(error.toString()));
@@ -1837,7 +1886,7 @@ class AppCubit extends Cubit<AppStates> {
       if (cartOfferId != null) 'offerId[]': cartOfferId,
       'coupon': coupon
     });
-    print('AppGetInvoicesSuccessState : ${formData.fields}');
+    // print('AppGetInvoicesSuccessState : ${formData.fields}');
     try {
       Dio dio = Dio();
       var response = await dio.post(
@@ -1854,10 +1903,10 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       if (kDebugMode) {
-        print('AppGetInvoicesSuccessState : $responseJson');
+        // print('AppGetInvoicesSuccessState : $responseJson');
       }
       invoiceModel = InvoiceModel.fromJson(responseJson);
-      print('invoiceModel : ${invoiceModel?.data?.total}');
+      // print('invoiceModel : ${invoiceModel?.data?.total}');
       emit(AppGetInvoicesSuccessState(invoiceModel!));
     } catch (error) {
       print('7mada $error');
@@ -2041,7 +2090,6 @@ class AppCubit extends Cubit<AppStates> {
         }
       }
     }
-    print(url);
     try {
       Dio dio = Dio();
       var response = await dio.get(
@@ -2057,8 +2105,6 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       labReservationsModel = LabReservationsModel.fromJson(responseJson);
-      print(responseJson);
-
       labStatusData = labReservationsModel?.data;
       for (var i = 0; i < labStatusValues.length; i++) {
         labStatusValues.add('${labStatusData?[i].status}');
@@ -2113,8 +2159,8 @@ class AppCubit extends Cubit<AppStates> {
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       if (kDebugMode) {
-        print('responseJson : $responseJson');
-        print('formData : ${formData.fields}');
+        // print('responseJson : $responseJson');
+        // print('formData : ${formData.fields}');
       }
       successModel = SuccessModel.fromJson(responseJson);
       getCart();
@@ -2201,8 +2247,6 @@ class AppCubit extends Cubit<AppStates> {
         }
       }
     }
-    print(url);
-
     try {
       Dio dio = Dio();
       var response = await dio.get(
@@ -2217,7 +2261,8 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      printWrapped('homeReservationsModel : $responseJson');
+      print('homeReservationsModel : $responseJson');
+      print('homeReservationsModel : $url');
       homeReservationsModel = HomeReservationsModel.fromJson(responseJson);
       emit(AppGetHomeReservationsSuccessState(homeReservationsModel!));
     } catch (error) {
@@ -2228,7 +2273,7 @@ class AppCubit extends Cubit<AppStates> {
   Future getLabResults({
     int? resultId,
     String? date,
-    String? search,
+    String? search
   }) async {
     emit(AppGetLabResultsLoadingState());
     var headers = {
@@ -2268,8 +2313,7 @@ class AppCubit extends Cubit<AppStates> {
         }
       }
     }
-    print(url);
-
+    // print(url);
     try {
       Dio dio = Dio();
       var response = await dio.get(
@@ -2334,9 +2378,7 @@ class AppCubit extends Cubit<AppStates> {
         }
       }
     }
-    print(url);
-
-
+    // print(url);
     try {
       Dio dio = Dio();
       var response = await dio.get(
@@ -2524,13 +2566,13 @@ class AppCubit extends Cubit<AppStates> {
           },
         ),
       );
-      print(url);
+      // print(url);
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
       testsModel = TestsModel.fromJson(responseJson);
       if (kDebugMode) {
-        print('testsModel responseJson : $responseJson');
+        // print('testsModel responseJson : $responseJson');
       }
       emit(AppGetTestsSuccessState(testsModel!));
     } catch (error) {
